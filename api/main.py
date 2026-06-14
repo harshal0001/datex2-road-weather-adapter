@@ -7,11 +7,16 @@ from typing import Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 from adapter import __version__
 from adapter.profiles import list_profiles
+from api.segments_routes import router as segments_router
 
-DEMO_DB = Path(__file__).resolve().parents[1] / "data" / "demo.db"
+ROOT = Path(__file__).resolve().parents[1]
+DEMO_DB = ROOT / "data" / "demo.db"
+SEGMENTS_DB = ROOT / "data" / "segments.db"
+STATIC_DIR = ROOT / "static"
 
 app = FastAPI(
     title="DATEX II Adapter",
@@ -28,6 +33,28 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(segments_router)
+
+
+def _segments_db_status() -> dict[str, Any]:
+    if not SEGMENTS_DB.exists():
+        return {"status": "missing",
+                "hint": "Run scripts/build_segment_snapshots.py --rebuild"}
+    try:
+        conn = sqlite3.connect(f"file:{SEGMENTS_DB}?mode=ro", uri=True)
+        segs = conn.execute("SELECT COUNT(*) FROM segments").fetchone()[0]
+        snaps = conn.execute("SELECT COUNT(*) FROM segment_snapshot").fetchone()[0]
+        conn.close()
+        return {"status": "ready", "segments": segs, "snapshot_rows": snaps}
+    except sqlite3.Error as e:
+        return {"status": "error", "detail": str(e)}
+
+
+@app.get("/dashboard")
+def dashboard() -> FileResponse:
+    """Multi-source fusion + road-segment map dashboard."""
+    return FileResponse(STATIC_DIR / "dashboard.html")
 
 
 def _demo_db_status() -> dict[str, Any]:
@@ -66,10 +93,12 @@ def root() -> dict[str, Any]:
 def health() -> dict[str, Any]:
     """Liveness + dependency status. Run this before every demo."""
     db = _demo_db_status()
-    overall = "ok" if db.get("status") == "ready" else "degraded"
+    seg = _segments_db_status()
+    overall = "ok" if seg.get("status") == "ready" else "degraded"
     return {
         "status": overall,
         "version": __version__,
         "demo_db": db,
+        "segments_db": seg,
         "profiles_available": list_profiles(),
     }

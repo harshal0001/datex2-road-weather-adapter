@@ -46,4 +46,13 @@ def load_profile(name: str = "bavaria") -> MappingProfile:
 
 
 def list_profiles() -> list[str]:
-    return sorted(p.stem for p in PROFILES_DIR.glob("*.yaml"))
+    """List condition MappingProfiles. Skips non-mapping YAMLs (e.g. fusion.yaml)."""
+    names = []
+    for p in sorted(PROFILES_DIR.glob("*.yaml")):
+        try:
+            data = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+        except yaml.YAMLError:
+            continue
+        if isinstance(data, dict) and "condition_codes" in data:
+            names.append(p.stem)
+    return names

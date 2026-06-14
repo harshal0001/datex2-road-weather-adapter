@@ -1,0 +1,78 @@
+# Multi-source fusion profile for the Hof road-segment network.
+#
+# THIS IS THE RESEARCH ARTEFACT: it declares, per field, which data source wins
+# when several sources cover the same road segment. Changing priorities here
+# changes the fused output — no code change. A new jurisdiction writes its own
+# fusion.yaml.
+#
+# Field coverage (why per-field priority matters — no source is complete):
+#   road surface temp / condition / water film  → SWS (+ LoRaWAN for temp)
+#   atmospheric (pressure / visibility / cloud)  → DWD, OpenWeather
+#   air temp / humidity / dew point              → all four
+#
+# Verified against the aggregated CSV headers (keyed by segment_id, event_timestamp).
+
+name: hof_fusion
+version: "1.0"
+description: "Per-field source priority for SWS / LoRaWAN / DWD / OpenWeather"
+
+# Global priority (highest first). Applied to any field without an explicit
+# override below. The user's stated priority: SWS is the trusted base.
+source_priority: [sws, lorawan, dwd, openweather]
+
+# Per-field overrides — list ONLY the sources that actually carry the field,
+# in priority order. The fusion engine intersects this with the user's selected
+# sources at request time, then takes the first available non-null value.
+field_priority:
+  surface_condition:     [sws]                          # ground-truth road_condition_code
+  road_surface_temp_c:   [sws, lorawan]
+  water_film_mm:         [sws]
+  subsurface_temp_5cm_c: [sws, dwd]
+  dew_point_c:           [sws, lorawan, dwd]
+  air_temp_c:            [sws, lorawan, dwd, openweather]
+  humidity_pct:          [sws, lorawan, dwd, openweather]
+  precipitation_mm:      [sws, dwd, openweather]
+  wind_speed_ms:         [sws, dwd, openweather]
+  wind_direction_deg:    [dwd, openweather]
+  pressure_hpa:          [dwd, openweather]
+  visibility_m:          [dwd, openweather]
+  cloud_cover_pct:       [dwd, openweather]
+
+# Per-source raw CSV column -> canonical field name.
+# (Unit caveats noted; harmonization is a documented future-work item.)
+source_fields:
+  sws:
+    road_condition_code:               surface_condition
+    road_surface_temperature_celsius:  road_surface_temp_c
+    subsurface_temperature_celsius:    subsurface_temp_5cm_c
+    water_film_mm:                     water_film_mm
+    air_temperature_celsius:           air_temp_c
+    dew_point_celsius:                 dew_point_c
+    relative_humidity_percent:         humidity_pct
+    precipitation_intensity_mm_s:      precipitation_mm   # NOTE: mm/s, not mm
+    wind_speed_ms:                     wind_speed_ms
+  lorawan:
+    surface_temperature:               road_surface_temp_c
+    air_temperature:                   air_temp_c
+    air_humidity:                      humidity_pct
+    dew_point:                         dew_point_c
+  dwd:
+    air_temperature_celsius:           air_temp_c
+    relative_humidity_percent:         humidity_pct
+    dew_point_celsius:                 dew_point_c
+    soil_temperature_5cm_celsius:      subsurface_temp_5cm_c
+    precipitation_mm:                  precipitation_mm
+    wind_speed_ms:                     wind_speed_ms
+    wind_direction_degrees:            wind_direction_deg
+    air_pressure_sea_level_hpa:        pressure_hpa
+    visibility_meters:                 visibility_m
+    cloud_cover_oktas:                 cloud_cover_pct    # NOTE: oktas 0-8, not %
+  openweather:
+    temp:                              air_temp_c
+    humidity:                          humidity_pct
+    rain:                              precipitation_mm   # NOTE: mm/3h
+    wind_speed:                        wind_speed_ms
+    wind_deg:                          wind_direction_deg
+    pressure:                          pressure_hpa
+    visibility:                        visibility_m
+    clouds:                            cloud_cover_pct

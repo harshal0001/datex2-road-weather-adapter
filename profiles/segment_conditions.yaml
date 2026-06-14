@@ -1,0 +1,45 @@
+# Road-segment condition scheme used by the SWS ground-truth + LightGBM model.
+#
+# This is the CURRENT production 5-class scheme (road_condition_code 0-4),
+# verified from the SWS aggregated data distribution. It differs from the older
+# 6-class ID3 scheme in bavaria.yaml — having both here demonstrates the
+# config-driven reusability claim (two schemes, zero code change).
+#
+# DATEX II values verified against WeatherRelatedRoadConditionTypeEnum (literals.csv).
+# Colours match predict_forecast.py CONDITION_STYLE for visual consistency.
+
+name: segment_conditions
+version: "1.0"
+description: "SWS/LightGBM 5-class road condition scheme (Hof road segments)"
+
+condition_codes:
+  0:
+    label: "Dry"
+    label_de: "Trocken"
+    datex2: "dry"
+    color: "#2ecc71"
+  1:
+    label: "Damp"
+    label_de: "Feucht"
+    datex2: "moist"
+    color: "#3498db"
+  2:
+    label: "Wet"
+    label_de: "Nass"
+    datex2: "wet"
+    color: "#2980b9"
+  3:
+    label: "Ice"
+    label_de: "Eisglätte"
+    datex2: "ice"
+    color: "#e74c3c"
+  4:
+    label: "Snow"
+    label_de: "Schneeglätte"
+    datex2: "snowOnTheRoad"
+    color: "#9b59b6"
+  255:
+    label: "Unknown"
+    label_de: "Unbekannt"
+    datex2: "other"
+    color: "#95a5a6"

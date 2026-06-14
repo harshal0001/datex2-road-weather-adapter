@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DATEX II — Multi-Source Fusion Dashboard</title>
+<style>
+  :root{
+    --bg:#f3f7f9; --surface:#fff; --text:#13202d; --muted:#617181; --border:#d9e2e8;
+    --teal:#0f766e; --teal-soft:#def7f3; --shadow:0 10px 30px rgba(15,23,42,.10);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,Segoe UI,sans-serif;background:linear-gradient(180deg,#edf4f7,#f8fafc);color:var(--text)}
+  .app{max-width:1500px;margin:0 auto;padding:18px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 18px;box-shadow:var(--shadow)}
+  h1{margin:0;font-size:20px}
+  .sub{margin-top:3px;color:var(--muted);font-size:13px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .chips .lbl{font-size:12px;color:var(--muted);margin-right:4px;font-weight:600}
+  .chip{border-radius:999px;padding:8px 14px;font-size:13px;border:1px solid var(--border);
+    background:#fff;color:var(--muted);cursor:pointer;user-select:none;transition:.15s;font-weight:600}
+  .chip.active{background:var(--teal-soft);border-color:#98d9d2;color:var(--teal)}
+  .chip .cov{font-size:11px;opacity:.7;font-weight:500}
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:16px}
+  @media(max-width:1100px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+  .card h3{margin:0;padding:13px 16px;font-size:14px;border-bottom:1px solid var(--border)}
+  .map-card{min-height:640px;display:flex;flex-direction:column}
+  iframe{border:0;width:100%;flex:1;min-height:600px}
+  .pad{padding:14px 16px}
+  .stat{display:flex;justify-content:space-between;padding:7px 0;font-size:13px;border-bottom:1px dashed var(--border)}
+  .stat:last-child{border:0}
+  .stat b{font-variant-numeric:tabular-nums}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border)}
+  th{font-size:11px;color:var(--muted);text-transform:uppercase}
+  .badge{display:inline-block;padding:3px 8px;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-size:11px;font-weight:700}
+  .badge.off{background:#f1f5f9;color:#94a3b8}
+  pre{margin:0;background:#0f172a;color:#d1fae5;border-radius:10px;padding:12px;font-size:11px;
+    line-height:1.45;overflow:auto;max-height:280px;white-space:pre-wrap}
+  .dist{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .pill{font-size:11px;padding:3px 9px;border-radius:999px;color:#fff;font-weight:600}
+  .note{font-size:11px;color:var(--muted);padding:8px 16px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div>
+      <h1>DATEX II · Multi-Source Fusion Dashboard</h1>
+      <div class="sub">Hof road network · select sources → fused per field → standardized DATEX II → map</div>
+    </div>
+    <div class="chips" id="chips">
+      <span class="lbl">Sources:</span>
+      <span class="chip active" data-s="sws">SWS <span class="cov" id="cov-sws"></span></span>
+      <span class="chip active" data-s="lorawan">LoRaWAN <span class="cov" id="cov-lorawan"></span></span>
+      <span class="chip active" data-s="dwd">DWD <span class="cov" id="cov-dwd"></span></span>
+      <span class="chip active" data-s="openweather">OpenWeather <span class="cov" id="cov-openweather"></span></span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card map-card">
+      <h3>Road segments — coloured by fused road-surface condition</h3>
+      <iframe id="map" src="/api/segments/map"></iframe>
+      <div class="note" id="mapnote">Hover a segment for fused values + which source supplied each.</div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>Coverage &amp; conditions</h3>
+        <div class="pad">
+          <div class="stat"><span>Selected sources</span><b id="s-sel">—</b></div>
+          <div class="stat"><span>Total segments</span><b id="s-total">—</b></div>
+          <div class="stat"><span>Without condition</span><b id="s-unknown">—</b></div>
+          <div class="dist" id="dist"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h3>Per-field source priority</h3>
+        <div class="pad" style="padding-top:4px">
+          <table><thead><tr><th>Field</th><th>Priority (active wins ←)</th></tr></thead>
+          <tbody id="prio"></tbody></table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h3>DATEX II output (sample segment)</h3>
+        <div class="pad"><pre id="datex">loading…</pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const COLORS = {Dry:"#2ecc71",Damp:"#3498db",Wet:"#2980b9",Ice:"#e74c3c",Snow:"#9b59b6",Unknown:"#95a5a6"};
+let active = new Set(["sws","lorawan","dwd","openweather"]);
+let sampleSegment = null;
+
+function qs(){ return [...active].join(","); }
+
+function refreshMap(){
+  document.getElementById("map").src = "/api/segments/map?sources=" + encodeURIComponent(qs());
+}
+
+async function refreshCoverage(){
+  const r = await fetch("/api/segments/coverage?sources=" + encodeURIComponent(qs()));
+  const d = await r.json();
+  document.getElementById("s-sel").textContent = d.selected_sources.join(", ") || "none";
+  document.getElementById("s-total").textContent = d.total_segments;
+  document.getElementById("s-unknown").textContent = d.segments_without_condition;
+  for(const s of ["sws","lorawan","dwd","openweather"]){
+    document.getElementById("cov-"+s).textContent = "("+(d.coverage_per_source[s]||0)+")";
+  }
+  const dist = document.getElementById("dist"); dist.innerHTML="";
+  for(const [k,v] of Object.entries(d.condition_distribution)){
+    const p=document.createElement("span"); p.className="pill";
+    p.style.background=COLORS[k]||"#888"; p.textContent=`${k}: ${v}`; dist.appendChild(p);
+  }
+}
+
+async function loadPriority(){
+  const r = await fetch("/api/segments/priority"); const d = await r.json();
+  const tb = document.getElementById("prio"); tb.innerHTML="";
+  for(const [field,list] of Object.entries(d.field_priority)){
+    const tr=document.createElement("tr");
+    const chips = list.map(s=>{
+      const on = active.has(s);
+      return `<span class="badge ${on?'':'off'}">${s}</span>`;
+    }).join(" ");
+    tr.innerHTML = `<td>${field}</td><td>${chips}</td>`;
+    tb.appendChild(tr);
+  }
+}
+
+async function refreshDatex(){
+  if(sampleSegment===null){
+    const r = await fetch("/api/segments/fused?sources=sws&limit=1");
+    const d = await r.json();
+    if(d.segments.length) sampleSegment = d.segments[0].segment_id;
+  }
+  if(sampleSegment===null) return;
+  const r = await fetch(`/api/segments/datex?segment_id=${sampleSegment}&sources=${encodeURIComponent(qs())}`);
+  document.getElementById("datex").textContent = await r.text();
+}
+
+function toggle(s){
+  if(active.has(s)){ if(active.size>1) active.delete(s); } else active.add(s);
+  document.querySelectorAll(".chip").forEach(c=>{
+    c.classList.toggle("active", active.has(c.dataset.s));
+  });
+  loadPriority(); refreshCoverage(); refreshDatex(); refreshMap();
+}
+
+document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>toggle(c.dataset.s)));
+
+loadPriority(); refreshCoverage(); refreshDatex();
+</script>
+</body>
+</html>
