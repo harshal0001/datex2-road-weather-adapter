@@ -4,44 +4,67 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DATEX II — Multi-Source Fusion Dashboard</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
-    --bg:#f3f7f9; --surface:#fff; --text:#13202d; --muted:#617181; --border:#d9e2e8;
-    --teal:#0f766e; --teal-soft:#def7f3; --shadow:0 10px 30px rgba(15,23,42,.10);
+    --bg:#eef3f6; --surface:#fff; --text:#13202d; --muted:#647483; --border:#dde4ea;
+    --teal:#0f766e; --teal-soft:#def7f3; --shadow:0 8px 26px rgba(15,23,42,.10);
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,system-ui,Segoe UI,sans-serif;background:linear-gradient(180deg,#edf4f7,#f8fafc);color:var(--text)}
-  .app{max-width:1500px;margin:0 auto;padding:18px}
-  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
-    background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 18px;box-shadow:var(--shadow)}
-  h1{margin:0;font-size:20px}
-  .sub{margin-top:3px;color:var(--muted);font-size:13px}
+  html,body{height:100%}
+  body{margin:0;font-family:Inter,system-ui,Segoe UI,sans-serif;background:var(--bg);color:var(--text)}
+  .app{max-width:1600px;margin:0 auto;padding:14px;display:flex;flex-direction:column;gap:14px;min-height:100vh}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 18px;box-shadow:var(--shadow)}
+  h1{margin:0;font-size:19px}
+  .sub{margin-top:3px;color:var(--muted);font-size:12.5px}
   .chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .chips .lbl{font-size:12px;color:var(--muted);margin-right:4px;font-weight:600}
+  .chips .lbl{font-size:12px;color:var(--muted);margin-right:2px;font-weight:600}
   .chip{border-radius:999px;padding:8px 14px;font-size:13px;border:1px solid var(--border);
-    background:#fff;color:var(--muted);cursor:pointer;user-select:none;transition:.15s;font-weight:600}
-  .chip.active{background:var(--teal-soft);border-color:#98d9d2;color:var(--teal)}
+    background:#fff;color:var(--muted);cursor:pointer;user-select:none;transition:.12s;font-weight:600}
+  .chip:hover{border-color:var(--teal)}
+  .chip.active{background:var(--teal-soft);border-color:#9ad9d2;color:var(--teal)}
   .chip .cov{font-size:11px;opacity:.7;font-weight:500}
-  .grid{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:16px}
-  @media(max-width:1100px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
-  .card h3{margin:0;padding:13px 16px;font-size:14px;border-bottom:1px solid var(--border)}
-  .map-card{min-height:640px;display:flex;flex-direction:column}
-  iframe{border:0;width:100%;flex:1;min-height:600px}
-  .pad{padding:14px 16px}
-  .stat{display:flex;justify-content:space-between;padding:7px 0;font-size:13px;border-bottom:1px dashed var(--border)}
-  .stat:last-child{border:0}
-  .stat b{font-variant-numeric:tabular-nums}
-  table{width:100%;border-collapse:collapse;font-size:12.5px}
-  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border)}
-  th{font-size:11px;color:var(--muted);text-transform:uppercase}
-  .badge{display:inline-block;padding:3px 8px;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-size:11px;font-weight:700}
-  .badge.off{background:#f1f5f9;color:#94a3b8}
-  pre{margin:0;background:#0f172a;color:#d1fae5;border-radius:10px;padding:12px;font-size:11px;
-    line-height:1.45;overflow:auto;max-height:280px;white-space:pre-wrap}
-  .dist{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+
+  /* top row: map (wide) + stats/selected (narrow), equal height */
+  .top{display:grid;grid-template-columns:1.85fr 1fr;gap:14px;align-items:stretch}
+  /* bottom row: priority + DATEX, equal halves */
+  .bottom{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+  @media(max-width:1080px){.top,.bottom{grid-template-columns:1fr}}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);
+    overflow:hidden;display:flex;flex-direction:column}
+  .card h3{margin:0;padding:12px 15px;font-size:13.5px;border-bottom:1px solid var(--border);
+    display:flex;justify-content:space-between;align-items:center;flex:0 0 auto}
+  .card .body{padding:13px 15px;overflow:auto;flex:1 1 auto}
+
+  .map-wrap{position:relative;min-height:560px}
+  #map{position:absolute;inset:0}
+  .loading{position:absolute;top:12px;right:12px;z-index:600;background:rgba(15,23,42,.8);color:#fff;
+    padding:6px 12px;border-radius:8px;font-size:12px;display:none}
+  .loading.on{display:block}
+
+  .side{display:flex;flex-direction:column;gap:14px}
+  .side .card:first-child{flex:0 0 auto}
+  .side .card:last-child{flex:1 1 auto}
+
+  .stat{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px dashed var(--border)}
+  .stat:last-child{border:0}.stat b{font-variant-numeric:tabular-nums}
+  .dist{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
   .pill{font-size:11px;padding:3px 9px;border-radius:999px;color:#fff;font-weight:600}
-  .note{font-size:11px;color:var(--muted);padding:8px 16px;border-top:1px solid var(--border)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--border)}
+  th{font-size:10.5px;color:var(--muted);text-transform:uppercase}
+  .badge{display:inline-block;padding:2px 7px;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-size:10.5px;font-weight:700;margin:1px}
+  .badge.off{background:#f1f5f9;color:#aab4c0}
+  pre{margin:0;background:#0f172a;color:#d1fae5;border-radius:9px;padding:12px;font-size:11px;
+    line-height:1.5;overflow:auto;height:100%;white-space:pre-wrap}
+  .seg-empty{color:var(--muted);font-size:12.5px}
+  .prov td:last-child{color:var(--muted)}
+  .leaflet-tooltip{font-size:12px}
 </style>
 </head>
 <body>
@@ -49,7 +72,7 @@
   <div class="topbar">
     <div>
       <h1>DATEX II · Multi-Source Fusion Dashboard</h1>
-      <div class="sub">Hof road network · select sources → fused per field → standardized DATEX II → map</div>
+      <div class="sub">Hof road network · select sources → fused per field → standardized DATEX II → live map</div>
     </div>
     <div class="chips" id="chips">
       <span class="lbl">Sources:</span>
@@ -60,103 +83,143 @@
     </div>
   </div>
 
-  <div class="grid">
-    <div class="card map-card">
-      <h3>Road segments — coloured by fused road-surface condition</h3>
-      <iframe id="map" src="/api/segments/map"></iframe>
-      <div class="note" id="mapnote">Hover a segment for fused values + which source supplied each.</div>
+  <!-- TOP: map + stats/selected -->
+  <div class="top">
+    <div class="card map-wrap">
+      <div id="map"></div>
+      <div class="loading" id="loading">updating…</div>
     </div>
 
-    <div>
+    <div class="side">
       <div class="card">
         <h3>Coverage &amp; conditions</h3>
-        <div class="pad">
+        <div class="body">
           <div class="stat"><span>Selected sources</span><b id="s-sel">—</b></div>
           <div class="stat"><span>Total segments</span><b id="s-total">—</b></div>
           <div class="stat"><span>Without condition</span><b id="s-unknown">—</b></div>
           <div class="dist" id="dist"></div>
         </div>
       </div>
-
-      <div class="card" style="margin-top:16px">
-        <h3>Per-field source priority</h3>
-        <div class="pad" style="padding-top:4px">
-          <table><thead><tr><th>Field</th><th>Priority (active wins ←)</th></tr></thead>
-          <tbody id="prio"></tbody></table>
+      <div class="card">
+        <h3>Selected segment <span id="seg-id" style="color:var(--muted);font-weight:500"></span></h3>
+        <div class="body">
+          <div id="seg-body" class="seg-empty">Click a road segment on the map to inspect its fused values and source provenance.</div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="card" style="margin-top:16px">
-        <h3>DATEX II output (sample segment)</h3>
-        <div class="pad"><pre id="datex">loading…</pre></div>
+  <!-- BOTTOM: priority + DATEX, full width -->
+  <div class="bottom">
+    <div class="card">
+      <h3>Per-field source priority <span style="color:var(--muted);font-weight:500">active source wins ←</span></h3>
+      <div class="body" style="padding-top:4px">
+        <table><thead><tr><th>Field</th><th>Priority order</th></tr></thead>
+        <tbody id="prio"></tbody></table>
       </div>
+    </div>
+    <div class="card">
+      <h3>DATEX II output <span id="datex-seg" style="color:var(--muted);font-weight:500"></span></h3>
+      <div class="body"><pre id="datex">Click a segment to see its standardized DATEX II.</pre></div>
     </div>
   </div>
 </div>
 
 <script>
-const COLORS = {Dry:"#2ecc71",Damp:"#3498db",Wet:"#2980b9",Ice:"#e74c3c",Snow:"#9b59b6",Unknown:"#95a5a6"};
-let active = new Set(["sws","lorawan","dwd","openweather"]);
-let sampleSegment = null;
+const COLORS={Dry:"#2ecc71",Damp:"#3498db",Wet:"#2980b9",Ice:"#e74c3c",Snow:"#9b59b6",Unknown:"#95a5a6"};
+let active=new Set(["sws","lorawan","dwd","openweather"]);
+let geoLayer=null, selectedId=null;
 
-function qs(){ return [...active].join(","); }
+const map=L.map("map",{preferCanvas:true}).setView([50.31,11.91],11);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+  {attribution:"&copy; OpenStreetMap &copy; CARTO",subdomains:"abcd",maxZoom:19}).addTo(map);
 
-function refreshMap(){
-  document.getElementById("map").src = "/api/segments/map?sources=" + encodeURIComponent(qs());
+const qs=()=>[...active].join(",");
+const setLoading=on=>document.getElementById("loading").classList.toggle("on",on);
+
+function styleFor(props,selected){
+  return {color:props.color||"#888",weight:selected?7:5,opacity:selected?1:.8};
+}
+
+async function loadGeo(){
+  setLoading(true);
+  const r=await fetch("/api/segments/geojson?sources="+encodeURIComponent(qs()));
+  const gj=await r.json();
+  if(geoLayer) geoLayer.remove();
+  geoLayer=L.geoJSON(gj,{
+    style:f=>styleFor(f.properties,f.properties.segment_id===selectedId),
+    onEachFeature:(f,layer)=>{
+      const p=f.properties;
+      layer.bindTooltip(
+        `<b>Seg ${p.segment_id}</b> · ${p.road_name||"?"}<br>`+
+        `${p.condition_de} (${p.condition}) → <code>${p.datex2}</code><br>`+
+        `surface src: <b>${p.provenance.surface_condition||"—"}</b>`,
+        {sticky:true});
+      layer.on("click",()=>selectSegment(p));
+    }
+  }).addTo(map);
+  setLoading(false);
+}
+
+function selectSegment(p){
+  selectedId=p.segment_id;
+  if(geoLayer) geoLayer.setStyle(f=>styleFor(f.properties,f.properties.segment_id===selectedId));
+  document.getElementById("seg-id").textContent="#"+p.segment_id;
+  document.getElementById("datex-seg").textContent="#"+p.segment_id;
+  const rows=Object.entries(p.values).map(([k,v])=>{
+    const src=p.provenance[k];
+    const val=(typeof v==="number")?v.toFixed(1):v;
+    return `<tr><td>${k}</td><td><b>${val}</b></td><td>[${src||"—"}]</td></tr>`;
+  }).join("");
+  document.getElementById("seg-body").className="";
+  document.getElementById("seg-body").innerHTML=
+    `<div style="margin-bottom:8px">${p.road_name||"?"} · ${p.elevation_m?p.elevation_m.toFixed(0)+" m":""} · `+
+    `<span class="pill" style="background:${p.color}">${p.condition_de}</span></div>`+
+    `<table class="prov"><thead><tr><th>Field</th><th>Value</th><th>Source</th></tr></thead><tbody>${rows}</tbody></table>`;
+  fetchDatex(p.segment_id);
+}
+
+async function fetchDatex(id){
+  const r=await fetch(`/api/segments/datex?segment_id=${id}&sources=${encodeURIComponent(qs())}`);
+  document.getElementById("datex").textContent=await r.text();
 }
 
 async function refreshCoverage(){
-  const r = await fetch("/api/segments/coverage?sources=" + encodeURIComponent(qs()));
-  const d = await r.json();
-  document.getElementById("s-sel").textContent = d.selected_sources.join(", ") || "none";
-  document.getElementById("s-total").textContent = d.total_segments;
-  document.getElementById("s-unknown").textContent = d.segments_without_condition;
-  for(const s of ["sws","lorawan","dwd","openweather"]){
-    document.getElementById("cov-"+s).textContent = "("+(d.coverage_per_source[s]||0)+")";
-  }
-  const dist = document.getElementById("dist"); dist.innerHTML="";
+  const r=await fetch("/api/segments/coverage?sources="+encodeURIComponent(qs()));
+  const d=await r.json();
+  document.getElementById("s-sel").textContent=d.selected_sources.join(", ")||"none";
+  document.getElementById("s-total").textContent=d.total_segments;
+  document.getElementById("s-unknown").textContent=d.segments_without_condition;
+  for(const s of ["sws","lorawan","dwd","openweather"])
+    document.getElementById("cov-"+s).textContent="("+(d.coverage_per_source[s]||0)+")";
+  const dist=document.getElementById("dist");dist.innerHTML="";
   for(const [k,v] of Object.entries(d.condition_distribution)){
-    const p=document.createElement("span"); p.className="pill";
-    p.style.background=COLORS[k]||"#888"; p.textContent=`${k}: ${v}`; dist.appendChild(p);
+    const el=document.createElement("span");el.className="pill";
+    el.style.background=COLORS[k]||"#888";el.textContent=`${k}: ${v}`;dist.appendChild(el);
   }
 }
 
 async function loadPriority(){
-  const r = await fetch("/api/segments/priority"); const d = await r.json();
-  const tb = document.getElementById("prio"); tb.innerHTML="";
+  const r=await fetch("/api/segments/priority");const d=await r.json();
+  const tb=document.getElementById("prio");tb.innerHTML="";
   for(const [field,list] of Object.entries(d.field_priority)){
-    const tr=document.createElement("tr");
-    const chips = list.map(s=>{
-      const on = active.has(s);
-      return `<span class="badge ${on?'':'off'}">${s}</span>`;
-    }).join(" ");
-    tr.innerHTML = `<td>${field}</td><td>${chips}</td>`;
-    tb.appendChild(tr);
+    const chips=list.map(s=>`<span class="badge ${active.has(s)?"":"off"}">${s}</span>`).join(" ");
+    const tr=document.createElement("tr");tr.innerHTML=`<td>${field}</td><td>${chips}</td>`;tb.appendChild(tr);
   }
-}
-
-async function refreshDatex(){
-  if(sampleSegment===null){
-    const r = await fetch("/api/segments/fused?sources=sws&limit=1");
-    const d = await r.json();
-    if(d.segments.length) sampleSegment = d.segments[0].segment_id;
-  }
-  if(sampleSegment===null) return;
-  const r = await fetch(`/api/segments/datex?segment_id=${sampleSegment}&sources=${encodeURIComponent(qs())}`);
-  document.getElementById("datex").textContent = await r.text();
 }
 
 function toggle(s){
-  if(active.has(s)){ if(active.size>1) active.delete(s); } else active.add(s);
-  document.querySelectorAll(".chip").forEach(c=>{
-    c.classList.toggle("active", active.has(c.dataset.s));
-  });
-  loadPriority(); refreshCoverage(); refreshDatex(); refreshMap();
+  if(active.has(s)){if(active.size>1)active.delete(s);}else active.add(s);
+  document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("active",active.has(c.dataset.s)));
+  loadPriority();refreshCoverage();loadGeo();
+  if(selectedId!==null)fetchDatex(selectedId);
 }
-
 document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>toggle(c.dataset.s)));
 
-loadPriority(); refreshCoverage(); refreshDatex();
+loadPriority();refreshCoverage();loadGeo();
+// keep Leaflet sized correctly after layout settles
+setTimeout(()=>map.invalidateSize(),300);
+window.addEventListener("resize",()=>map.invalidateSize());
 </script>
 </body>
 </html>

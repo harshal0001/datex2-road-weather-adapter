@@ -72,9 +72,44 @@ def fused(sources: str | None = Query(None), limit: int = 200):
     return {"selected_sources": selected, "count": len(out), "segments": out}
 
 
+@router.get("/geojson")
+def geojson(sources: str | None = Query(None)):
+    """Fused segments as a GeoJSON FeatureCollection (for client-side Leaflet).
+
+    Each feature carries the fused condition, colour, values and per-field
+    provenance in its properties, so the client can render + recolour instantly.
+    """
+    from shapely import wkt as shapely_wkt
+    from shapely.geometry import mapping
+
+    selected = _parse_sources(sources)
+    features = []
+    for fs in fuse_segments(selected):
+        if not fs.segment.geom_wkt:
+            continue
+        geom = mapping(shapely_wkt.loads(fs.segment.geom_wkt))
+        features.append({
+            "type": "Feature",
+            "geometry": geom,
+            "properties": {
+                "segment_id": fs.segment.segment_id,
+                "road_name": fs.segment.road_name,
+                "elevation_m": fs.segment.elevation_m,
+                "condition": fs.condition_label,
+                "condition_de": fs.condition_label_de,
+                "datex2": fs.datex2_value,
+                "color": fs.color,
+                "values": {k: v.value for k, v in fs.fusion.fields.items() if v.value is not None},
+                "provenance": fs.fusion.provenance(),
+                "sources_used": fs.fusion.sources_used,
+            },
+        })
+    return {"type": "FeatureCollection", "selected_sources": selected, "features": features}
+
+
 @router.get("/map", response_class=HTMLResponse)
 def segment_map(sources: str | None = Query(None)):
-    """Full Leaflet map HTML (for embedding in an iframe)."""
+    """Full folium map HTML (legacy/fallback — the Leaflet dashboard uses /geojson)."""
     selected = _parse_sources(sources)
     fused = fuse_segments(selected)
     return HTMLResponse(build_map(fused, selected).get_root().render())
