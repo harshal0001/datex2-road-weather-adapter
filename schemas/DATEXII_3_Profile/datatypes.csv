@@ -1,0 +1,54 @@
+Namespace;Datatype name;Facets;Definition
+LocationReferencing;AlertCLocationCode;<xs:minInclusive value='1'/><xs:maxInclusive value='63487'/>;A positive integer number (between 1 and 63 487) which uniquely identifies a pre-defined Alert C location defined within an Alert-C table.
+Facilities;AmountOfMoney;<xs:totalDigits value='8'/><xs:fractionDigits value='2'/>;A monetary value expressed to two decimal places.
+EnergyInfrastructure;Ampere;;Ampere.
+Common;AngleInDegrees;<xs:minInclusive value='0'/><xs:maxInclusive value='359'/>;An integer number representing an angle in whole degrees between 0 and 359.
+Common;AxlesPerHour;;Vehicle axles per hour.
+Common;Base64Binary;;Binary data in base 64 encoding, for example for image data.
+Common;Boolean;;Boolean has the value space required to support the mathematical concept of binary-valued logic: {true, false}. 
+Common;ConcentrationKilogramsPerCubicMetre;;Concentration defined in kilograms per cubic metre (equivalent to grams per litre under standard conditions).
+Common;ConcentrationMicrogramsPerCubicMetre;;A measure of concentration defined in µg/m3 (micrograms/cubic metre).
+Common;CountryCode;<xs:maxLength value='2'/>;EN ISO 3166-1 alpha-2 two-letter country code
+Common;CubicMetres;;A volumetric measure defined in cubic metres.
+Facilities;CurrencyCode;<xs:pattern value="[A-Z][A-Z][A-Z]"/>;Three letter code defining the currency according to ISO 4217:2015 (e.g. EUR for Euro).
+Common;Date;;A combination of year, month and day integer-valued properties plus an optional timezone property. It represents an interval of exactly one day, beginning on the first moment of the day in the timezone, i.e. '00:00:00' up to but not including '24:00:00'.
+Common;DateTime;;A combination of integer-valued year, month, day, hour, minute properties, a decimal-valued second property and a time zone property from which it is possible to determine the local time, the equivalent UTC time and the time zone offset from UTC.
+Common;Decimal;;A decimal number whose value space is the set of numbers that can be obtained by multiplying an integer by a non-positive power of ten, i.e., expressible as i × 10^-n where i and n are integers and n >= 0.
+RoadTrafficData;DensityVehiclesPerKilometre;;A measure of traffic density defined in number of vehicles per kilometre of road.
+Facilities;Duration;;A duration of time, which may consist of years, months, days, hours, minutes, and seconds components, as defined in ISO 8601.
+Common;Float;;A floating point number whose value space consists of the values m × 2^e, where m is an integer whose absolute value is less than 2^24, and e is an integer between -149 and 104, inclusive.
+Vms;GddPictogramCategoryCode;;A 3-digit code to identify a pictogram, as defined in ISO 14823 Graphic Data Dictionary. That standard is inconsistent in its definition of the value range; this model uses the more permissive definition where the bounds are 100 and 999.
+LocationReferencing;GmlPosList;<xs:pattern value='[-+]?[0-9]*\.?[0-9]+(\s[-+]?[0-9]*\.?[0-9]+){3,}'/>;List of coordinates, space-separated, within the same coordinate reference system, defining a geometric entity. Modelled on DirectPositionListType in GML (EN ISO 19136), but constrained to represent a 2D or 3D polyline.
+Common;Hectopascal;;A measure of pressure defined in hectopascal.
+Common;Integer;;An integer number whose value space is the set {-2147483648, -2147483647, -2147483646, ..., -2, -1, 0, 1, 2, ..., 2147483645, 2147483646, 2147483647}.
+Common;IntensityKilogramsPerSquareMetre;;A measure of the quantity of application of a substance to an area defined in kilograms per square metre.
+Common;IntensityMillimetresPerHour;;A measure of precipitation intensity defined in millimetres per hour.
+Common;KilometresPerHour;;A measure of speed defined in kilometres per hour.
+Common;Language;;A language datatype, identifies a specified language by an ISO 639-1 2-alpha code.
+Common;MetresAsFloat;;A measure of distance defined in metres in a floating point format.
+Common;MetresAsNonNegativeInteger;;A measure of distance defined in metres in a non negative integer format.
+Common;MetresPerSecond;;A measure of speed defined in metres per second.
+Common;MultilingualString;;A multilingual string, whereby the same text may be expressed in more than one language.
+LocationExtension;NamedAreaCode;<xs:maxLength value='8'/>;Type for a short numeric or alphanumeric code identifying an area.
+Common;NonNegativeInteger;;An integer number whose value space is the set {0, 1, 2, ..., 2147483645, 2147483646, 2147483647}.
+LocationReferencing;NutsCode;<xs:maxLength value='5'/>;A NUTS code (Nomenclature of territorial units for statistics).
+RoadTrafficData;PassengerCarUnitsPerHour;;Passenger car units per hour.
+Common;Percentage;;A measure of percentage.
+Common;Reference;;A reference to an identifiable managed object where the identifier is unique.  It comprises an identifier (e.g. UUID) and a string identifying the class of the referenced object.
+Common;Seconds;;Seconds.
+Facilities;SquareMetres;;A value of area expressed in units of square metres.
+Common;String;<xs:maxLength value='1024'/>;A character string whose value space is the set of finite-length sequences of characters. Every character has a corresponding Universal Character Set code point (as defined in ISO/IEC 10646), which is an integer.
+LocationReferencing;SubdivisionCode;<xs:maxLength value='3'/>;The second part of an ISO 3166-2 country sub-division code (up to 3 characters) which may be used along with a CountryCode to make a full ISO 3166-2 subdivision code.
+Common;TemperatureCelsius;;A measure of temperature defined in degrees Celsius.
+Common;Time;;An instant of time that recurs every day. The value space of time is the space of time of day values as defined in § 5.3 of [ISO 8601]. Specifically, it is a set of zero-duration daily time instances.
+Facilities;TimeZone; <xs:pattern value="[-+][0-9][0-9]:[0-9][0-9]|Z"/>;Identifies a time zone by specifying the difference to UTC in hours and minutes, as defined in ISO 8601.
+Common;Tonnes;;A measure of weight defined in metric tonnes.
+EnergyInfrastructure;Units;;Amount in units, which are specified by unitTypeEnum.
+Common;Url;;A Uniform Resource Locator (URL) address comprising a compact string of characters for a resource available on the Internet.
+RoadTrafficData;VehiclesPerDay;;A rate of vehicle flow in units of vehicles per day
+Common;VehiclesPerHour;;Vehicles per hour.
+Common;VersionedReference;;A reference to an identifiable version managed object where the combination of the identifier and version is unique. It comprises an identifier (e.g. UUID), a version (NonNegativeInteger) and a string identifying the class of the referenced object.
+EnergyInfrastructure;Volt;;Volt.
+EnergyInfrastructure;Watt;;Watt.
+Common;Year;;A year.
+

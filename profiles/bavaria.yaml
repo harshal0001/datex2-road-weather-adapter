@@ -1,0 +1,78 @@
+# Bavarian Road Weather Service mapping profile.
+# Reference: Cisneros Saldana et al. (2025), "AI-based System for Road Surface
+# Condition Forecasting Using Multi-Source Meteorological Data", ISM 2025.
+#
+# Copy this file to profiles/<your-jurisdiction>.yaml and edit to adopt the
+# adapter in a different region.
+
+name: bavaria
+version: "1.0"
+description: "Bayerische Landesbaudirektion / WDMS condition codes"
+
+# AI condition code → DATEX II WeatherRelatedRoadConditionTypeEnum.
+# Values VERIFIED against schemas/DATEXII_3_Profile/literals.csv (DATEX II v3.4,
+# enumeration "WeatherRelatedRoadConditionTypeEnum" in the Common namespace).
+# NOTE: the enum has NO `iceOnRoad`, `snowOnRoad`, or `unknown` literals — earlier
+# drafts used those and would have failed XSD validation. See docs/PANEL_QA.md §2.
+condition_codes:
+  0:
+    label: "Dry"
+    label_de: "Trocken"
+    datex2: "dry"          # "There is no humidity over the sensor."
+    color: "#22c55e"
+  1:
+    label: "Damp"
+    label_de: "Feucht"
+    datex2: "moist"        # "From 0,01 mm water film thickness over the sensor."
+    color: "#60a5fa"
+  2:
+    label: "Wet"
+    label_de: "Nass"
+    datex2: "wet"          # "From 0,2 mm water film thickness over the sensor."
+    color: "#8b5cf6"
+  3:
+    label: "Hoarfrost"
+    label_de: "Reif"
+    # Domain mapping decision: hoarfrost (Reif) → `glaze` ("Glaze of the road
+    # surface") to keep it DISTINCT from code 5 (generic `ice`). Alternatives:
+    # `icyPatches` or generic `ice`. Justified in docs/PANEL_QA.md §2.
+    datex2: "glaze"
+    color: "#f97316"
+  4:
+    label: "Snow"
+    label_de: "Schnee"
+    datex2: "snowOnTheRoad"  # "Snow is lying on the road surface."
+    color: "#ef4444"
+  5:
+    label: "Ice"
+    label_de: "Eis"
+    datex2: "ice"         # "Increased skid risk due to ice (of any kind)."
+    color: "#dc2626"
+  255:
+    label: "Unclassifiable"
+    label_de: "Nicht klassifizierbar"
+    datex2: "other"       # enum has no `unknown`; `other` is the catch-all literal.
+    color: "#9ca3af"
+
+# Source-specific field names → canonical names on WeatherInputs.
+# Add entries when wiring a new Source.
+field_map:
+  # WDMS (Bayern ArcGIS / Flask API)
+  TEMP: air_temp_c
+  TAUTEMP: dew_point_c
+  BTEMP: road_surface_temp_c
+  STZST: subsurface_temp_5cm_c
+  WINDGESCHW: wind_speed_ms
+  STATID: station_id
+  TIMESTAMP_MEASURE: timestamp
+
+  # Existing Flask REST API field names (api.json contract)
+  temperature: air_temp_c
+  tauTemperature: dew_point_c
+  bTemperature: road_surface_temp_c
+  windSpeed: wind_speed_ms
+
+horizons:
+  - now
+  - in_3h
+  - in_18h

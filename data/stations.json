@@ -1,0 +1,77 @@
+{
+  "_comment": "8 representative LoRaWAN road-sensor stations around Hof / Landkreis Hof, Bavaria. Picked for geographic diversity (elevation, urban/rural, north/south/east/west). Coordinates parsed from LoRaWAN device names.",
+  "stations": [
+    {
+      "id": "GAT-TPK-0004",
+      "name": "Gattendorf",
+      "lat": 50.34312,
+      "lon": 11.97851,
+      "source": "lorawan",
+      "is_demo": true,
+      "profile_tag": "rural_north"
+    },
+    {
+      "id": "RGL-TPK-0001",
+      "name": "Regnitzlosau",
+      "lat": 50.28824,
+      "lon": 12.06587,
+      "source": "lorawan",
+      "is_demo": true,
+      "profile_tag": "rural_east"
+    },
+    {
+      "id": "DOE-TPK-0002",
+      "name": "Döhlau",
+      "lat": 50.30570,
+      "lon": 11.95033,
+      "source": "lorawan",
+      "is_demo": true,
+      "profile_tag": "suburban"
+    },
+    {
+      "id": "TOE-TPK-0004",
+      "name": "Töpen",
+      "lat": 50.39144,
+      "lon": 11.89637,
+      "source": "lorawan",
+      "is_demo": true,
+      "profile_tag": "rural_far_north"
+    },
+    {
+      "id": "KOE-TPK-0006",
+      "name": "Köditz",
+      "lat": 50.34663,
+      "lon": 11.87007,
+      "source": "lorawan",
+      "is_demo": true,
+      "profile_tag": "rural_west"
+    },
+    {
+      "id": "FEI-TPK-0005",
+      "name": "Feilitzsch",
+      "lat": 50.35383,
+      "lon": 11.90219,
+      "source": "lorawan",
+      "is_demo": true,
+      "profile_tag": "rural_central"
+    },
+    {
+      "id": "SBS-TPK-0003",
+      "name": "Schwarzenbach a.d. Saale",
+      "lat": 50.18541,
+      "lon": 11.92680,
+      "source": "lorawan",
+      "is_demo": true,
+      "profile_tag": "rural_south"
+    },
+    {
+      "id": "GEG-TPK-0002",
+      "name": "Geroldsgrün",
+      "lat": 50.32938,
+      "lon": 11.58983,
+      "source": "lorawan",
+      "is_demo": true,
+      "profile_tag": "mountain_west"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+Namespace;Package name;Definition
+Parking;Access;A collection of information relating to the specification of a vehicular or pedestrian access identified areas.
+Situation;Accident;Situations in which one or more vehicles lose control and do not recover. These include collisions between vehicle(s) or other road user(s), between vehicle(s) and obstacle(s), or the result of a vehicle running off the road.
+Situation;Activity;A collection of information relating to human activities external to the traffic stream or roadway which could disrupt traffic.
+LocationReferencing;AlertC;A collection of information describing locations using the Alert-C location referencing approach.
+LocationReferencing;AlertCArea;A collection of information describing area locations using the Alert-C location referencing approach.
+LocationReferencing;AlertCLinearByCode;A collection of information describing linear locations by use of specified location codes using the Alert-C location referencing approach.
+LocationReferencing;AlertCMethod2Linear;A collection of information describing linear locations by method 2 (defined primary and secondary locations) using the Alert-C location referencing approach.
+LocationReferencing;AlertCMethod2Point;A collection of information describing point locations by method 2 (defined primary and secondary locations) using the Alert-C location referencing approach.
+LocationReferencing;AlertCMethod4Linear;A collection of information describing linear locations by method 4 (defined primary and secondary locations and offset distances) using the Alert-C location referencing approach.
+LocationReferencing;AlertCMethod4Point;A collection of information describing point locations by method 4 (defined primary and secondary locations and offset distances) using the Alert-C location referencing approach.
+Parking;Assignment;Assignment
+RoadTrafficData;BasicData;Generic data that is either measured or calculated data.
+RoadTrafficData;Classes;A collection of data and information constructs that are used only in the RoadTrafficData package of the DATEX II model.
+Situation;Classes;A collection of data and information constructs that are used only in the Situation package of the DATEX II model.
+EnergyInfrastructure;Classes;Classes for Energy publication.
+Common;Classes;A collection of data and information constructs used throughout the DATEX II model.
+Vms;Classes;A collection of data and information constructs that are used only in the Vms package of the DATEX II model.
+Parking;CommonComponents;A collection of information concerning attribution and features relating to one parking place,parking hierarchy element or identified area.
+Situation;Conditions;A collection of information providing quantified measures that influence driving conditions, including metrological and road surface measures.
+Common;DataValue;A data value of something that can be measured or calculated.
+RoadTrafficData;DataValue;Data values of something that can be measured or calculated.
+Facilities;DataValue;Data value
+Facilities;Dimension;Dimensions of some object.
+RoadTrafficData;ElaboratedDataPublication;A collection of data relating to the publication of elaborated data.  Elaborated data includes all data created through algorithm and not directly recorded.  Journey time data is included.
+Facilities;Eligibility;A collection of information regarding criteria for access to use a rate table.
+EnergyInfrastructure;EnergyInfrastructureStatusPublication;EnergyInfrastructureStatusPublication
+EnergyInfrastructure;EnergyInfrastructureTablePublication;EnergyInfrastructureTablePublication
+Facilities;Facility;Abstract class facility with a couple of properties.
+Common;Fault;Information about faults.
+LocationExtension;Final;LocationReferencing extension elements that have reached their final stable forms for the current major revision of DATEX II
+CommonExtension;Final;Common extension elements that have reached their final stable forms for the current major revision of DATEX II
+LocationReferencing;Gml;Constructs modelling GML (ISO 19136) concepts
+Vms;GraphicDataDictionary;Constructs based on ISO 14823 Graphics Data Dictionary (GDD), for identifying pictograms
+Parking;IdentifiedArea;A collection of information relating to IdentifiedArea,which are An identifiable discrete bounded geographic zone that shares common characteristics and that may be used for parking related or other purposes.
+Situation;Impact;A collection of data related to the impact of any form of event, incident or activity on the network. Provides qualitive and quantative measures describing the proportion of road space remaining.
+RoadTrafficData;IndividualVehicleData;Constructs to express data arising from the travel of an individual vehicle
+Parking;JunctionAndRoad;Junction
+LocationReferencing;LinearWithinLinearElement;A collection of information for defining linear locations using reference points on a linear element that is a road.
+LocationReferencing;LocationReference;A collection of information related to specifying locations within a transportation network.
+RoadTrafficData;MeasuredDataPublication;A collection of data relating to the publication of potentially large amounts of measured data.
+RoadTrafficData;MeasurementSiteTablePublication;A publication containing one or more Measurement Site Tables.
+LocationReferencing;NamedArea;A collection of information for defining area locations.
+Situation;NetworkManagement;Restrictions on road usage, whether by legal order or by operational decisions. It includes road and lane closures, weight and dimensional limits, banned turns, contraflows and alternate traffic operations.
+Situation;Obstruction;Information about obstacles or obstructions on or adjacent to the roadway, either of a stationary or moving nature, which may disrupt or endanger traffic.
+LocationReferencing;OpenLR;OpenLR
+LocationReferencing;OpenlrArea;OpenLR Area
+LocationReferencing;OpenlrLinear;OpenLRLinear
+LocationReferencing;OpenlrPoint;OpenLRPoint
+Facilities;OperatingHoursPublication;OperatingHours
+Parking;OperatingPattern;Operating restrictions for this parking place or campus.
+Situation;OperatorAction;Operator actions.
+Facilities;OrganisationPublication;Contact information.
+Parking;OrganisationRole;OrganisationRole
+Parking;ParkingRoute;Parking Route information.
+Parking;ParkingStatus;Information related to the ParkingStatus publication.
+Parking;ParkingStatusPublication;A collection of data relating to the publication of parking status information.
+Parking;ParkingTablePublication;A collection of data relating to the publication of parking tables.
+Facilities;PaymentMethod;A collection of information regarding different forms of payment.
+RoadTrafficData;PhysicalQuantity;Constructs representing the measurement or calculation of physical quantities.
+Parking;Place;Where a vehicle may park,stand,rest,or briefly transit to allow a person to change modes of transport (i.e. taxi drop-off/pickup,ride share drop-off/pickup,valet stand,etc.).
+Parking;PlaceHierarchy;A collection of constructs that make up a parking hierarchy,including campus,parking place,hierarchy element,identified area(s) and space(s).
+LocationReferencing;PointAlongLinearElement;A collection of information for defining point locations using reference points on a linear element that is a road.
+LocationReferencing;PointCoordinates;Different classes needed for defining a point using coordiantes
+LocationReferencing;PredefinedLocationsPublication;A collection of data providing a definition of one particular defined group of sections of the network.
+Facilities;Rates;Information about rates.
+Facilities;Right;Rights in combination with rates.
+Situation;Roadworks;Road maintenance, installation and construction activities, works in the road, or other construction or maintenance actions that may affect normal operation of a road.
+Situation;ServiceInformation;A collection of information about events related to services, not traffic on the road, but which may influence the behaviour of drivers and hence the characteristics of traffic flow.
+Situation;SituationPublication;A collection of data relating to the publication of situation information.
+Parking;Space;A collection of information relating to a parking space,i.e. a location normally for parking a single vehicle.
+Parking;SubplaceElement;Allows a parking operating entity to subdivide the Parking Place into homogenous operating areas.  The Parking Place is typically identified in the physical world as a specific parking structure,surface lot,or city zone of on-street parking.
+LocationReferencing;SupplementaryPositionalDescription;Package with constructs for supplementary descriptions to help identifiy locations
+Parking;SupplyAndDemand;A collection of informartion regarding the parameters of the supply of parking and reporting actual usage of parking in a parking Hierarchy Component.
+Parking;ThresholdConfiguration;Configuration for parking status thresholds.
+LocationReferencing;TpegAreaLocation;A collection of information describing area locations using the TPEG-Loc location referencing approach.
+LocationReferencing;TpegDescriptor;A collection of information providing descriptive references to locations using the TPEG-Loc location referencing approach.
+LocationReferencing;TpegLinearLocation;A collection of information describing linear locations using the TPEG-Loc location referencing approach.
+LocationReferencing;TpegPointLocation;A collection of information describing point locations using the TPEG-Loc location referencing approach.
+RoadTrafficData;TrafficConcentration;Averaged measurements of traffic concentration.
+RoadTrafficData;TrafficData;A collection of information associated with measured or derived values relating to vehicle movements at a specified location.
+Situation;TrafficElement;A collection of data providing information on an occurrence on the network on the network which is not planned by a traffic operator.
+RoadTrafficData;TrafficFlow;Averaged measurements of traffic flow rates.
+RoadTrafficData;TrafficGap;Averaged measurements of gaps between vehicles.
+RoadTrafficData;TrafficHeadway;Averaged measurements of traffic headway, i.e. the distance or time interval between vehicles.
+RoadTrafficData;TrafficSpeed;Averaged measurements of traffic speed.
+RoadTrafficData;TrafficStatus;Derived/computed traffic status information.
+RoadTrafficData;TravelTimeData;Measured or derived travel time information relating to a defined linear stretch of the road network.
+Common;Validity;Specification of validity, either explicitly or by a validity time period specification which may be discontinous.
+Common;Vehicle;A collection of information providing measures relating to an individual vehicle.
+Common;VehicleCharacteristics;A collection of parameters which characterise a vehicle.
+Parking;VehicleCountAndRate;ParkingVehicleCountAndRate
+Vms;VmsConfiguration;Configuration (static or dynamic) of a VMS
+Vms;VmsFault;Information about faults.
+Vms;VmsMessage;A collection of data relating to the publication of the text and pictogram information displayed on VMS.
+Vms;VmsPublication;A collection of data relating to the publication of VMS information.
+Vms;VmsStatus;A collection of information relating to the status and settings of a VMS controller unit and the one or more variable message signs it controls.
+Vms;VmsTablePublication;A collection of data relating to the publication of characteristic type data relating to VMS.
+RoadTrafficData;WeatherData;A collection of information related to measured or derived weather conditions at a specified location.
+Common;WeatherRelated;Weather related information.
+

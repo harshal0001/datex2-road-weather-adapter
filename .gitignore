@@ -1,0 +1,35 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Generated artifacts (regenerate via scripts/)
+generated/datex2/
+data/demo.db
+data/demo.db-*
+data/raw/
+
+# DATEX II schema bundle (XSDs + data dictionary CSVs) IS committed so the repo is
+# self-contained and reproducible: clone → scripts/generate_dataclasses.py → tests pass.
+# Only the raw downloaded zip is ignored.
+schemas/*.zip
+
+# Large local data drops (parquet / aggregated CSVs live outside git)
+data/raw/
+*.parquet
+
+# IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Logs
+*.log

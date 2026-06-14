@@ -1,0 +1,463 @@
+Namespace;Class name;Association end;Designation;Definition;Multiplicity;Target
+Parking;Access;;;;0..1;EAID_9C1C60E7_8F24_40bc_A596_F021FC9D776E
+Parking;Access;primaryRoad;Primary road;;0..*;EAID_D9424D34_C6ED_4177_A738_6CC193EEAB47
+Parking;AccessAndEgress;entranceOpenTime;Entrance open time;Specification of entry open times.;0..1;EAID_2A6A3FD2_A3E4_469e_9A76_57C8F23EE37F
+Parking;AccessAndEgress;exitOpenTime;Exit open time;Specification of exit open times.;0..1;EAID_2A6A3FD2_A3E4_469e_9A76_57C8F23EE37F
+Parking;AccessAndEgress;openTime;Open time;Specification of access open times in general.;0..1;EAID_2A6A3FD2_A3E4_469e_9A76_57C8F23EE37F
+Parking;AccessJunction;;;;1..1;EAID_9AB63F4C_BC43_4d85_9C8C_8D17F98B12E4
+Parking;AccessLaneSpecific;entranceOpenTime;Entrance open time;Specification of entry open times.;0..1;EAID_2A6A3FD2_A3E4_469e_9A76_57C8F23EE37F
+Parking;AccessLaneSpecific;exitOpenTime;Exit open time;Specification of exit open times.;0..1;EAID_2A6A3FD2_A3E4_469e_9A76_57C8F23EE37F
+Parking;AccessLaneSpecific;maxDimension;Max dimension;;0..1;EAID_513E26A7_D33C_46f1_BEF1_5D07A07F7955
+Parking;AccessRoad;;;;1..1;EAID_2DD3DF23_1753_4333_B61A_3AD8D4107E91
+Parking;VehicularAccess;;;;0..*;EAID_E477DA8F_3A25_41c5_9C5D_80E42CBB9A21
+Parking;VehicularAccess;correspondingJunction;Corresponding junction;;0..1;EAID_8A9C3D1C_984B_4060_AEAE_019504AF32C9
+Situation;Accident;;;;0..*;EAID_2B372237_03AA_40b2_9F77_23C368B1BAD6
+Situation;Accident;;;;0..*;EAID_78796365_15FB_4f04_A1D1_37B0891D63D9
+Situation;Accident;vehicleInvolved;Vehicle involved;The vehicle involved in the accident.;0..*;EAID_EED11672_97F8_47f5_8EE7_D8F41C785480
+Situation;Activity;mobilityOfActivity;Mobility of activity;Mobility of the activity.;0..1;EAID_DC471947_184F_49a4_BDEC_EB9734EFC519
+LocationReferencing;AlertCMethod2PrimaryPointLocation;;;;1..1;EAID_5B227414_6989_4551_9FFE_26D05A9331B9
+LocationReferencing;AlertCMethod2SecondaryPointLocation;;;;1..1;EAID_5B227414_6989_4551_9FFE_26D05A9331B9
+LocationReferencing;AlertCMethod4PrimaryPointLocation;;;;1..1;EAID_17D9A0F3_0E2D_4681_9E78_EA4235DC5451
+LocationReferencing;AlertCMethod4PrimaryPointLocation;;;;1..1;EAID_5B227414_6989_4551_9FFE_26D05A9331B9
+LocationReferencing;AlertCMethod4SecondaryPointLocation;;;;1..1;EAID_17D9A0F3_0E2D_4681_9E78_EA4235DC5451
+LocationReferencing;AlertCMethod4SecondaryPointLocation;;;;1..1;EAID_5B227414_6989_4551_9FFE_26D05A9331B9
+LocationReferencing;AlertCArea;areaLocation;Area location;Area location defined by a specific Alert-C location.;1..1;EAID_5B227414_6989_4551_9FFE_26D05A9331B9
+LocationReferencing;AlertCLinearByCode;;;;1..1;EAID_FBFB44B6_4562_436a_99A2_8D6215A51D68
+LocationReferencing;AlertCLinearByCode;locationCodeForLinearLocation;Location code for linear location;Linear location defined by a specific Alert-C location.;1..1;EAID_5B227414_6989_4551_9FFE_26D05A9331B9
+LocationReferencing;AlertCMethod2Linear;;;;1..1;EAID_FBFB44B6_4562_436a_99A2_8D6215A51D68
+LocationReferencing;AlertCMethod2Linear;;;;1..1;EAID_48305A58_7EA3_41df_AD52_2656C2087928
+LocationReferencing;AlertCMethod2Linear;;;;1..1;EAID_F86AB504_DC39_4afe_B745_84652E9AC4C1
+LocationReferencing;AlertCMethod2Point;;;;1..1;EAID_FBFB44B6_4562_436a_99A2_8D6215A51D68
+LocationReferencing;AlertCMethod2Point;;;;1..1;EAID_48305A58_7EA3_41df_AD52_2656C2087928
+LocationReferencing;AlertCMethod4Linear;;;;1..1;EAID_FBFB44B6_4562_436a_99A2_8D6215A51D68
+LocationReferencing;AlertCMethod4Linear;;;;1..1;EAID_9FA48308_F473_4b49_8428_3BC7F8DDC718
+LocationReferencing;AlertCMethod4Linear;;;;1..1;EAID_CBAE58F4_DF40_412b_89C9_A74F0E3A77E6
+LocationReferencing;AlertCMethod4Point;;;;1..1;EAID_FBFB44B6_4562_436a_99A2_8D6215A51D68
+LocationReferencing;AlertCMethod4Point;;;;1..1;EAID_9FA48308_F473_4b49_8428_3BC7F8DDC718
+Parking;Assignment;applicableFor;Applicable for;Assignments for parking. Other assignments are allowed as well, i.e. the parking spaces are convenient for this kind of assignment.;0..1;EAID_04AFBDC3_234D_4cf7_9AAE_FB3282C2C7E6
+Parking;Assignment;assignmentValidity;Assignment validity;;0..1;EAID_32B776D4_35CA_47a0_8E49_354460E5DE34
+Parking;Assignment;exclusivelyAssignedFor;Exclusively assigned for;Parking is only allowed for the assignment specified here, i.e. other assignments are not allowed. By using this role, it is not allowed to use 'applicableFor' and 'prohibitedFor' for the same type of attributes.;0..1;EAID_04AFBDC3_234D_4cf7_9AAE_FB3282C2C7E6
+Parking;Assignment;prohibitedFor;Prohibited for;Parking is not allowed for the given assignment.;0..1;EAID_04AFBDC3_234D_4cf7_9AAE_FB3282C2C7E6
+RoadTrafficData;BasicData;;;Characteristics of the measurement or calculation time which should be considered to override any specified defaults;0..1;EAID_753B59C8_88A5_491b_A3A3_90CFB9D71027
+RoadTrafficData;MeasurementOrCalculationTime;;;The measurement or calculation period;0..1;EAID_DC2B72A4_31FE_4cf5_B594_5EA8FFC4D072
+Situation;Cause;detailedCauseType;Detailed cause type;The type of cause, expressed in more detail than the NonManagedCause causeType. If both are present then they must be consistent.;0..1;EAID_E9304498_ABD0_46d8_A25F_BC62A7FEFF42
+Situation;Cause;managedCause;Managed cause;A reference to another situation record which defines a cause of the event defined here.;0..1;EAID_BBBA60F5_773B_4be4_99C2_D1A4219205C0
+EnergyInfrastructure;ElectricChargingPoint;;;Specify the connector(s).;0..*;EAID_E5D9EB2F_7F9D_4a3b_9A7C_9CB63A2DF208
+EnergyInfrastructure;ElectricChargingPoint;;;;0..*;EAID_0363A258_0B06_4ccd_B2BE_0EF82E0552FD
+EnergyInfrastructure;ElectricChargingPoint;;;;0..*;EAID_EE8D215A_90CD_4a9f_AA5A_5AF9015AD218
+EnergyInfrastructure;ElectricChargingPointStatus;electricEnergyMixOverride;Electric energy mix override;Overrides the energy mixes that are available at this electric charging point.;0..*;EAID_0363A258_0B06_4ccd_B2BE_0EF82E0552FD
+EnergyInfrastructure;ElectricEnergyMix;;;;0..*;EAID_BA1868A7_B813_445f_A70D_881A27D95504
+EnergyInfrastructure;ElectricEnergyMix;;;;0..1;EAID_482231EA_2481_4bb0_9774_EE062933C6AD
+EnergyInfrastructure;ElectricEnergyMix;energyProvider;Energy provider;The energy provider for this electric charging point.;0..1;EAID_99D16EA9_E308_4a11_8B32_960549E58724
+EnergyInfrastructure;ElectricEnergySourceRatio;sourceRatioValue;Source ratio value;The percentage ratio value of this energy source.;1..1;EAID_649A1B6C_14F5_438e_A81B_7DEAD9D91B94
+EnergyInfrastructure;EnergyInfrastructureSite;;;Specifications of charging stations on the site.;0..*;EAID_18B5A27A_2965_41d7_96FA_B795FA26CF3B
+EnergyInfrastructure;EnergyInfrastructureSite;entrance;Entrance;Possibility to specify the location of the site's entrance.;0..*;EAID_8B6050E8_8BFC_4b0e_9354_4F0527307112
+EnergyInfrastructure;EnergyInfrastructureSite;exit;Exit;Possibility to specify the location of the site's exit.;0..*;EAID_8B6050E8_8BFC_4b0e_9354_4F0527307112
+EnergyInfrastructure;EnergyInfrastructureSiteStatus;;;Specify the status of a charging station with dynamic information.;0..*;EAID_33A250CF_399E_4c79_9937_17A41361E649
+EnergyInfrastructure;EnergyInfrastructureStation;;;Specify the type of service available at the EnergyInfrastructureStation.;0..1;EAID_9522D7D5_446E_4ac3_B9D1_ACF3D3A48E43
+EnergyInfrastructure;EnergyInfrastructureStation;;;Specifications of refill points at a charging station. Note that the refillPointIndex must be unique within the complete site!;0..*;EAID_176D1329_000F_4dc8_B3F2_775C59B73D8B
+EnergyInfrastructure;EnergyInfrastructureStation;energyDistributor;Energy distributor;The distributor of the energy.;0..1;EAID_99D16EA9_E308_4a11_8B32_960549E58724
+EnergyInfrastructure;EnergyInfrastructureStation;energyProvider;Energy provider;The provider of the energy.;0..1;EAID_99D16EA9_E308_4a11_8B32_960549E58724
+EnergyInfrastructure;EnergyInfrastructureStationStatus;;;Specify the status of a refill point with dynamic information.;0..*;EAID_0BE3289C_9E16_4ab8_AA39_656E0F9EDE80
+EnergyInfrastructure;EnergyInfrastructureTable;;;;1..*;EAID_6275CEAD_3F3A_4b95_96F3_DA3FE639ECE1
+Common;GroupOfVehiclesInvolved;;;;0..1;EAID_3E56124E_0654_4d2a_B78E_2C7C6A470500
+Vms;ManagedLogicalLocation;managedLocation;Managed location;The location which is managed by the variable message sign, such as the location of a junction or a car park.;0..1;EAID_8B6050E8_8BFC_4b0e_9354_4F0527307112
+RoadTrafficData;MeasurementSite;;;Indexed measurement-specific characteristics associated with the measurement site. The index uniquely associates the measurement characteristics with the corresponding indexed measurement values for the measurement site.;1..1;EAID_271DE7C1_6D8A_4c33_925C_4BDEBDDAAC3F
+RoadTrafficData;MeasurementSite;informationManagerOverride;Information manager override;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content. This value overrides any value specified at a more general level.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+RoadTrafficData;MeasurementSite;measurementSiteLocation;Measurement site location;;1..1;EAID_A2A4DD9E_C635_48e4_8143_F444A0A0C335
+RoadTrafficData;MeasurementSiteTable;;;;1..*;EAID_48E520A8_448A_41df_8DDA_16FD6B35E697
+RoadTrafficData;MeasurementSiteTable;informationManager;Information manager;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+RoadTrafficData;MeasurementSpecificCharacteristics;;;Axle characteristics for which the measurement applies;0..1;EAID_2C4BBC6B_009C_484e_BD0B_AC61F5B7DE34
+RoadTrafficData;MeasurementSpecificCharacteristics;specificLane;Specific lane;The lane(s) to which the specific measurement at the measurement site relate(s). This overrides any lane specified for the measurement site as a whole.;0..*;EAID_E48F56CA_7AE8_49f3_9BCA_2B1E2F69CCEE
+RoadTrafficData;MeasurementSpecificCharacteristics;specificVehicleCharacteristics;Specific vehicle characteristics;;0..1;EAID_3E56124E_0654_4d2a_B78E_2C7C6A470500
+Common;PayloadPublication;publicationCreator;Publication creator;;1..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+EnergyInfrastructure;RefillPoint;;;Specify the type of service available at a RefillPoint.;0..1;EAID_9522D7D5_446E_4ac3_B9D1_ACF3D3A48E43
+EnergyInfrastructure;RefillPointStatus;waitingTime;Waiting time;Estimated waiting time for customers without reservation;0..1;EAID_45EB1D56_9B28_43ef_9AB1_4040A01180D5
+RoadTrafficData;SiteMeasurements;;;Indexed measured value associated with the measurement site. The index uniquely associates the measurement value with the corresponding indexed measurement characteristics defined for the measurement site.;1..1;EAID_33C7F59F_E755_466c_968D_1F590B3A6D1E
+RoadTrafficData;SiteMeasurements;measurementTimeDefault;Measurement time default;The time associated with the set of measurements.;1..1;EAID_753B59C8_88A5_491b_A3A3_90CFB9D71027
+Situation;Situation;;;Details of the Situation;1..*;EAID_14358B9A_22CA_463c_ADA7_092CBB3D3E14
+Situation;Situation;;;;1..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+Situation;Situation;informationManager;Information manager;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+Situation;Situation;relatedSituation;Related situation;Reference to related situations via unique identifiers.;0..*;EAID_122DD9E2_B021_47dd_BCBC_F3F5E765BC75
+Situation;Situation;situationSummary;Situation summary;A SituationRecord that provides a summary of the information described by the corresponding Situation, i.e. a superset of at least the location and validity information of all (other) SituationRecords in this Situation. ;0..1;EAID_14358B9A_22CA_463c_ADA7_092CBB3D3E14
+Situation;SituationRecord;;;;0..1;EAID_5774578F_72F8_4cbc_818B_D7CA689E86FF
+Situation;SituationRecord;;;;1..1;EAID_A2A4DD9E_C635_48e4_8143_F444A0A0C335
+Situation;SituationRecord;;;;1..1;EAID_7B9FCC60_B9BF_477c_81A5_657663A34BD8
+Situation;SituationRecord;;;;0..*;EAID_AC5B3818_EB8B_48d5_AEE7_E3C6362C9096
+Situation;SituationRecord;;;;0..1;EAID_8069FF02_0B57_4564_90D1_E96616145F8E
+Situation;SituationRecord;generalPublicComment;General public comment;A comment which may be freely distributed to the general public;0..*;EAID_D1567E46_DCE8_4795_B382_79ADDBF24D6A
+Situation;SituationRecord;impact;Impact;Impact of the situation element;0..1;EAID_480D8D37_3A5F_40e4_AE70_E887E23D78C7
+Situation;SituationRecord;impactOnOppositeDirection;Impact on opposite direction;impact of the situation element on driving conditions in the opposite direction;0..1;EAID_480D8D37_3A5F_40e4_AE70_E887E23D78C7
+Situation;SituationRecord;informationManagerOverride;Information manager override;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content. This value overrides any value specified at a more general level.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+Situation;SituationRecord;nonGeneralPublicComment;Non general public comment;A comment which should not be distributed to the general public.;0..*;EAID_D1567E46_DCE8_4795_B382_79ADDBF24D6A
+Vms;Vms;;;;1..1;EAID_0856E4A8_2CB7_4cd7_A96E_6E62CFD25487
+Vms;Vms;;;The logical location managed by the VMS;0..1;EAID_C73414BB_4BE7_4d0a_8A64_3CD9DC5B71C6
+Vms;Vms;imageLink;Image link;A URL reference from where an image of the VMS can be obtained.;0..1;EAID_AC5B3818_EB8B_48d5_AEE7_E3C6362C9096
+Vms;Vms;vmsLocation;VMS location;The physical point location at which the variable message sign is situated. For mobile VMS which are regularly moved this need not be provided. Instead the VMS location should be provided in the VmsPublication along with current settings.;0..1;EAID_8B6050E8_8BFC_4b0e_9354_4F0527307112
+Vms;VmsController;;;;1..*;EAID_D415FCCA_2BF4_4e34_912E_43CF6360602F
+Vms;VmsControllerTable;;;;1..*;EAID_0431A8EA_3EA8_4d95_BE31_5C492BE1E89B
+Vms;VmsControllerTable;informationManager;Information manager;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+Parking;AdditionalCharacteristics;;;;0..*;EAID_F317A38E_9D72_4e4d_B10D_A66CF3469CA0
+Parking;AdditionalCharacteristics;;;;0..*;EAID_F1EA042F_90D6_4586_9C35_DF5EA7BCB365
+Parking;AdditionalCharacteristics;maximumParkingSpaceDimension;Maximum parking space dimension;Dimension of the largest space within this area (i.e. there must be at least one space of this dimension). If the comparison of dimension values is not unique, the length is decisive.;0..1;EAID_513E26A7_D33C_46f1_BEF1_5D07A07F7955
+Parking;AdditionalCharacteristics;minimumParkingSpaceDimension;Minimum parking space dimension;Lower dimension boundaries for all spaces within the area. Note that there need not exist a space with this exact dimension, but each space's dimension values must be equal or higher.;0..1;EAID_513E26A7_D33C_46f1_BEF1_5D07A07F7955
+Parking;AdditionalCharacteristics;totalDimension;Total dimension;Dimension of a virtual rectangle encapsulating the area of all parking spaces in the described hierarchy level. Use 'usableArea' to define the total space available for parking within this group. Do not use 'height'.;0..1;EAID_513E26A7_D33C_46f1_BEF1_5D07A07F7955
+Parking;CommonComponents;;;;0..1;EAID_B6817E9E_D97D_4041_9A9B_21989C2ABBD9
+Parking;CommonComponents;;;;0..*;EAID_6B8E417A_41FA_476b_AA37_E5843C1A4492
+Parking;CommonComponents;;;;0..*;EAID_AD2DBF1A_76D1_4f9e_872F_463CAD63FE28
+Parking;CommonComponents;;;;0..*;EAID_D0779E73_21D7_4fc1_B7F6_DE96BE4684A6
+Parking;CommonComponents;;;;0..*;EAID_C17CF3BE_F685_46af_8B23_A433C4932B89
+Parking;CommonComponents;;;;0..*;EAID_DBB119A1_D654_4349_8743_0483AADD4CA5
+Parking;CommonComponents;;;;0..*;EAID_A15E9B37_9037_4448_8B27_623E569E3F5C
+Parking;CommonComponents;;;;0..1;EAID_3C3DFB60_5421_4f6b_8DE8_D374BA664FDD
+Parking;CommonComponents;;;;0..*;EAID_22F6C100_B395_4acf_BEEA_2426880480E5
+Parking;CommonComponents;;;;0..1;EAID_77B5BE94_B7D6_449a_A33A_F09953B7AE96
+Parking;Marketing;;;;0..*;EAID_4B9D1E4B_4AAC_478b_A499_24ABBA5BD974
+Parking;SafetyStandardClassification;;;;0..*;EAID_B4E95421_24D8_4252_B6E9_5033073AB642
+Situation;PoorEnvironmentConditions;;;;0..1;EAID_556EDB50_CB4C_4c3c_8C3A_F47C128EC64D
+Situation;PoorEnvironmentConditions;;;;0..1;EAID_DD58245B_12C7_4a62_A002_99FA681D3CE3
+Situation;PoorEnvironmentConditions;;;;0..1;EAID_621F65C2_F33C_4292_A924_F688035A0A81
+Situation;PoorEnvironmentConditions;;;;0..1;EAID_0800E31F_41C0_4659_B57A_7333B3908D14
+Situation;PoorEnvironmentConditions;;;;0..1;EAID_B872D5C9_C377_442d_AE65_567002AFF4B7
+Situation;PoorEnvironmentConditions;;;;0..1;EAID_890BB8E3_8CFE_4524_9D3D_9DDE17CE1B1D
+Situation;PoorEnvironmentConditions;;;;0..1;EAID_BB2C3753_BA09_4965_AFDD_1925A97A93BD
+Situation;WeatherRelatedRoadConditions;;;;0..1;EAID_C7A8510A_6710_4e1a_B423_D081E9524E8C
+RoadTrafficData;ElaboratedDataPublication;;;;1..*;EAID_33C7F59F_E755_466c_968D_1F590B3A6D1E
+RoadTrafficData;ElaboratedDataPublication;;;;0..1;EAID_5971833C_653E_446d_9395_237967755187
+RoadTrafficData;ElaboratedDataPublication;;;;1..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+RoadTrafficData;ElaboratedDataPublication;informationManager;Information manager;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+Facilities;Eligibility;;;;0..*;EAID_C5CAECC8_1BE0_4672_9E47_7D94FCFC7F09
+Facilities;Qualification;;;;0..*;EAID_3E56124E_0654_4d2a_B78E_2C7C6A470500
+Facilities;Qualification;;;;0..*;EAID_70150FEF_02B0_48fa_A43C_5FBE2A44BC75
+Facilities;Qualification;;;;0..*;EAID_47653F36_E6BC_4356_B5F8_494C220D229B
+EnergyInfrastructure;EnergyInfrastructureStatusPublication;;;;0..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+EnergyInfrastructure;EnergyInfrastructureStatusPublication;;;;0..*;EAID_A12E1A75_8C47_41a6_8B6E_3AA4BF95FC9B
+EnergyInfrastructure;EnergyInfrastructureTablePublication;;;;0..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+EnergyInfrastructure;EnergyInfrastructureTablePublication;;;;1..*;EAID_B91A4FF3_32EF_4524_860C_991D20CAF77C
+LocationExtension;Address;;;;0..*;EAID_D8545AFB_B8D0_4396_8162_0B5AE6B91241
+LocationExtension;FacilityLocation;;;An address specification following ISO 19160-4.;0..1;EAID_8B6C9804_34F2_4053_ADCC_6D8139D069E7
+LocationReferencing;GmlMultiPolygon;;;;1..*;EAID_F00FF3F2_71E8_42d4_989E_75F789570D1D
+LocationReferencing;GmlPolygon;exterior;Exterior;A boundary of a polygonal surface consisting of a ring i.e. in the normal 2D case, a closed polygonal line distinguished as exterior. Such a polygonal line has at least 4 pairs of coordinates;1..1;EAID_D8C0297D_8283_4fe7_96BA_7B6AEE74083D
+LocationReferencing;GmlPolygon;interior;Interior;A boundary of internal patches of a polygonal surface consisting of a ring feature;0..*;EAID_D8C0297D_8283_4fe7_96BA_7B6AEE74083D
+Vms;GddStructure;;;;0..1;EAID_023516E5_332F_4fbd_8ECF_9439DE56F4B6
+Vms;GddStructure;;;;1..1;EAID_B5150DF8_2318_492a_9B40_E42C00725DF5
+Parking;IdentifiedArea;;;;0..1;EAID_77B5BE94_B7D6_449a_A33A_F09953B7AE96
+Parking;IdentifiedArea;;;;0..*;EAID_D0779E73_21D7_4fc1_B7F6_DE96BE4684A6
+Parking;SpecificArea;;;;0..1;EAID_22F6C100_B395_4acf_BEEA_2426880480E5
+Situation;Impact;;;;0..1;EAID_D6E2CAAD_2468_4a67_97C4_C580C42B51B3
+RoadTrafficData;IndividualVehicleDataValues;individualVehicle;Individual vehicle;Properties of the individual vehicle to which the measurement values relate;0..1;EAID_EED11672_97F8_47f5_8EE7_D8F41C785480
+Parking;JunctionInformation;intersectionDestinationMotorway;Intersection destination motorway;In case of any type of intersection, the destination motorway(s) can be defined.;0..*;EAID_2DD3DF23_1753_4333_B61A_3AD8D4107E91
+Parking;JunctionInformation;motorway;Motorway;A detailed identification of the motorway the junction belongs to.;0..1;EAID_2DD3DF23_1753_4333_B61A_3AD8D4107E91
+LocationReferencing;LinearWithinLinearElement;;;;1..1;EAID_0CAB1F60_1F6C_4a88_BE21_EA256D99C2EC
+LocationReferencing;LinearWithinLinearElement;fromPoint;From point;A point on the linear element that defines the start node of the linear section.;1..1;EAID_91DF4D41_6E94_4701_A4FB_DE5DF4823E9C
+LocationReferencing;LinearWithinLinearElement;toPoint;To point;A point on the linear element that defines the end node of the linear section.;1..1;EAID_91DF4D41_6E94_4701_A4FB_DE5DF4823E9C
+LocationReferencing;AreaDestination;;;;1..1;EAID_DCD818AF_F632_4398_B250_6F24DCF858C2
+LocationReferencing;AreaLocation;;;;0..1;EAID_C98509A8_4A6B_4d6f_8727_96B6658F619C
+LocationReferencing;AreaLocation;;;;0..1;EAID_B468C916_637B_41bc_B5F9_1FC6F4777B29
+LocationReferencing;AreaLocation;;;;0..1;EAID_AD25D3CF_5DE3_4f5c_A4A0_10653D7D0F71
+LocationReferencing;AreaLocation;;;;0..1;EAID_DC6E8E84_2787_4e5c_9A29_588205E1511C
+LocationReferencing;AreaLocation;;;;0..*;EAID_2536A5ED_7484_4e8a_A1F9_2E5557A6C150
+LocationReferencing;Itinerary;routeDestination;Route destination;Destination of a route or final location in an itinerary.;0..*;EAID_42AEF70A_9AAE_43c8_BF44_6BA8C2A3DA75
+LocationReferencing;ItineraryByIndexedLocations;locationContainedInItinerary;Location contained in itinerary;A location contained in an itinerary (i.e. an ordered set of locations defining a route or itinerary).;1..1;EAID_8B6050E8_8BFC_4b0e_9354_4F0527307112
+LocationReferencing;LinearLocation;;;;0..1;EAID_3D271A89_15EA_45f8_B5B1_5F37E7FD9B10
+LocationReferencing;LinearLocation;;;;0..1;EAID_6C63F590_D1E3_495c_8A34_D1E6988BC264
+LocationReferencing;LinearLocation;secondarySupplementaryDescription;Secondary supplementary description;Supplementary description that applies to the secondary end of the linear location. Use when properties change along the Linear. For a one-way linear the secondary end should be the destination end.;0..1;EAID_EB0BF15E_C269_4f69_86DC_94F1518CB8CC
+LocationReferencing;Location;;;;0..*;EAID_1F93F005_17BF_429c_A37E_8C2AE3D045B7
+LocationReferencing;Location;coordinatesForDisplay;Coordinates for display;Coordinates that may be used by clients for visual display on user interfaces.;0..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;LocationGroupByList;locationContainedInGroup;Location contained in group;A location contained in a non-ordered group of locations.;2..*;EAID_8B6050E8_8BFC_4b0e_9354_4F0527307112
+LocationReferencing;NetworkLocation;;;;0..1;EAID_42AEF70A_9AAE_43c8_BF44_6BA8C2A3DA75
+LocationReferencing;NetworkLocation;;;;0..1;EAID_EB0BF15E_C269_4f69_86DC_94F1518CB8CC
+LocationReferencing;PointDestination;;;;1..1;EAID_600DDD49_C7B4_4f36_9D1B_E0151871D733
+LocationReferencing;PointLocation;;;;0..1;EAID_309597B5_B01D_4267_934A_D8B5EB945F61
+LocationReferencing;PointLocation;;;;0..1;EAID_E4535F04_E240_433b_8170_D6ECEBB0B826
+LocationReferencing;PointLocation;;;;0..1;EAID_C13A89CB_0DF5_4fad_8035_570916B75787
+LocationReferencing;PointLocation;;;;0..*;EAID_A0AE403B_AE08_40ff_9BFC_2D135A04B986
+LocationReferencing;PointLocation;;;The point location expressed using AlertC. Multiple instances of AlertCPoint shall represent the same real-world geographic feature.;0..*;EAID_5E7A7C5A_0933_41f3_A636_E4EDA659DB2D
+LocationReferencing;SingleRoadLinearLocation;;;The linear location expressed using AlertC. Multiple instances of AlertCLinear shall represent the same real-world geographic feature.;0..*;EAID_538DA6A1_280C_4b5f_8FFA_1CEDF0BA19C2
+LocationReferencing;SingleRoadLinearLocation;;;;0..*;EAID_37FEBD13_3C87_4f74_9C02_7B1FDA827EBE
+LocationReferencing;SingleRoadLinearLocation;;;;0..1;EAID_900C51D7_FC05_4fbd_ABB0_410768EDEF70
+RoadTrafficData;MeasuredDataPublication;;;;1..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+RoadTrafficData;MeasuredDataPublication;;;;1..*;EAID_3FC0CFBA_AF9E_4b92_8700_BB33C821CD32
+RoadTrafficData;MeasurementSiteTablePublication;;;;1..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+RoadTrafficData;MeasurementSiteTablePublication;;;;1..*;EAID_D378BD31_64B9_4a2b_8B80_3D857E4BDD7B
+Situation;NetworkManagement;forVehiclesWithCharacteristicsOf;For vehicles with characteristics of;The characteristics of those vehicles for which the network management is applicable.;0..*;EAID_3E56124E_0654_4d2a_B78E_2C7C6A470500
+Situation;ReroutingManagement;;;The destination of the rerouting. Use this direct property when there is no detailed Itinerary available.;0..1;EAID_42AEF70A_9AAE_43c8_BF44_6BA8C2A3DA75
+Situation;ReroutingManagement;alternativeRoute;Alternative route;The definition of the alternative route (rerouting) specified as an ordered set of locations (itinerary) which may be specific to one or more defined destinations.;0..*;EAID_36407EEB_B4DB_4779_9908_A0DD512EF781
+Situation;GeneralObstruction;;;;0..*;EAID_78796365_15FB_4f04_A1D1_37B0891D63D9
+Situation;Obstruction;mobilityOfObstruction;Mobility of obstruction;The mobility of the obstruction.;0..1;EAID_DC471947_184F_49a4_BDEC_EB9734EFC519
+Situation;VehicleObstruction;obstructingVehicle;Obstructing vehicle;The obstructing vehicle.;0..*;EAID_EED11672_97F8_47f5_8EE7_D8F41C785480
+LocationReferencing;OpenlrBaseReferencePoint;;;Properties of the line towards the topologically adjacent OpenLR location referencing point, on the shortest path to that point.;1..1;EAID_CBBDB09F_DA46_41df_BFD2_A180A5FD1A1F
+LocationReferencing;OpenlrBaseReferencePoint;openlrCoordinates;OpenLR coordinates;Provides coordinates for the base point of the OpenLR path;1..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;OpenlrCircleLocationReference;;;;1..1;EAID_3A7607A1_396B_442a_B69F_EC6EE3FE1DB3
+LocationReferencing;OpenlrClosedLineLocationReference;;;;1..*;EAID_9A641638_46A7_402a_A4FA_6489D4453406
+LocationReferencing;OpenlrClosedLineLocationReference;openlrLastLine;OpenLR last line;Provides the line attributes for the last line section closing the polygon.;1..1;EAID_9E2A540F_7B44_4184_B384_57142B33C6B3
+LocationReferencing;OpenlrGridLocationReference;;;;1..1;EAID_4163AEAC_54D7_45a7_B12F_B02060CDFB0E
+LocationReferencing;OpenlrPolygonCorners;openlrCoordinates;OpenLR coordinates;Corresponding coordinates of vertices that define a polygon.;3..*;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;OpenlrPolygonLocationReference;;;;1..1;EAID_3FC9A7D7_EC91_4b9e_8098_17227980A192
+LocationReferencing;OpenlrRectangle;openlrLowerLeft;OpenLR lower left;The lower left corner of the rectangle.;1..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;OpenlrRectangle;openlrUpperRight;OpenLR upper right;The upper right corner of the rectangle.;1..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;OpenlrRectangleLocationReference;;;;1..1;EAID_4163AEAC_54D7_45a7_B12F_B02060CDFB0E
+LocationReferencing;OpenlrLinear;firstDirection;First direction;First OpenLR reference in first/main direction.;1..1;EAID_A69D4AC9_7311_4a06_BA44_5FA6953CFF31
+LocationReferencing;OpenlrLinear;oppositeDirection;Opposite direction;If both direction, this is the reference in the opposite direction against firstDirection.;0..1;EAID_A69D4AC9_7311_4a06_BA44_5FA6953CFF31
+LocationReferencing;OpenlrLineLocationReference;;;;1..1;EAID_9E2A540F_7B44_4184_B384_57142B33C6B3
+LocationReferencing;OpenlrLineLocationReference;;;;1..*;EAID_9A641638_46A7_402a_A4FA_6489D4453406
+LocationReferencing;OpenlrLineLocationReference;openlrOffsets;OpenLR offsets;Allows for adding offsets to the line location path defined by nodes when the starting (respectively ending) point does not coincide with a node.;0..1;EAID_3BE4C9DB_84E9_4257_9541_CF6D372C46B9
+LocationReferencing;OpenlrBasePointLocation;;;Provides optional offsets relative to the path;0..1;EAID_3BE4C9DB_84E9_4257_9541_CF6D372C46B9
+LocationReferencing;OpenlrBasePointLocation;;;Allows defining the last point of the OpenLR path;1..1;EAID_9E2A540F_7B44_4184_B384_57142B33C6B3
+LocationReferencing;OpenlrBasePointLocation;;;Allows defining the first point of the OpenLR path;1..1;EAID_9A641638_46A7_402a_A4FA_6489D4453406
+LocationReferencing;OpenlrGeoCoordinate;openlrCoordinates;OpenLR coordinates;Corresponding coordinates of an OpenLR point defined by its only coordinates.;1..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;OpenlrLocationReferencePoint;;;Additional path attributes relative to the next point;1..1;EAID_9B51D4F4_100F_465f_8FC4_F285402951DB
+LocationReferencing;OpenlrPoiWithAccessPoint;openlrCoordinates;OpenLR coordinates;The coordinate of the actual point of interest;1..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+Facilities;OperatingHours;;;;0..1;EAID_FBA48B0C_6853_4445_8EB0_B01EA90DDCF1
+Facilities;OperatingHoursPublication;;;;0..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+Facilities;OperatingHoursPublication;;;;1..*;EAID_13196A74_6350_46f1_A698_B5DADD792E03
+Facilities;OperatingHoursSpecification;;;The specification of operating hours by an overall period combined with valid or exceptional periods.;1..1;EAID_32B776D4_35CA_47a0_8E49_354460E5DE34
+Facilities;OperatingHoursTable;;;;1..*;EAID_0071DF42_8296_4de0_93B0_0D516479D6B9
+Facilities;OperatingHoursTable;informationManager;Information manager;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+Parking;OperatingPattern;;;;0..*;EAID_5F39235B_8F82_4675_A94F_6E234FAE4FB9
+Parking;OperatingPattern;validity;Validity;;0..1;EAID_32B776D4_35CA_47a0_8E49_354460E5DE34
+Parking;PublicTransportSchedule;;;;0..1;EAID_7B9FCC60_B9BF_477c_81A5_657663A34BD8
+Parking;PublicTransportStop;;;;0..*;EAID_4AD891C4_2E3A_4698_8EA5_70D817BFF2E5
+Parking;RelatedLocation;;;;0..1;EAID_A2A4DD9E_C635_48e4_8143_F444A0A0C335
+Parking;RelatedLocation;distanceFromOrigin;Distance from origin;;0..1;EAID_ECCC2012_8612_430b_B77E_EAB2791E7C6F
+Facilities;Organisation;generalTimeValidity;General time validity;Specification of a time validity, for which this organisation information is valid in general. This is not a specification of the operating hours as such.;0..1;EAID_32B776D4_35CA_47a0_8E49_354460E5DE34
+Facilities;OrganisationPublication;;;;0..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+Facilities;OrganisationPublication;;;;1..*;EAID_67C66618_C0C0_4441_AD4B_F52D55E7C6E6
+Facilities;OrganisationSpecification;;;;1..*;EAID_F243EDC8_CCB3_40c9_9A48_96C2BC239917
+Facilities;OrganisationSpecification;subOrganisation;Sub organisation;A sub organisation that could substitute its role;0..*;EAID_99D16EA9_E308_4a11_8B32_960549E58724
+Facilities;OrganisationTable;;;;1..*;EAID_3D0F5F15_656E_40cc_B375_8E691CE65BF7
+Facilities;OrganisationTable;informationManager;Information manager;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+Facilities;OrganisationUnit;;;;0..1;EAID_A2A4DD9E_C635_48e4_8143_F444A0A0C335
+Facilities;OrganisationUnit;;;;0..*;EAID_D1B777FB_F179_4c5b_B91B_7C8F13C2B706
+Facilities;OrganisationUnit;;;;0..1;EAID_2A6A3FD2_A3E4_469e_9A76_57C8F23EE37F
+Parking;OperatorDefinedPlace;;;;0..*;EAID_99D16EA9_E308_4a11_8B32_960549E58724
+Parking;ResponsibilityRoleAssignment;;;;1..*;EAID_99D16EA9_E308_4a11_8B32_960549E58724
+Parking;ParkingRoute;parkingRouteColour;Parking route colour;A colour assigned to a parking route for visualisation purpose.;0..1;EAID_DBB119A1_D654_4349_8743_0483AADD4CA5
+Parking;ParkingRouteDetails;;;;0..1;EAID_A2A4DD9E_C635_48e4_8143_F444A0A0C335
+Parking;ParkingRouteDetails;;;;0..*;EAID_6B8E417A_41FA_476b_AA37_E5843C1A4492
+Parking;ParkingVms;vmsOperator;VMS operator;;0..1;EAID_99D16EA9_E308_4a11_8B32_960549E58724
+Parking;Occupancy;;;;0..*;EAID_0363E22F_D942_4709_BF3A_8257E2EA317B
+Parking;Occupancy;overrideThresholdConfiguration;Override threshold configuration;Possibility to override the thresholds for the parking, which are in principle defined in the static part of the model (ParkingStatusPublication).;0..1;EAID_B6817E9E_D97D_4041_9A9B_21989C2ABBD9
+Parking;Occupancy;probability;Probability;The probability that at least one parking space within the specified parking element is available.;0..1;EAID_649A1B6C_14F5_438e_A81B_7DEAD9D91B94
+Parking;OperatingPatternStatus;ptScheduleUpdate;Public transport schedule update;Provides an updated version of the public transport schedule (with same id, but new version).;0..*;EAID_4AD891C4_2E3A_4698_8EA5_70D817BFF2E5
+Parking;ParkingRouteStatus;;;;0..*;EAID_2F96B970_3AB2_492e_8B52_8B39D8258A89
+Parking;ParkingStatusInformation;;;;0..1;EAID_EC2784CF_E7A6_4a5a_84B7_F2C186A913F9
+Parking;ParkingStatusInformation;;;;0..1;EAID_47D60E24_42C8_46fe_AFC1_6C9623A1DD0A
+Parking;ParkingStatusInformation;;;;0..1;EAID_048DCBA6_14C2_41f1_9878_C46689251167
+Parking;ParkingStatusInformation;;;;0..*;EAID_9E858209_4D42_4c7a_955E_DFEE04BB3A37
+Parking;ParkingStatusInformation;;;;0..*;EAID_D4E2DB34_2D82_467b_9E89_14EA09453865
+Parking;ParkingStatusInformation;;;;0..1;EAID_D0C6F045_21AF_4eaf_8D15_44C126CB3A58
+Parking;ValidityByPeriod;validityTimeSpecification;Validity time specification;A specification of periods of validity defined by overall bounding start and end times and the possible intersection of valid periods with exception periods (exception periods overriding valid periods).;1..1;EAID_32B776D4_35CA_47a0_8E49_354460E5DE34
+Parking;ParkingStatusPublication;;;;0..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+Parking;ParkingStatusPublication;;;;1..*;EAID_C5B17811_37ED_42ca_BE6D_B0A22596CDDF
+Parking;ParkingTable;;;;1..*;EAID_A3D5D397_D065_4e06_9B68_53B66DB1928C
+Parking;ParkingTable;informationManager;Information manager;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+Parking;ParkingTablePublication;;;;0..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+Parking;ParkingTablePublication;;;;1..*;EAID_1DCC3272_39DB_463b_9E03_B6256CEB4798
+Facilities;PaymentMethod;;;;0..*;EAID_999EE1FB_DFE6_4651_AE08_128EAE6435BC
+Facilities;PaymentMethod;;;;0..*;EAID_3FD99278_9DB1_4280_80F3_4EDA2009BC2C
+RoadTrafficData;PhysicalQuantity;;;;0..*;EAID_0F466C1E_DF56_431d_92CB_23DA1EF0F1A2
+RoadTrafficData;PhysicalQuantity;;;;0..1;EAID_8069FF02_0B57_4564_90D1_E96616145F8E
+RoadTrafficData;PhysicalQuantity;informationManagerOverride;Information manager override;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content. This value overrides any value specified at a more general level.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+RoadTrafficData;PhysicalQuantity;pertinentLocation;Pertinent location;The location (e.g. the stretch of road or area) to which the data value(s) is or are pertinent/relevant. This may be different from the location of the measurement equipment (i.e. the measurement site location). ;0..1;EAID_A2A4DD9E_C635_48e4_8143_F444A0A0C335
+RoadTrafficData;SinglePhysicalQuantity;;;;0..1;EAID_2F5F27F7_F925_48e6_9B08_EB1EDD302ACD
+RoadTrafficData;TimeProfiledPhysicalQuantity;;;;0..*;EAID_2F5F27F7_F925_48e6_9B08_EB1EDD302ACD
+Parking;Place;;;;0..1;EAID_34FD4CCB_57DC_478c_99AC_7CCF28CB8A86
+Parking;Campus;;;;0..1;EAID_34FD4CCB_57DC_478c_99AC_7CCF28CB8A86
+Parking;HierarchyElementGeneral;;;;0..1;EAID_EC2784CF_E7A6_4a5a_84B7_F2C186A913F9
+Parking;HierarchyElementGeneral;;;;0..1;EAID_F34F6F3D_5BFC_4f8f_997D_C0924CBB9F6D
+Parking;HierarchyElementGeneral;;;;0..*;EAID_CC84C0FE_0B72_496f_8568_5B2EFE2467E9
+Parking;HierarchyElementGeneral;;;;0..*;EAID_61FBF532_139B_4eaf_BC21_C09270B5EE1F
+LocationReferencing;DistanceFromLinearElementReferent;fromReferent;From referent;A known location along the linear element from which the distanceAlong is measured, termed the "fromReferent" in EN ISO 19148. ;1..1;EAID_C52BC9A2_1CEB_4186_927B_D41F3E88464F
+LocationReferencing;DistanceFromLinearElementReferent;towardsReferent;Towards referent;A known location along the linear element towards which the distanceAlong is measured, termed the "towardsReferent" in EN ISO 19148.;0..1;EAID_C52BC9A2_1CEB_4186_927B_D41F3E88464F
+LocationReferencing;LinearElementByLineString;;;;1..1;EAID_3D271A89_15EA_45f8_B5B1_5F37E7FD9B10
+LocationReferencing;LinearElementByPoints;endPointOfLinearElement;End point of linear element;The referent at a known location on the linear object which defines the end of the linear element.;1..1;EAID_C52BC9A2_1CEB_4186_927B_D41F3E88464F
+LocationReferencing;LinearElementByPoints;intermediatePointOnLinearElement;Intermediate point on linear element;A referent at a known location on the linear object which is neither the start or end of the linear element.;1..1;EAID_C52BC9A2_1CEB_4186_927B_D41F3E88464F
+LocationReferencing;LinearElementByPoints;startPointOfLinearElement;Start point of linear element;The referent at a known location on the linear object which defines the start of the linear element.;1..1;EAID_C52BC9A2_1CEB_4186_927B_D41F3E88464F
+LocationReferencing;PointAlongLinearElement;;;;1..1;EAID_91DF4D41_6E94_4701_A4FB_DE5DF4823E9C
+LocationReferencing;PointAlongLinearElement;;;;1..1;EAID_0CAB1F60_1F6C_4a88_BE21_EA256D99C2EC
+LocationReferencing;Referent;;;;0..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;HeightCoordinate;;;;0..1;EAID_EA97E18E_D23D_48c8_9727_4726A3445AD1
+LocationReferencing;HeightCoordinate;verticalPositionAccuracy;Vertical position accuracy;Defines the vertical position accuracy according to EN16803-1;0..1;EAID_C6918D1E_4D05_4ac6_ADD3_45E2F2A744CF
+LocationReferencing;PointByCoordinates;;;;1..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;PointCoordinates;;;;0..3;EAID_53F9434E_2BC3_4b61_ABFA_3219C6DED8A9
+LocationReferencing;PointCoordinates;;;;0..1;EAID_DD314BF4_A2D6_4b44_BA57_9356E1CA18C5
+LocationReferencing;PointCoordinates;horizontalPositionAccuracy;Horizontal position accuracy;Defines the horizontal position accuracy according EN 16803-1;0..1;EAID_C6918D1E_4D05_4ac6_ADD3_45E2F2A744CF
+LocationReferencing;PredefinedItinerary;;;;0..1;EAID_36407EEB_B4DB_4779_9908_A0DD512EF781
+LocationReferencing;PredefinedItinerary;;;;0..*;EAID_85139981_6F49_47bc_A7C9_A2787ECF5874
+LocationReferencing;PredefinedLocation;;;;1..1;EAID_8B6050E8_8BFC_4b0e_9354_4F0527307112
+LocationReferencing;PredefinedLocationGroup;;;;0..1;EAID_0218B7CA_6205_44c7_B1BD_60839D13ABC5
+LocationReferencing;PredefinedLocationGroup;;;;0..*;EAID_85139981_6F49_47bc_A7C9_A2787ECF5874
+LocationReferencing;PredefinedLocationsPublication;;;;1..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+LocationReferencing;PredefinedLocationsPublication;;;;1..*;EAID_AF1897C9_6689_4b8f_A531_A62190B9FFA8
+Facilities;RateEligibility;;;;1..1;EAID_04AFBDC3_234D_4cf7_9AAE_FB3282C2C7E6
+Facilities;RateEligibility;;;;0..1;EAID_F82EEEC3_056B_4548_9830_50A82672606C
+Facilities;RateEligibility;;;;0..*;EAID_97255BA3_D442_4c7a_92B0_50B0663823D4
+Facilities;RateLineCollection;;;;1..*;EAID_F7D096B7_4F31_41de_A915_AEF2CE03D35C
+Facilities;RateMatrix;;;;1..*;EAID_8AC32C2E_B552_4b09_9593_87E3C15401CF
+Facilities;RateMatrix;informationManager;Information manager;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+Facilities;Rates;;;;0..1;EAID_32B776D4_35CA_47a0_8E49_354460E5DE34
+Facilities;Rates;;;;0..1;EAID_6AEAD682_A870_469d_AAE5_2CD7D7E5529F
+Facilities;Rates;;;;0..1;EAID_47653F36_E6BC_4356_B5F8_494C220D229B
+Facilities;RatesPublication;;;;0..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+Facilities;RatesPublication;;;;1..*;EAID_A5824984_B33F_4fb9_819B_57505707E270
+Facilities;RateTable;;;;0..1;EAID_50A30D43_B0FB_4a14_ABC1_68723BA42689
+Facilities;RateTable;;;;0..*;EAID_CB2DE86A_4BDD_45b8_8446_B927BDB4E54B
+Facilities;RateDiscount;fixedValue;Fixed value;Fixed value discount (-) or surcharge (+) to be applied to all values in the referenced RateTable ;0..1;EAID_5DCF1A0F_3C3D_42c8_A814_B6129001B861
+Facilities;RightSpecification;;;;0..*;EAID_E26EF277_92CC_4ba1_BB28_E1B549A30943
+Facilities;RightSpecification;validity;Validity;;0..1;EAID_7B9FCC60_B9BF_477c_81A5_657663A34BD8
+Situation;Roadworks;;;;0..1;EAID_DC471947_184F_49a4_BDEC_EB9734EFC519
+Situation;Roadworks;;;;0..1;EAID_122F8FEB_E126_4de9_A52B_5E096B134B2F
+Situation;Roadworks;;;;0..1;EAID_8E5EBEDC_D09A_4dad_8C2D_E54D51F87DE2
+Situation;SituationPublication;;;;0..*;EAID_377430AF_6445_4a16_9877_6AE90C0E6F26
+Parking;Space;;;;0..1;EAID_77B5BE94_B7D6_449a_A33A_F09953B7AE96
+Parking;Space;;;;0..*;EAID_D0779E73_21D7_4fc1_B7F6_DE96BE4684A6
+Parking;Space;spaceMaximumUsableDimensions;Space maximum usable dimensions;The maximal allowed physical dimensions for this space.;0..1;EAID_513E26A7_D33C_46f1_BEF1_5D07A07F7955
+Parking;SubplaceElement;;;;0..1;EAID_34FD4CCB_57DC_478c_99AC_7CCF28CB8A86
+LocationReferencing;Carriageway;;;;0..*;EAID_E48F56CA_7AE8_49f3_9BCA_2B1E2F69CCEE
+LocationReferencing;SupplementaryPositionalDescription;;;Information on a set of one or more roads. The location could correspond to a part of the road identified, the whole stretch of road identified, or a combination of multiple road sections.;0..*;EAID_2DD3DF23_1753_4333_B61A_3AD8D4107E91
+LocationReferencing;SupplementaryPositionalDescription;;;;0..*;EAID_EEB24F26_7F2A_4c5d_9728_578F931E4B51
+LocationReferencing;SupplementaryPositionalDescription;;;;0..1;EAID_C98509A8_4A6B_4d6f_8727_96B6658F619C
+Parking;DemandSpaceType;;;;0..1;EAID_F34F6F3D_5BFC_4f8f_997D_C0924CBB9F6D
+Parking;DemandTable;;;;0..*;EAID_2FB6B3BD_7FF3_4c6d_8544_6EF120913285
+Parking;DemandTable;;;;0..*;EAID_F9640B6F_7633_486b_A1B5_DB8C2E4149AE
+Parking;StatusConfiguration;;;A configuration of thresholds from which the specified parking site status should become active.;1..1;EAID_E1FBA99C_F1DA_4963_B151_3B4DAE827397
+Parking;StatusConfiguration;statusColourMapping;Status colour mapping;A colour which is mapped to the status.;0..1;EAID_DBB119A1_D654_4349_8743_0483AADD4CA5
+Parking;ThresholdConfiguration;;;;1..*;EAID_D07E3FD1_1E83_44cd_BFDE_CFF976C832A5
+LocationReferencing;TpegAreaLocation;;;;0..1;EAID_F61C38F2_4558_4cb4_9653_5AC22731C686
+LocationReferencing;TpegGeometricArea;centrePoint;Centre point;Centre point of a circular geometric area.;1..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;TpegGeometricArea;name;Name;Name of area.;0..1;EAID_FF4CE13A_BDF7_4d4f_AB11_EB44967A067F
+LocationReferencing;TpegNamedOnlyArea;name;Name;Name of area.;1..*;EAID_FF4CE13A_BDF7_4d4f_AB11_EB44967A067F
+LocationReferencing;TpegLinearLocation;from;From;The location at the up stream end of the linear section of road.;1..1;EAID_D87B7004_4CAE_4c36_B5D0_09BFE64AC3E3
+LocationReferencing;TpegLinearLocation;to;to;The location at the down stream end of the linear section of road.;1..1;EAID_D87B7004_4CAE_4c36_B5D0_09BFE64AC3E3
+LocationReferencing;TpegFramedPoint;framedPoint;Framed point;A single non-junction point on the road network which is framed between two other specified points on the road network.;1..1;EAID_135081C1_2858_4a08_95FD_97E80A9C5639
+LocationReferencing;TpegFramedPoint;from;From;The location at the upstream end of the section of road which frames the TPEGFramedPoint.;1..1;EAID_D87B7004_4CAE_4c36_B5D0_09BFE64AC3E3
+LocationReferencing;TpegFramedPoint;to;to;The location at the downstream end of the section of road which frames the TPEGFramedPoint.;1..1;EAID_D87B7004_4CAE_4c36_B5D0_09BFE64AC3E3
+LocationReferencing;TpegJunction;;;;1..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;TpegJunction;ilc;ILC;A descriptor for describing a junction by identifying the intersecting roads at a road junction.;1..3;EAID_43C49531_137B_45d5_B1E8_8921FB620E5F
+LocationReferencing;TpegJunction;name;Name;A name which identifies a junction point on the road network;0..1;EAID_819A3BDE_6FA1_4d7e_ABF3_F3F3B28C325D
+LocationReferencing;TpegJunction;otherName;Other name;A descriptive name which helps to identify the junction point.;0..*;EAID_3510F23B_3DA6_433d_9CFB_E2E901BE8BDF
+LocationReferencing;TpegNonJunctionPoint;;;;1..1;EAID_46E260A6_C34E_43eb_B1D1_4BC0C63E224B
+LocationReferencing;TpegNonJunctionPoint;name;Name;A descriptive name which helps to identify the non-junction point. At least one descriptor must identify the road on which the point is located, i.e. must be of type 'linkName' or 'localLinkName'.;1..*;EAID_3510F23B_3DA6_433d_9CFB_E2E901BE8BDF
+LocationReferencing;TpegSimplePoint;point;Point;A single point defined by a coordinate set and TPEG descriptors.;1..1;EAID_D87B7004_4CAE_4c36_B5D0_09BFE64AC3E3
+RoadTrafficData;TrafficConcentration;density;Density;An averaged measurement or calculation of the concentration of vehicles at the specified measurement site.;0..1;EAID_87CA7D22_85DC_4b17_AEC9_CE5F35873647
+RoadTrafficData;TrafficConcentration;occupancy;Occupancy;An averaged measurement or calculation of the percentage of time that a section of road at the specified measurement site is occupied by vehicles.;0..1;EAID_649A1B6C_14F5_438e_A81B_7DEAD9D91B94
+RoadTrafficData;TrafficData;forVehiclesWithCharacteristicsOf;For vehicles with characteristics of;Used to define the vehicle characteristics to which the TrafficValue is applicable primarily in Elaborated Data Publications, but may also be used in Measured Data Publications to override vehicle characteristics defined for the measurement site.;0..1;EAID_3E56124E_0654_4d2a_B78E_2C7C6A470500
+RoadTrafficData;TrafficFlow;;;Axle characteristics for which the flow measurement applies.;0..1;EAID_2C4BBC6B_009C_484e_BD0B_AC61F5B7DE34
+RoadTrafficData;TrafficFlow;annualAverageDailyTraffic;Annual average daily traffic;Daily traffic flow averaged from the total over one year.;0..1;EAID_0FEF5028_6698_4a10_9AA6_B2A9D6E897B0
+RoadTrafficData;TrafficFlow;axleFlow;Axle flow;An averaged measurement or calculation of flow rate defined in terms of the number of vehicle axles passing the specified measurement site.;0..1;EAID_A07CF984_ADD8_4e7a_B3FE_347081AA6A22
+RoadTrafficData;TrafficFlow;monthlyAverageDailyTraffic;Monthly average daily traffic;Daily traffic flow averaged from the total over one month.;0..1;EAID_0FEF5028_6698_4a10_9AA6_B2A9D6E897B0
+RoadTrafficData;TrafficFlow;normallyExpectedFlow;Normally expected flow;The vehicle flow which is expected for the given period (e.g. date/time, holiday status etc.) and any known quasi-static conditions (e.g. long-term roadworks). This value is derived from historical analysis.;0..1;EAID_A5A59387_6423_4071_A66B_6A92D9FC8813
+RoadTrafficData;TrafficFlow;pcuFlow;Pcu flow;An averaged measurement or calculation of flow rate defined in terms of the number of passenger car units passing the specified measurement site.;0..1;EAID_DC987594_752D_4da7_9C64_37CA7C4C0257
+RoadTrafficData;TrafficFlow;percentageLongVehicles;Percentage long vehicles;An averaged measurement or calculation of the percentage of long vehicles contained in the traffic flow at the specified measurement site.;0..1;EAID_649A1B6C_14F5_438e_A81B_7DEAD9D91B94
+RoadTrafficData;TrafficFlow;vehicleFlow;Vehicle flow;An averaged measurement of flow rate defined in terms of the number of vehicles passing the specified measurement site.;0..1;EAID_A5A59387_6423_4071_A66B_6A92D9FC8813
+RoadTrafficData;TrafficGap;averageDistanceGap;Average distance gap;The average distance between the front of one vehicle and the rear of the preceding vehicle, averaged for all vehicles within a defined measurement period at the specified measurement site.;0..1;EAID_EFBCE3DA_3307_4dfc_AB4F_9131ACEA71D4
+RoadTrafficData;TrafficGap;averageTimeGap;Average time gap;The average time gap between the front of one vehicle and the rear of the preceding vehicle, averaged for all vehicles within a defined measurement period at the specified measurement site.;0..1;EAID_3535CB90_A767_4f90_B304_ADB853E77531
+RoadTrafficData;TrafficHeadway;averageDistanceHeadway;Average distance headway;The average distance between one end (normally the front) of this vehicle and the same end of the preceding vehicle, averaged for all vehicles within a defined measurement period at the specified measurement site.;0..1;EAID_EFBCE3DA_3307_4dfc_AB4F_9131ACEA71D4
+RoadTrafficData;TrafficHeadway;averageTimeHeadway;Average time headway;The average time interval between one end (normally the front) of this vehicle and the same end of the preceding vehicle, averaged for all vehicles within a defined measurement period at the specified measurement site.;0..1;EAID_3535CB90_A767_4f90_B304_ADB853E77531
+RoadTrafficData;SpeedPercentile;speedPercentile;Speed percentile;The speed below which the associated percentage of vehicles in the measurement set are travelling at.;1..1;EAID_B47897A2_F6FC_4be3_980A_DEA1123B6945
+RoadTrafficData;SpeedPercentile;vehiclePercentage;Vehicle percentage;The percentage of vehicles from the observation set whose speeds fall below the stated speed (speedPercentile).;1..1;EAID_649A1B6C_14F5_438e_A81B_7DEAD9D91B94
+RoadTrafficData;TrafficSpeed;;;;0..*;EAID_C9E42AAB_CA79_42a8_A5DA_CC1DE420D223
+RoadTrafficData;TrafficSpeed;averageVehicleSpeed;Average vehicle speed;An averaged measurement or calculation of the speed of vehicles at the specified location.;0..1;EAID_B47897A2_F6FC_4be3_980A_DEA1123B6945
+RoadTrafficData;TrafficSpeed;maximumSpeed;Maximum speed;The maximum speed;0..1;EAID_B47897A2_F6FC_4be3_980A_DEA1123B6945
+RoadTrafficData;TrafficSpeed;minimumSpeed;Minimum speed;The minimum speed;0..1;EAID_B47897A2_F6FC_4be3_980A_DEA1123B6945
+RoadTrafficData;TrafficSpeed;normallyExpectedSpeed;Normally expected speed;The average vehicle speed which is expected for the given period (e.g. date/time, holiday status etc.) and any known quasi-static conditions (e.g. long-term roadworks). This value is derived from historical analysis.;0..1;EAID_B47897A2_F6FC_4be3_980A_DEA1123B6945
+RoadTrafficData;TrafficStatus;trafficStatus;Traffic status;Status of traffic conditions on the identified section of road in the specified direction.;0..1;EAID_260EDEE0_9E0F_4904_B276_C7ADC0602989
+RoadTrafficData;TravelTimeData;freeFlowSpeed;Free flow speed;The free flow speed expected under ideal conditions, corresponding to the freeFlowTravelTime.;0..1;EAID_B47897A2_F6FC_4be3_980A_DEA1123B6945
+RoadTrafficData;TravelTimeData;freeFlowTravelTime;Free flow travel time;The travel time which would be expected under ideal free flow conditions.;0..1;EAID_3535CB90_A767_4f90_B304_ADB853E77531
+RoadTrafficData;TravelTimeData;normallyExpectedTravelTime;Normally expected travel time;The travel time which is expected for the given period (e.g. date/time, holiday status etc.) and any known quasi-static conditions (e.g. long-term roadworks). This value is derived from historical analysis.;0..1;EAID_3535CB90_A767_4f90_B304_ADB853E77531
+RoadTrafficData;TravelTimeData;travelTime;Travel time;Derived/computed travel time information relating to a specific group of locations.;0..1;EAID_3535CB90_A767_4f90_B304_ADB853E77531
+RoadTrafficData;TravelTimeData;travelTimeDelay;Travel time delay;Delay in travel time compared to free-flow conditions;0..1;EAID_3535CB90_A767_4f90_B304_ADB853E77531
+Common;OverallPeriod;exceptionPeriod;Exception period;A single time period, a recurring time period or a set of different recurring time periods during which validity is false.;0..*;EAID_DC2B72A4_31FE_4cf5_B594_5EA8FFC4D072
+Common;OverallPeriod;validPeriod;Valid period;A single time period, a recurring time period or a set of different recurring time periods during which validity is true.;0..*;EAID_DC2B72A4_31FE_4cf5_B594_5EA8FFC4D072
+Common;Period;recurringDayWeekMonthPeriod;Recurring day week month period;A recurring period defined in terms of days of the week, weeks of the month and months of the year. ;0..*;EAID_1EAB8123_5A05_43d9_BFA2_3C4FD715B956
+Common;Period;recurringSpecialDay;Recurring special day;A recurring period in terms of special days.;0..*;EAID_7B52F70D_BEA7_446b_845D_7B1B7823CFFC
+Common;Period;recurringTimePeriodOfDay;Recurring time period of day;A recurring period of a day.;0..*;EAID_B811B137_C71E_4748_9A02_B3DD0134459C
+Common;SpecialDay;;;;0..*;EAID_66D3C944_15CA_4327_B932_BB746423F102
+Common;Validity;validityTimeSpecification;Validity time specification;A specification of periods of validity defined by overall bounding start and end times and the possible intersection of valid periods with exception periods (exception periods overriding valid periods).;1..1;EAID_32B776D4_35CA_47a0_8E49_354460E5DE34
+Common;Vehicle;;;;0..1;EAID_3E56124E_0654_4d2a_B78E_2C7C6A470500
+Common;Vehicle;axleSpacingOnVehicle;Axle spacing on vehicle;The spacing between axles on the vehicles.;0..*;EAID_B456B531_C277_426b_A669_EBA0C3B69DAC
+Common;Vehicle;hazardousGoodsAssociatedWithVehicle;Hazardous goods associated with vehicle;Details of hazardous goods carried by the vehicle.;0..1;EAID_12EF50D5_57F3_44f0_AE26_3FE5078941B7
+Common;Vehicle;specificAxleWeight;Specific axle weight;The weight details relating to a specific axle on the vehicle.;0..*;EAID_2282EC07_36C2_431e_9FF0_511057C7E248
+Common;VehicleCharacteristics;;;;0..2;EAID_CF440CEA_5AE2_411b_889D_4F188DDCA136
+Common;VehicleCharacteristics;;;;0..2;EAID_65512B6E_83D8_4c46_ACFC_ED07639A0EC5
+Common;VehicleCharacteristics;;;;0..2;EAID_DD7B363C_90C2_46b1_948D_A0E1312867D5
+Common;VehicleCharacteristics;;;;0..2;EAID_87BC70D8_A16C_4b75_A917_523696EA9341
+Common;VehicleCharacteristics;;;;0..2;EAID_95314B2F_48FA_4731_AF68_B66ADC0E5CF2
+Common;VehicleCharacteristics;;;;0..2;EAID_8CF7AB8D_00E4_4427_9389_5C04E1797044
+Common;VehicleCharacteristics;;;;0..1;EAID_F82C4017_FC0E_4be3_A06F_681576B084D4
+Parking;VehicleCountAndRate;;;;0..*;EAID_6D2E7E07_A913_4dfb_A2E4_D3F27A005640
+Parking;VehicleCountAndRate;;;;0..*;EAID_53FDB14F_AAC4_4d0f_872B_6E99175481EC
+Parking;VehicleCountAndRate;measurementTimeDefault;Measurement time default;The time associated with the set of measurements.;0..1;EAID_753B59C8_88A5_491b_A3A3_90CFB9D71027
+Parking;VehicleCountWithinInterval;;;;0..1;EAID_753B59C8_88A5_491b_A3A3_90CFB9D71027
+Parking;VehicleCountWithinInterval;changeOfOccupiedSpaces;Change of occupied spaces;The change in the number of occupied spaces for specified vehicles within the given interval. Negative values mean less occupied spaces than at the beginning of the interval.;0..1;EAID_95A641BA_AAA4_430f_BA9B_06902757E0D5
+Parking;VehicleCountWithinInterval;countedVehicles;Counted vehicles;;0..1;EAID_3E56124E_0654_4d2a_B78E_2C7C6A470500
+Parking;VehicleCountWithinInterval;numberOfIncomingVehicles;Number of incoming vehicles;Number of vehicles of specified type that entered the specified parking within the given interval.;0..1;EAID_63FE1F75_C0AE_4140_A034_390E38ACA3C8
+Parking;VehicleCountWithinInterval;numberOfOutgoingVehicles;Number of outgoing vehicles;Number of vehicles of specified type that left the specified parking within the given interval.;0..1;EAID_63FE1F75_C0AE_4140_A034_390E38ACA3C8
+Parking;VehicleRate;;;;0..1;EAID_753B59C8_88A5_491b_A3A3_90CFB9D71027
+Parking;VehicleRate;exitRate;Exit rate;The rate at which vehicles are exiting the parking expressed in vehicles per hour.;0..1;EAID_A5A59387_6423_4071_A66B_6A92D9FC8813
+Parking;VehicleRate;fillRate;Fill rate;The rate at which vehicles are entering the parking expressed in vehicles per hour.;0..1;EAID_A5A59387_6423_4071_A66B_6A92D9FC8813
+Parking;VehicleRate;measuredVehicles;Measured vehicles;;0..1;EAID_3E56124E_0654_4d2a_B78E_2C7C6A470500
+Parking;VehicleRate;vehicleFlowRate;Vehicle flow rate;A value of vehicle flow rate expressed in vehicles per hour.;0..1;EAID_A5A59387_6423_4071_A66B_6A92D9FC8813
+Vms;DisplayArea;;;;0..1;EAID_AD0907D4_0B29_40a3_818C_8AA230D07FD2
+Vms;DisplayArea;overriddenLaneAssociation;Overridden lane association;The display area is associated with these lanes, which refine any location specified for the VMS;0..*;EAID_E48F56CA_7AE8_49f3_9BCA_2B1E2F69CCEE
+Vms;VmsConfiguration;;;;1..1;EAID_DA094465_DC52_4f08_A6C1_5F1FFBA31CD2
+Vms;CompositePictogram;;;;1..1;EAID_E9E50B57_0F8F_4d7b_B1EE_B2D9C721AEC3
+Vms;MultiPageDisplay;;;;1..1;EAID_7FB3A467_8FF8_4fd2_BCBB_5D6E8B3A1E47
+Vms;Pictogram;;;;0..1;EAID_0713B6A5_3BB2_4c29_BA17_FE8FEDF5F2D1
+Vms;PictogramDisplay;;;;0..1;EAID_E47FCC58_A2FA_4246_AB28_D7420C708CDE
+Vms;PictogramDisplay;;;;1..1;EAID_3DEB0584_1626_4b62_8A92_51685F1CBB0C
+Vms;PictogramDisplay;;;;0..1;EAID_C90B8AF1_BDAE_4080_9839_ABAA876AD602
+Vms;RegularPictogram;;;;0..2;EAID_01905A78_A25C_430c_9C37_C431794C12F9
+Vms;SupplementaryText;;;One line of text displayed in the panel which is supplemental to the pictogram display.;1..1;EAID_CBBF30D4_3E7E_4f98_9F51_098E1D83D30F
+Vms;TextDisplay;;;;0..1;EAID_CBBF30D4_3E7E_4f98_9F51_098E1D83D30F
+Vms;VmsMessage;;;;1..1;EAID_7FB3A467_8FF8_4fd2_BCBB_5D6E8B3A1E47
+Vms;VmsMessage;;;;0..1;EAID_E47FCC58_A2FA_4246_AB28_D7420C708CDE
+Vms;VmsPublication;;;;1..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+Vms;VmsPublication;;;;1..*;EAID_40E0576D_EA2C_4f18_B7F6_3AA6A4823B17
+Vms;VmsControllerStatus;;;;0..*;EAID_D565C2AB_2E1D_412e_AA7B_3B33F4B9CEE3
+Vms;VmsControllerStatus;;;;1..1;EAID_5EC43BC6_80FE_4cde_9477_0446AB434987
+Vms;VmsControllerStatus;informationManagerOverride;Information manager override;Organisation that manages the information content (is responsible for updates of this information) typically the organisation that first made the DATEX II publication of this content. This value overrides any value specified at a more general level.;0..1;EAID_89F74DD6_CCE5_45aa_93DA_A5DFCEE9D88E
+Vms;VmsStatus;;;;1..1;EAID_F926BF87_C704_4afc_9390_239F5478B046
+Vms;VmsStatus;;;;0..*;EAID_8613EFA4_174D_4fb3_B595_1BAF9F0AF6F0
+Vms;VmsStatus;managedLogicalLocationOverride;Managed logical location override;The current logical location that is being managed by the VMS which overrides any stated in the corresponding Vms object. Typically it is used for giving the updated managed location of a mobile VMS which has recently been moved.;0..1;EAID_C73414BB_4BE7_4d0a_8A64_3CD9DC5B71C6
+Vms;VmsStatus;vmsDynamicConfiguration;VMS dynamic configuration;;0..1;EAID_0856E4A8_2CB7_4cd7_A96E_6E62CFD25487
+Vms;VmsStatus;vmsLocationOverride;VMS location override;The current physical point location at which the VMS is situated. This overrides any physical location stated in the corresponding Vms object. Typically it is used for giving the updated physical location of a mobile VMS which has recently been moved.;0..1;EAID_8B6050E8_8BFC_4b0e_9354_4F0527307112
+Vms;VmsTablePublication;;;;1..1;EAID_05DC7325_F646_4785_9C7D_781F75F4612D
+Vms;VmsTablePublication;;;;1..*;EAID_E9C1D516_B022_4e01_93B9_49C933E82AA1
+RoadTrafficData;HumidityInformation;;;;1..1;EAID_BB2C3753_BA09_4965_AFDD_1925A97A93BD
+RoadTrafficData;PollutionInformation;;;;1..*;EAID_890BB8E3_8CFE_4524_9D3D_9DDE17CE1B1D
+RoadTrafficData;PrecipitationInformation;;;;0..1;EAID_B872D5C9_C377_442d_AE65_567002AFF4B7
+RoadTrafficData;PressureInformation;;;;1..1;EAID_0800E31F_41C0_4659_B57A_7333B3908D14
+RoadTrafficData;RoadSurfaceConditionInformation;;;;1..1;EAID_C7A8510A_6710_4e1a_B423_D081E9524E8C
+RoadTrafficData;TemperatureInformation;;;;1..1;EAID_621F65C2_F33C_4292_A924_F688035A0A81
+RoadTrafficData;VisibilityInformation;;;;1..1;EAID_DD58245B_12C7_4a62_A002_99FA681D3CE3
+RoadTrafficData;WindInformation;;;;1..1;EAID_556EDB50_CB4C_4c3c_8C3A_F47C128EC64D
+Common;Humidity;relativeHumidity;Relative humidity;The amount of water vapour in the air, as a percentage of the amount of water vapour in saturated air at the same temperature and at atmospheric pressure. The measurement is taken between 1.5 and 2 m above the ground and behind a meteorological screen.;1..1;EAID_649A1B6C_14F5_438e_A81B_7DEAD9D91B94
+Common;Pollution;pollutantConcentration;Pollutant concentration;The average concentration of the pollutant in the air.;0..1;EAID_6F83104E_642E_4715_BDCC_6A4DA89A69DD
+Common;PrecipitationDetail;depositionDepth;Deposition depth;The equivalent depth of the water layer resulting from precipitation or deposition on a non-porous horizontal surface. Non liquid precipitation is considered as melted in water form. ;0..1;EAID_EFBCE3DA_3307_4dfc_AB4F_9131ACEA71D4
+Common;PrecipitationDetail;precipitationIntensity;Precipitation intensity;The height of the precipitation received per unit time.;0..1;EAID_FB80B45A_3D9A_4a72_98B2_801285541605
+Common;Pressure;;;;1..1;EAID_EEF6D42D_9B05_48b3_8C23_B8B23FE3EF29
+Common;RoadSurfaceConditionMeasurements;;;Temperature measurements below or above the road surface.;0..*;EAID_92C87619_6FF4_4ceb_81C5_577FD07B1D83
+Common;RoadSurfaceConditionMeasurements;deIcingApplicationRate;De-icing application rate;Indicates the rate at which de-icing agents have been applied to the specified road.;0..1;EAID_078E634B_F2BA_4f76_95BA_AA157AB13FFF
+Common;RoadSurfaceConditionMeasurements;deIcingConcentration;De-icing concentration;Indicates the concentration of de-icing agent present in surface water on the specified road.;0..1;EAID_015F8461_8BB1_46d5_9431_0C1A81C76F50
+Common;RoadSurfaceConditionMeasurements;depthOfSnow;Depth of snow;The depth of snow recorded on the road surface.;0..1;EAID_EFBCE3DA_3307_4dfc_AB4F_9131ACEA71D4
+Common;RoadSurfaceConditionMeasurements;friction;Friction;The friction value of the road.;0..1;EAID_696B4EA7_C829_49f6_A127_000AF0EAE50A
+Common;RoadSurfaceConditionMeasurements;iceLayerThickness;Ice layer thickness;The depth of ice to be found on the road surface.;0..1;EAID_EFBCE3DA_3307_4dfc_AB4F_9131ACEA71D4
+Common;RoadSurfaceConditionMeasurements;icePercentage;Ice percentage;The percentage of ice in the water.;0..1;EAID_649A1B6C_14F5_438e_A81B_7DEAD9D91B94
+Common;RoadSurfaceConditionMeasurements;protectionTemperature;Protection temperature;The road surface temperature down to which the surface is protected from freezing.;0..1;EAID_7891432E_A908_476c_BA2D_EF1536405ADE
+Common;RoadSurfaceConditionMeasurements;roadSurfaceTemperature;Road surface temperature;The temperature measured on the road surface.;0..1;EAID_7891432E_A908_476c_BA2D_EF1536405ADE
+Common;RoadSurfaceConditionMeasurements;waterFilmThickness;Water film thickness;The depth of standing water to be found on the road surface.;0..1;EAID_EFBCE3DA_3307_4dfc_AB4F_9131ACEA71D4
+Common;Temperature;airTemperature;Air temperature;The air temperature measured in the shade between 1.5 and 2 metres above ground level.;0..1;EAID_7891432E_A908_476c_BA2D_EF1536405ADE
+Common;Temperature;dewPointTemperature;Dew point temperature;The temperature to which the air would have to cool (at constant pressure and water vapour content) in order to reach saturation.;0..1;EAID_7891432E_A908_476c_BA2D_EF1536405ADE
+Common;Temperature;maximumTemperature;Maximum temperature;The maximum temperature during the forecast or measurement period.;0..1;EAID_7891432E_A908_476c_BA2D_EF1536405ADE
+Common;Temperature;minimumTemperature;Minimum temperature;The minimum temperature during the forecast or measurement period.;0..1;EAID_7891432E_A908_476c_BA2D_EF1536405ADE
+Common;TemperatureBelowOrAboveRoadSurface;temperatureBelowOrAboveRoadSurface;Temperature below or above road surface;The temperature measured at the specified height below or above the road surface.;1..1;EAID_7891432E_A908_476c_BA2D_EF1536405ADE
+Common;Visibility;minimumVisibilityDistance;Minimum visibility distance;The minimum distance, measured or estimated, beyond which drivers may be unable to clearly see a vehicle or an obstacle.;1..1;EAID_ECCC2012_8612_430b_B77E_EAB2791E7C6F
+Common;Wind;maximumWindDirectionBearing;Maximum wind direction bearing;The direction from which the maximum wind blows, in terms of a bearing measured in degrees (0 - 359).;0..1;EAID_E53A2F37_5CFF_4715_A76B_AFDE7CD0E057
+Common;Wind;maximumWindDirectionCompass;Maximum wind direction compass;The direction from which the maximum wind blows, in terms of points of the compass.;0..1;EAID_D9F2AEF5_4684_42b3_92A6_B26FCDB22622
+Common;Wind;maximumWindSpeed;Maximum wind speed;The maximum wind speed in a measurement period of 10 minutes.;0..1;EAID_72D7BBB1_D85A_4648_9D21_9B5C29716F00
+Common;Wind;windDirectionBearing;Wind direction bearing;The average direction from which the wind blows, in terms of a bearing measured in degrees (0 - 359).;0..1;EAID_E53A2F37_5CFF_4715_A76B_AFDE7CD0E057
+Common;Wind;windDirectionCompass;Wind direction compass;The average direction from which the wind blows, in terms of points of the compass.;0..1;EAID_D9F2AEF5_4684_42b3_92A6_B26FCDB22622
+Common;Wind;windSpeed;Wind speed;The wind speed averaged over at least 10 minutes, measured at a default height of10 metres (meteorological standard) above the road surface, unless measurement height is specified.;0..1;EAID_72D7BBB1_D85A_4648_9D21_9B5C29716F00
+

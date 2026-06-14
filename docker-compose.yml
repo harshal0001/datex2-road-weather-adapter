@@ -1,0 +1,19 @@
+services:
+  adapter:
+    build: .
+    container_name: datex2-adapter
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./schemas:/app/schemas:ro
+      - ./profiles:/app/profiles:ro
+      - ./generated:/app/generated:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

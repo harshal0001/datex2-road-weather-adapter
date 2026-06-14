@@ -1,0 +1,219 @@
+Namespace;Enumeration name;Definition
+Situation;AbnormalTrafficTypeEnum;Descriptive terms for abnormal traffic conditions specifically relating to the nature of the traffic movement, implying levels of service.
+Parking;AccessEquipmentEnum;Specifies additional equipment for this access.
+Parking;AccessLaneTypeEnum;A list of the supported access lane characteristic types.
+Parking;AccessTypeEnum;A list of the supported access area types.
+Situation;AccidentCauseEnum;Collection of the type of accident causes.
+Situation;AccidentTypeEnum;Collection of descriptive terms for types of accidents.
+Parking;ActivityEnum;Collection of activities, for example in the context of rest areas.
+LocationExtension;AddressLineTypeEnum;A list of supported address line types.
+LocationReferencing;AlertCDirectionEnum;Direction used to reach the primary location from the secondary location in ALERT-C location table, as defined in CEN ISO 14819-1
+LocationReferencing;AltitudeAccuracyEnum;Coded level of vertical accuracy
+Situation;AnimalPresenceTypeEnum;Types of animal presence.
+LocationReferencing;AreaPlacesEnum;Type of area place(s)
+EnergyInfrastructure;AuthenticationAndIdentificationEnum;A table of authentication and/or identification methods
+Situation;AuthorityOperationTypeEnum;Types of authority operations.
+EnergyInfrastructure;BioethanolTypeEnum;A table of different types of petrol with a share of bioethanol.
+Parking;CalculationTypeEnum;A list of the supported calculation types for demand.
+Common;CalendarWeekWithinMonthEnum;Calendar week within month (see ISO8601).
+Parking;CampusStatusEnum;The status for multiple parking objects (available spaces or not).
+LocationReferencing;CarriagewayEnum;List of descriptors identifying specific carriageway details.
+Situation;CauseTypeEnum;Types of causes of situations which are not managed or are off network.
+EnergyInfrastructure;ChargingModeEnum;Charging mode according to IEC 61851-1 terminology
+EnergyInfrastructure;ChargingPointUsageTypeEnum;Type of usage for an electric charging point..
+Situation;CollisionTypeEnum;Identifies a type of collision
+Vms;ColourEnum;Colours.
+Situation;CommentTypeEnum;Classification of comment types.
+Common;ComparisonOperatorEnum;Logical comparison operations.
+Situation;ComplianceOptionEnum;Types of compliance.
+Vms;CompositePictogramEnum;Identifies a pictogram used only for building a composite pictogram
+Common;ComputationMethodEnum;Types of computational methods used in deriving data values for data sets.
+Common;ConfidentialityValueEnum;Values of confidentiality.
+EnergyInfrastructure;ConnectorFormatTypeEnum;A list of cable types used during the charging process.
+EnergyInfrastructure;ConnectorTypeEnum;A table of commonly used connectors / charging interfaces
+Situation;ConstructionWorkTypeEnum;Types of works relating to construction.
+Parking;ContactTypeEnum;Defines the supported lists of types of contact.
+Parking;CoveredEnum;Defines the supported lists of different types describing roof coverage of the facility or entity
+Facilities;CredentialTypeEnum;A list of the supported credential types available for reference.
+Common;DangerousGoodsRegulationsEnum;Types of dangerous goods regulations.
+Common;DayEnum;Days of the week.
+Vms;DedicatedUsageEnum;Type of usage for which a VMS is dedicated
+Situation;DelayBandEnum;Classifications of a delay banded by length (i.e. the additional travel time).
+Situation;DelaysTypeEnum;Course classifications of a delay.
+EnergyInfrastructure;DeliveryUnitEnum;Table with diffrent units in which the delivery is measured.
+EnergyInfrastructure;DieselTypeEnum;A table of different diesel types
+Common;DirectionCompassEnum;Cardinal direction points of the compass.
+LocationReferencing;DirectionEnum;List of directions of travel.
+LocationReferencing;DirectionPurposeEnum;Main purpose of a direction of a road
+Vms;DisplayedNumericalInformationTypeEnum;Type of numerical information displayed
+Situation;DisturbanceActivityTypeEnum;Types of disturbance activities.
+Situation;DrivingConditionTypeEnum;Types of the perceived driving conditions.
+EnergyInfrastructure;ElectricEnergySourceTypeEnum;Electric energy sources
+Parking;ElementDescriptorEnum;A list of the supported parking element descriptors (e.g. floor,row).
+Common;EmissionClassificationEuroEnum;Classification of emission according to the Euro emission classification (based on serveral amendments on 1970 Directive 70/220/EEC). Note htat vehicleType as well as fuelType are mandatory to provide to make this classification explicit.
+CommonExtension;EmissionClassificationEuroEnumExtended;extension of the EmissionClassificationEuroEnum
+EnergyInfrastructure;EnergyInfrastructureSiteTypeEnum;The type of an energy infrastructure site.
+Facilities;EnergySourceEnum;Type of fuel used by a vehicle.
+Situation;EnvironmentalObstructionTypeEnum;Types of environmental obstructions.
+Situation;EquipmentOrSystemFaultTypeEnum;Types of fault, malfunctioning or non operational conditions of equipment or systems.
+Situation;EquipmentOrSystemTypeEnum;Types of equipment and systems used to support the operation of the road network.
+Parking;EsporgStandardLevelEnum;Classification according to the technical specifications of the European secure parking organisation.
+Common;FuelTypeEnum;Type of fuel used by a vehicle.
+Vms;GddServiceCategoryEnum;Type of service offered by the pictogram, as defined in ISO 14823.
+Situation;GeneralInstructionToRoadUsersTypeEnum;General instructions that may be issued to road users (specifically drivers and sometimes passengers) by an operator or operational system in support of network management activities or emergency situations.
+Situation;GeneralNetworkManagementTypeEnum;Types of network management actions.
+LocationReferencing;GeographicCharacteristicEnum;Descriptor to help to identify a specific location.
+LocationReferencing;HeightGradeEnum;List of height or vertical gradings of road sections.
+LocationReferencing;HeightTypeEnum;Coded value for type of height
+Parking;HierarchyElementTypeEnum;Defines the supported lists of types of parking hierarchy elements permissible
+EnergyInfrastructure;HydrogenFuellingProcessProtocolEnum;A table with different types of protocols that are used during the hydron fuelling process.
+Vms;ImageFormatEnum;Identifies an image format
+Common;InformationDeliveryServicesEnum;List of service channels or devices on which information or data exchanged can be delivered.
+Common;InformationStatusEnum;Status of the related information (i.e. real, test or exercise).
+Vms;InformationTypeEnum;Type of text characterisation.
+Situation;InfrastructureDamageTypeEnum;Types of infrastructure damage which may have an effect on the road network.
+LocationReferencing;InfrastructureDescriptorEnum;Descriptor identifying infrastructure to help to identify a specific location.
+Situation;InjuryStatusTypeEnum;Types of injury status of people.
+Common;InstanceOfDayEnum;Instances of a day of the week in a month
+Situation;InvolvementRolesEnum;Involvement role of a person in event.
+Parking;JunctionClassificationEnum;Explicit type of a junction.
+LocationReferencing;LaneEnum;List of descriptors identifying specific lanes.
+Parking;LayoutEnum;Types of layout of this (parking) place.
+LocationReferencing;LinearDirectionEnum;Directions of traffic flow relative to the direction in which the linear element is defined.
+LocationReferencing;LinearElementNatureEnum;List of indicative natures of linear elements.
+Common;LoadTypeEnum;Types of load carried by a vehicle.
+Common;LowEmissionLevelEnum;The emission level of a vehicle.
+Situation;MaintenanceVehicleActionsEnum;Types of maintenance vehicle actions associated with roadworks.
+Facilities;MeansOfPaymentEnum;Means of payment
+RoadTrafficData;MeasuredOrDerivedDataTypeEnum;Types of measured or derived data.
+Vms;MessageInformationTypeEnum;Types of information displayable on a VMS.
+Situation;MobilityTypeEnum;Types of mobility relating to a situation element defined by a SituationReord.
+Common;MonthOfYearEnum;A list of the months of the year.
+LocationReferencing;NamedAreaTypeEnum;Types of areas.
+Situation;NonWeatherRelatedRoadConditionTypeEnum;Types of road surface conditions which are not related to the weather.
+LocationReferencing;NutsCodeTypeEnum;Types of NUTS codes (Nomenclature of territorial units for statistics) including LAU codes (Local Administrative Units).
+Situation;ObstructionTypeEnum;Types of obstructions on the roadway.
+LocationReferencing;OpenlrFormOfWayEnum;Enumeration of for of way
+LocationReferencing;OpenlrFunctionalRoadClassEnum;Enumeration of functional road class
+LocationReferencing;OpenlrOrientationEnum;Enumeration of orientation
+LocationReferencing;OpenlrSideOfRoadEnum;Enumeration of side of road
+Parking;OperatingRestrictionsEnum;Defines operating restrictions to use the of a facility. 
+Facilities;OperationStatusEnum;Specifies whether some scenario or equipment is in operation or not.
+Situation;OperatorActionOriginEnum;Origins of operator actions.
+Situation;OperatorActionStatusEnum;List of statuses associated with operator actions.
+EnergyInfrastructure;OrganicGasTypeEnum;A table of types of organic gases
+Facilities;OrganisationTypeEnum;Type of organisation.
+Parking;ParkingConditionsEnum;Defines if normal parking conditions are suspended or special parking conditions are in force.
+Parking;ParkingFaultEnum;Types of parking site or access faults.
+Parking;ParkingModeEnum;The arrangement of the parking space or the group of parking spaces in relation to the road.
+Parking;ParkingOccupancyEnum;Parking Occupancy enum.
+Parking;ParkingOccupancyTrendEnum;List of terms used to describe the trend in parking space occupancy.
+Parking;ParkingPlaceStatusEnum;The status of the parking place or sub-places (spaces available or not).
+Parking;ParkingRouteOrientationEnum;Orientation of traffic for a parking route.
+Parking;ParkingRouteTypeEnum;The type of the parking route.
+Parking;ParkingSafetyEnum;Safety requirements for truck parking sites according to European Secure Parking Organisation.
+Parking;ParkingSecurityEnum;Specifies security measures related to the parking site or particular spaces.
+Parking;ParkingSpaceConvenienceEnum;Facilities for persons with disabilities.
+Parking;ParkingSpaceOccupancyDetectionEnum;A list of supported methods for detection of occupancy by a vehicle in a parking space.
+Parking;ParkingStructuralCharacteristicsEnum;Specifies some structural characteristics of a parking space or a group of parking spaces.
+Parking;ParkingSupervisionEnum;Defines the kind of supervision of the parking site.
+Parking;ParkingUsageScenarioEnum;Types of parking usage (park & ride, kiss & ride, ...)
+Parking;ParkingVacantSpacesEnum;Parking vacant spaces enum.
+Facilities;PaymentBrandsEnum;Brands for payment cards
+Facilities;PaymentTimingEnum;Details of when payment is required.
+Parking;PedestrianAccessStyleEnum;A list of the supported pedestrian access characteristic types.
+Situation;PersonCategoryEnum;Categories of person.
+EnergyInfrastructure;PetrolTypeEnum;A table of different petrol types
+RoadTrafficData;PhysicalQuantityFaultEnum;Types of faults that may affect the measurement or calculation of physical quantities
+Vms;PhysicalSupportEnum;The ways in which equipments such as VMS are mounted or deployed on the road.
+Vms;PictogramEnum;Types of pictogram not currently covered by ISO 14823 Graphic Data Dictionary
+Situation;PlacesEnum;List of types of places.
+Common;PollutantTypeEnum;Types of pollutant that can be measured in the atmosphere.
+Situation;PoorEnvironmentTypeEnum;Types of poor environmental conditions.
+LocationReferencing;PositionConfidenceCodedErrorEnum;Error code for horizontal or vertical position confidence
+Vms;PositionXAbsoluteEnum;Absolute horizontal positions of an item within an assigned space.
+Vms;PositionXRelativeEnum;Relative horizontal positions of one item to another.
+Vms;PositionYAbsoluteEnum;Absolute verticals positions of an item within an assigned space.
+Vms;PositionYRelativeEnum;Relative vertical positions of one item to another.
+Common;PrecipitationIntensityEnum;Intensity of precipitation.
+Common;PrecipitationTypeEnum;Types of precipitation.
+EnergyInfrastructure;PricingPolicyEnum;A list of possible pricing policies at refill points
+Situation;ProbabilityOfOccurrenceEnum;Levels of confidence that the sender has in the information, ordered {certain, probable, risk of}.
+Common;PublicEventTypeEnum;Types of public events.
+Parking;PublicTransportTypeEnum;Special measures in the context of public transport.
+Parking;PublicTransportVehicleType;Types of public transport vehicles
+Facilities;RateAvailabilityTypeEnum;A list of rate availability types.
+Facilities;RateLineTypeEnum;A list of rate line types.
+Facilities;RateTypeEnum;A list of supported rate types.
+LocationReferencing;ReferentTypeEnum;A set of types of known points along a linear object such as a road.
+EnergyInfrastructure;RefillPointStatusEnum;The status of a refill point.
+EnergyInfrastructure;RefillSolutionHydrogenEnum;A table of different refilling solutions for hydrogen
+Parking;RegulationEnum;Regulation parameters for actions.
+LocationReferencing;RelativePositionOnCarriagewayEnum;Identifies a relative position across a carriageway
+Situation;RelativeTrafficFlowEnum;Levels of assessment of the traffic flow conditions relative to normally expected conditions at this date/time.
+Situation;ReroutingManagementTypeEnum;Management actions relating to rerouting.
+Facilities;ReservationTypeEnum;Different types of reservation.
+Facilities;RightTypeEnum;A list of the supported RightSpecification types available for reference.
+Situation;RoadMaintenanceTypeEnum;Types of road maintenance.
+Situation;RoadOperatorServiceDisruptionTypeEnum;Types of disruption to road operator services relevant to road users.
+Situation;RoadOrCarriagewayOrLaneManagementTypeEnum;Management actions relating to road, carriageway or lane usage.
+Situation;RoadsideAssistanceTypeEnum;Types of road side assistance.
+Parking;RoadTypeEnum;Categorisation of the  road type (motorway,main road,...).
+Situation;RoadworksDurationEnum;Expected durations of roadworks in general terms.
+Situation;RoadworksScaleEnum;Grade of complexity of the roadworks according to the responsible road operator. For example determined by size, duration and/or traffic disruption.
+Situation;ServiceDisruptionTypeEnum;Types of disruption to services relevant to road users.
+EnergyInfrastructure;ServiceTypeEnum;A table of different service levels to be expected for fuelling/charging and payment.
+Parking;SessionActivationModeEnum;Modes or credentials that can be used to activate a parking session or other operation (delivery, loading, etc).
+Vms;SettingReasonEnum;Coded reasons why a message has been selected for display on the sign.
+Situation;SeverityEnum;Levels of severity of a situation as whole assessed by the impact that the situation may have on traffic flow as perceived by the supplier.
+Common;SourceTypeEnum;Type of sources from which situation information may be derived.
+Common;SpecialDayTypeEnum;Collection of special types of days.
+Parking;SpecialLocationEnum;Types of locations, often associated with some building.
+Situation;SpeedManagementTypeEnum;Management actions relating to speed.
+Parking;StaffEnum;A list of supported values for staffing characteristics.
+Parking;StructureGradeEnum;Types of layout of the parking site.
+Parking;StructureTypeEnum;A list of types of parking structure.
+LocationReferencing;SubdivisionTypeEnum;ISO 3166-2 subdivison types.
+Situation;SubjectTypeOfWorksEnum;Subject types of construction or maintenance work.
+Vms;SupplementalPictogramEnum;Types of pictograms displayable in supplementary panels (normally below the main pictogram display which it qualifies).
+Parking;SupplyViewTypeEnum;Define if space quantity is demarcated or estimated.
+RoadTrafficData;TimeMeaningEnum;Explains the meaning of a specific time value with respect to a time period
+Common;TimePrecisionEnum;List of precisions to which times can be given.
+LocationReferencing;TpegLoc01AreaLocationSubtypeEnum;Types of area.
+LocationReferencing;TpegLoc01FramedPointLocationSubtypeEnum;Types of points on the road network framed by two other points on the same road.
+LocationReferencing;TpegLoc01LinearLocationSubtypeEnum;Types of linear location.
+LocationReferencing;TpegLoc01SimplePointLocationSubtypeEnum;Types of simple point.
+LocationReferencing;TpegLoc03AreaDescriptorSubtypeEnum;Descriptors for describing area locations.
+LocationReferencing;TpegLoc03IlcPointDescriptorSubtypeEnum;Descriptors for describing a junction by identifying the intersecting roads at a road junction.
+LocationReferencing;TpegLoc03JunctionPointDescriptorSubtypeEnum;Descriptors for describing a point at a road junction.
+LocationReferencing;TpegLoc03OtherPointDescriptorSubtypeEnum;Descriptors other than junction names and road descriptors which can help to identify the location of points on the road network.
+LocationReferencing;TpegLoc04HeightTypeEnum;Types of height.
+Situation;TrafficConstrictionTypeEnum;Types of constriction to which traffic is subjected as a result of an event.
+Situation;TrafficFlowCharacteristicsEnum;Types of consistency (steadiness) of traffic flow.
+RoadTrafficData;TrafficStatusEnum;List of terms used to describe traffic conditions.
+Common;TrafficTrendTypeEnum;List of terms used to describe the trend in traffic conditions.
+Situation;TrafficTypeEnum;Types of traffic, mostly classified by its destination type.
+Situation;TransitServiceInformationEnum;Types of public transport information.
+Situation;TransitServiceTypeEnum;Types of transport services available to the general public.
+RoadTrafficData;TravelTimeTrendTypeEnum;List of terms used to describe the trend in travel times.
+RoadTrafficData;TravelTimeTypeEnum;List of ways in which travel times are derived.
+Parking;TruckParkingDynamicManagementEnum;Dynamic parking mode enum.
+Vms;UnitOfMeasureEnum;Identifies a unit of measure for a physical quantity
+Common;UrlLinkTypeEnum;Types of URL links.
+Facilities;UserTypeEnum;Types of different users, for example used in the context of parking.
+Common;ValidityStatusEnum;Values of validity status that can be assigned to a described event, action or item.
+Common;VehicleEquipmentEnum;Types of vehicle equipment in use or on board.
+Situation;VehicleObstructionTypeEnum;Types of obstructions involving vehicles.
+Situation;VehicleProblemCauseEnum;The component of the vehicle that has caused a problem
+Common;VehicleStatusEnum;The status of a vehicle.
+EnergyInfrastructure;VehicleToGridCommunicationTypeEnum;A list of communication types for communication between vehicles and the grid.
+Common;VehicleTypeEnum;Types of vehicle.
+Common;VehicleUsageEnum;Types of usage of a vehicle.
+Vms;VmsControllerFaultEnum;Types of variable message sign controller faults.
+Vms;VmsFaultEnum;Types of variable message sign faults.
+Vms;VmsTypeEnum;Type of variable message sign.
+Common;WeatherRelatedRoadConditionTypeEnum;Types of road surface conditions which are related to the weather.
+Common;WeightTypeEnum;Type of weight - describing the meaning of a vehicle weight value
+Common;WinterEquipmentManagementTypeEnum;Instructions relating to the use of winter equipment.
+Vms;WorkingStatusEnum;Identifies the working status of a VMS.
+

@@ -1,0 +1,433 @@
+Namespace;Package nam;Class name;Designation;Definition;Stereotype;Abstract
+Parking;Access;Access;Access;An identified area defining a vehicular or a pedestrian access area.;;Yes
+Parking;Access;AccessAndEgress;Access and egress;Time periods specified for access to or from a parking facility.;;No
+Parking;Access;AccessJunction;Access junction;An access junction with its distance.;;No
+Parking;Access;AccessLaneSpecific;Access lane specific;Defines the sequence and nature of a specific entrance or exit lane.;;No
+Parking;Access;AccessRoad;Access road;An access road with its distance.;;No
+Parking;Access;PedestrianAccess;Pedestrian access;A specialisation of an identifiedArea defining a pedestrian access area.;;No
+Parking;Access;VehicularAccess;Vehicular access;A specialisation of an identified area defining a vehicular access area.;;No
+Situation;Accident;Accident;Accident;Accidents are events where one or more vehicles are involved in collisions or in leaving the roadway. These include collisions between vehicles or with other road users or obstacles.;;No
+Situation;Activity;Activity;Activity;Deliberate human action external to the traffic stream or roadway which could disrupt traffic.;;Yes
+Situation;Activity;AuthorityOperation;Authority operation;Authority initiated operation or activity that could disrupt traffic.;;No
+Situation;Activity;DisturbanceActivity;Disturbance activity;Deliberate human action of either a public disorder nature or of a situation alert type which could disrupt traffic.;;No
+Situation;Activity;PublicEvent;Public event;Organised public event which could disrupt traffic.;;No
+LocationReferencing;AlertC;AlertCDirection;ALERT-C direction;The direction of traffic flow along the road to which the information relates.;;No
+LocationReferencing;AlertC;AlertCLinear;ALERT-C linear;A linear section along a road defined between two points on the road by reference to a pre-defined ALERT-C location table.;;Yes
+LocationReferencing;AlertC;AlertCLocation;ALERT-C location;Identification of a specific point, linear or area location in an ALERT-C location table.;;No
+LocationReferencing;AlertC;AlertCMethod2PrimaryPointLocation;ALERT-C method 2 primary point location;The point (called Primary point) which is either a single point or at the downstream end of a linear road section. The point is specified by a reference to a point in a pre-defined ALERT-C location table.;;No
+LocationReferencing;AlertC;AlertCMethod2SecondaryPointLocation;ALERT-C method 2 secondary point location;The point (called Secondary point) which is at the upstream end of a linear road section. The point is specified by a reference to a point in a pre-defined ALERT-C location table.;;No
+LocationReferencing;AlertC;AlertCMethod4PrimaryPointLocation;ALERT-C method 4 primary point location;The point (called Primary point) which is either a single point or at the downstream end of a linear road section. The point is specified by a reference to a point in a pre-defined ALERT-C location table plus a non-negative offset distance.;;No
+LocationReferencing;AlertC;AlertCMethod4SecondaryPointLocation;ALERT-C method 4 secondary point location;The point (called Secondary point) which is at the upstream end of a linear road section. The point is specified by a reference to a point in a pre-defined Alert-C location table plus a non-negative offset distance.;;No
+LocationReferencing;AlertC;AlertCPoint;ALERT-C point;A single point on the road network defined by reference to a pre-defined ALERT-C location table and which has an associated direction of traffic flow.;;Yes
+LocationReferencing;AlertCArea;AlertCArea;ALERT-C area;An area defined by reference to a predefined ALERT-C location table.;;No
+LocationReferencing;AlertCLinearByCode;AlertCLinearByCode;ALERT-C linear by code;A linear section along a road defined by reference to a linear section in a pre-defined ALERT-C location table.;;No
+LocationReferencing;AlertCMethod2Linear;AlertCMethod2Linear;ALERT-C method 2 linear;A linear section along a road between two points, primary and secondary, which are pre-defined in an ALERT-C location table. Direction is FROM the secondary point TO the primary point, i.e. the primary point is downstream of the secondary point.;;No
+LocationReferencing;AlertCMethod2Point;AlertCMethod2Point;ALERT-C method 2 point;A single point on the road network defined by reference to a point in a pre-defined ALERT-C location table and which has an associated direction of traffic flow.;;No
+LocationReferencing;AlertCMethod4Linear;AlertCMethod4Linear;ALERT-C method 4 linear;A linear section along a road between two points, primary and secondary, which are pre-defined ALERT-C locations plus offset distance. Direction is FROM the secondary point TO the primary point, i.e. the primary point is downstream of the secondary point.;;No
+LocationReferencing;AlertCMethod4Point;AlertCMethod4Point;ALERT-C method 4 point;A single point on the road network defined by reference to a point in a pre-defined ALERT-C location table plus an offset distance and which has an associated direction of traffic flow.;;No
+Parking;Assignment;Assignment;Assignment;An assignment for parking, optionally limited to a validity in time.;;No
+RoadTrafficData;BasicData;BasicData;Basic data;Data that are either measured or calculated at the same time or over the same time period.;;Yes
+RoadTrafficData;BasicData;MeasurementOrCalculationTime;Measurement or calculation time;Describes the time at which a measured or calculated value or set of values was measured or calculated. It may be a future time at which a data value is predicted to apply.;;No
+RoadTrafficData;Classes;AxleCharacteristics;Axle characteristics;Characteristics of vehicle axles;;No
+Situation;Classes;Cause;Cause;Contains details of the cause of a record within a situation;;No
+Situation;Classes;Comment;Comment;A free text comment with an optional date/time stamp that can be used by the operator to convey un-coded observations/information.;;No
+EnergyInfrastructure;Classes;Connector;Connector;Parameters and description of an interface that is available at the given electric charging point to connect vehicles;;No
+Situation;Classes;DetailedCauseType;Detailed cause type;The type of influence that may be the cause of components of a situation. At least one attribute must be populated.;;No
+EnergyInfrastructure;Classes;DieselRefillPoint;Diesel refill point;A refill point for diesel;;No
+EnergyInfrastructure;Classes;ElectricChargingPoint;Electric charging point;Technical infrastructure at a specific location that facilitates electric charging of one vehicle at a time;;No
+EnergyInfrastructure;Classes;ElectricChargingPointStatus;Electric charging point status;Dynamic information on the status of the charging point.;;No
+EnergyInfrastructure;Classes;ElectricEnergyMix;Electric energy mix;The energy mix and environmental impact of the supplied energy available at this charging point.;;No
+EnergyInfrastructure;Classes;ElectricEnergySourceRatio;Electric energy source ratio;Ratio for the specified energy source;;No
+EnergyInfrastructure;Classes;EnergyInfrastructureSite;Energy infrastructure site;A site where vehicles can be supplied with energy, including all buildings, stations, parking spaces and other associated services.;;No
+EnergyInfrastructure;Classes;EnergyInfrastructureSiteStatus;Energy infrastructure site status;Dynamic information on the status of the energy supplying site;;No
+EnergyInfrastructure;Classes;EnergyInfrastructureStation;Energy infrastructure station;A collection of associated refill points (which can be of different type). An example would be a fuel dispenser that serves different types of fuel. Often the vehicle space of the station is shared between the different refill points.;;No
+EnergyInfrastructure;Classes;EnergyInfrastructureStationStatus;Energy infrastructure station status;Dynamic information on the status of the station.;;No
+EnergyInfrastructure;Classes;EnergyInfrastructureTable;Energy infrastructure table;A table of sites where vehicles can be supplied with energy.;;No
+EnergyInfrastructure;Classes;EnergyPricingPolicy;Energy pricing policy;Details how the price for the charging process is calculated.;;No
+Common;Classes;GenericPublication;Generic publication;A publication used to make level B extensions at the publication level.;;No
+Situation;Classes;GenericSituationRecord;Generic situation record;A generic SituationRecord for use when adding level B extensions at the SituationRecord level.;;No
+Common;Classes;GlobalReference;Global reference;A versioned reference to an object that may be in another publication from another publisher.;;Yes
+Situation;Classes;GroupOfPeopleInvolved;Group of people involved;Group of people involved in the event having common characteristics and/or status.;;No
+Common;Classes;GroupOfVehiclesInvolved;Group of vehicles involved;Group of the vehicles involved having common characteristics and/or status.;;No
+Common;Classes;HazardousMaterials;Hazardous materials;Details of hazardous materials.;;No
+Common;Classes;HeaderInformation;Header information;Management information relating to the data contained within a publication.;;No
+EnergyInfrastructure;Classes;HydrogenRefillPoint;Hydrogen refill point;A refill point for hydrogen;;No
+Common;Classes;InternationalIdentifier;International identifier;An identifier/name whose range is specific to the particular country.;;No
+Vms;Classes;ManagedLogicalLocation;Managed logical location;The logical location (e.g. a car park, a section of road, a junction etc.) which a VMS contributes to the management of.;;No
+RoadTrafficData;Classes;MeasurementSite;Measurement site;An identifiable single measurement site entry/record in the measurement site table.;;No
+RoadTrafficData;Classes;MeasurementSiteTable;Measurement site table;A Measurement Site Table comprising a number of sets of data, each describing the location from where a stream of measured data may be derived.  Each location is known as a "measurement site" which can be a point, a linear road section or an area.;;No
+RoadTrafficData;Classes;MeasurementSpecificCharacteristics;Measurement specific characteristics;Characteristics which are specific to an individual measurement type (specified in a known order) at the given measurement site.;;No
+Situation;Classes;Mobility;Mobility;An indication of whether the associated instance of a SituationRecord is mobile (e.g. a march or parade moving along a road) or stationary.;;No
+Common;Classes;NamedArea;Named area;An abstract hook class to hook in a model for a named area.;;Yes
+EnergyInfrastructure;Classes;OrganicGasRefillPoint;Organic gas refill point;A refill point for organic gases;;No
+Common;Classes;PayloadPublication;Payload publication;A payload publication of traffic related information or associated management information created at a specific point in time that can be exchanged via a DATEX II interface.;;Yes
+EnergyInfrastructure;Classes;PetrolRefillPoint;Petrol refill point;A refill point for petrol;;No
+RoadTrafficData;Classes;ReferenceSettings;Reference settings;Specification of default values for locations on the road network. Where a default status value is supplied, it shall apply for all specified locations, unless the publication includes an additional status value for a specified location.;;No
+EnergyInfrastructure;Classes;RefillPoint;Refill point;Technical infrastructure at a specific location that facilitates an energy refilling process being connected to max. one vehicle at a time;;Yes
+EnergyInfrastructure;Classes;RefillPointStatus;Refill point status;Dynamic information on the status of the refill point.;;No
+EnergyInfrastructure;Classes;ServiceType;Service type;A specification of service types for the fuelling/charging and payment process;;No
+RoadTrafficData;Classes;SiteMeasurements;Site measurements;A  measurement data set derived from a specific measurement site.;;No
+Situation;Classes;Situation;Situation;An identifiable instance of a traffic/travel situation comprising one or more traffic/travel circumstances which are linked by one or more causal relationships. Each traffic/travel circumstance is represented by a Situation Record.;;No
+Situation;Classes;SituationRecord;Situation record;An identifiable versioned instance of a single record/element within a situation.;;Yes
+Common;Classes;Source;Source;Details of the source from which the information was obtained.;;No
+Common;Classes;UrlLink;URL link;Details of a Uniform Resource Locator (URL) address pointing to a resource available on the Internet from where further relevant information may be obtained.;;No
+EnergyInfrastructure;Classes;VehicleSpace;Vehicle space;A space where a vehicle can be charged.;;No
+Vms;Classes;Vms;VMS;Variable message sign - a display panel used to display one or more messages (text, symbols, pictograms or combinations) that can be changed or switched on or off as required;;No
+Vms;Classes;VmsController;VMS controller;A roadside unit which can control one or more variable message signs on a single gantry or mounting or on closely associated gantries or mountings.;;No
+Vms;Classes;VmsControllerTable;VMS controller table;A versioned VMS controller unit table comprising a number of data records, each record defining the characteristics of a specific deployed variable message sign controller unit.;;No
+Parking;CommonComponents;AdditionalCharacteristics;Additional characteristics;Common additional characteristics for campus, (sub)places and spaces.;;No
+Parking;CommonComponents;CertifiedSecureParking;Certified secure parking;Certification for secure parking.;;No
+Parking;CommonComponents;Characteristics;Characteristics;A class defining information concerning characteristics relating to a parking facility.;;No
+Parking;CommonComponents;CommonComponents;Common components;A class defining information concerning multiple features relating to place hierarchy elements.;;No
+Parking;CommonComponents;DedicatedAccess;Dedicated access;Reference to an access of any type (vehicles, pedestrian, ...).;;No
+Parking;CommonComponents;ImageAlbum;Image album;A class defining information relating to images for a parking facility.;;No
+Parking;CommonComponents;Marketing;Marketing;Universal resource locator (URI) that points towards a web site carrying marketing material supplied.;;No
+Parking;CommonComponents;PermitsAndProhibitions;Permits and prohibitions;Defines sets of action and regulations to specify permitted and prohibited issues.;;No
+Parking;CommonComponents;RgbColour;RGBColour;An RGB colour described by values for red, green and blue (0..255) as well as an optional name.;;No
+Parking;CommonComponents;SafetyStandardClassification;Safety standard classification;Use this class to classification type/level for security schemes for this place;;No
+Situation;Conditions;Conditions;Conditions;Any conditions which have the potential to degrade normal driving conditions.;;No
+Situation;Conditions;NonWeatherRelatedRoadConditions;Non weather related road conditions;Road surface conditions that are not related to the weather but which may affect driving conditions.;;No
+Situation;Conditions;PoorEnvironmentConditions;Poor environment conditions;Any environmental conditions which may be affecting the driving conditions on the road.;;No
+Situation;Conditions;RoadSurfaceConditions;Road surface conditions;Conditions of the road surface which may affect driving conditions. These may be related to the weather (e.g. ice, snow etc.) or to other conditions (e.g. oil, mud, leaves etc. on the road);;Yes
+Situation;Conditions;WeatherRelatedRoadConditions;Weather related road conditions;Road surface conditions that are related to the weather which may affect the driving conditions, such as ice, snow or water.;;No
+Common;DataValue;ApplicationRateValue;Application rate value;A measured or calculated value of the application rate of a substance.;;No
+RoadTrafficData;DataValue;AxleFlowValue;Axle flow value;A measured or calculated value of the flow rate of vehicle axles.;;No
+RoadTrafficData;DataValue;DailyTrafficFlowValue;Daily traffic flow value;A measured or calculated value of daily traffic flow;;No
+Common;DataValue;DataValue;Data value;A data value of something that can be measured or calculated. Any provided meta-data values specified in the attributes override any specified generic characteristics such as defined for a specific measurement in the MeasurementSiteTable. ;;Yes
+Common;DataValue;DirectionBearingValue;Direction bearing value;A measured or calculated value of direction as a bearing.;;No
+Common;DataValue;DirectionCompassValue;Direction compass value;A measured or calculated value of direction as a point of the compass.;;No
+Facilities;DataValue;DurationValue;Duration value;A measured or calculated value of a period of time.;;No
+RoadTrafficData;DataValue;DurationValue;Duration value;A measured or calculated value of a period of time.;;No
+Common;DataValue;FloatingPointMetreDistanceValue;Floating point metre distance value;A measured or calculated value of distance in metres in a floating point format.;;No
+Common;DataValue;FrictionValue;Friction value;A measured or calculated value of road surface friction.;;No
+Common;DataValue;IntegerMetreDistanceValue;Integer metre distance value;A measured or calculated value of distance in whole metres.;;No
+Common;DataValue;KilogramsConcentrationValue;Kilograms concentration value;A measured or calculated value of concentration of a substance in kilograms per unit volume.;;No
+Common;DataValue;MicrogramsConcentrationValue;Micrograms concentration value;A measured or calculated value of concentration of a substance in micrograms per unit volume.;;No
+RoadTrafficData;DataValue;PcuFlowValue;Pcu flow value;A measured or calculated value of the flow rate of passenger car units.;;No
+Common;DataValue;PercentageValue;Percentage value;A measured or calculated value expressed as a percentage.;;No
+Common;DataValue;PrecipitationIntensityValue;Precipitation intensity value;A measured or calculated value of the accumulation rate of precipitation.;;No
+Common;DataValue;PressureValue;Pressure value;A measured or calculated value of atmospheric pressure.;;No
+Common;DataValue;SpeedValue;Speed value;A measured or calculated value of speed.;;No
+Common;DataValue;TemperatureValue;Temperature value;A measured or calculated value of temperature.;;No
+RoadTrafficData;DataValue;TrafficDensityValue;Traffic density value;A measured or calculated value of the density of vehicles on a unit stretch of road in a given direction.;;No
+RoadTrafficData;DataValue;TrafficStatusValue;Traffic status value;A measured or calculated value of the status of traffic conditions on a section of road in a specified direction.;;No
+Common;DataValue;VehicleFlowValue;Vehicle flow value;A measured or calculated value of the flow rate of vehicles.;;No
+Common;DataValue;WindSpeedValue;Wind speed value;A measured or calculated value of wind speed.;;No
+Facilities;Dimension;Dimension;Dimension;A component that provides dimension information. Especially for multi-storey buildings, the usable area might be larger than the product from its length and width. ;;No
+RoadTrafficData;ElaboratedDataPublication;ElaboratedDataPublication;Elaborated data publication;A publication containing one or more elaborated data sets.;;No
+Facilities;Eligibility;Eligibility;Eligibility;Class support concepts for defining eligibility criteria.;;No
+Facilities;Eligibility;Qualification;Qualification;A singular set of criteria used to test eligibility for use of a rate table.;;No
+Facilities;Eligibility;UserQualification;User qualification;Class supporting the definition of user group characteristics;;No
+EnergyInfrastructure;EnergyInfrastructureStatusPublication;EnergyInfrastructureStatusPublication;Energy infrastructure status publication;Dynamic information on the status of energy supplying sites.;;No
+EnergyInfrastructure;EnergyInfrastructureTablePublication;EnergyInfrastructureTablePublication;Energy infrastructure table publication;A publication of static information on the infrastructure for vehicle energy supply.;;No
+Facilities;Facility;Facility;Facility;Provides information about a facility, which may represent any kind of site, building, or structure, and may be a composite facility that includes supplemental facilities.;;Yes
+Facilities;Facility;FacilityObject;Facility object;Provides information about a facility object, which may represent any kind of site, building, or structure, including those which supplement a main facility.;;Yes
+Facilities;Facility;FacilityObjectStatus;Facility object status;Dynamic status information for a facility object.;;No
+Facilities;Facility;FacilityStatus;Facility status;Dynamic status information for a facility.;;No
+Common;Fault;Fault;Fault;Information about a fault relating to a specific piece of equipment or process.;;No
+LocationExtension;Final;Address;Address;A street oriented addressing structure supporting delivery;;No
+LocationExtension;Final;AddressLine;Address line;A class defining information concerning one line of a postal address.;;No
+CommonExtension;Final;EmissionsExtension;Emissions extension;An extension for the Emissions class to provide a comparison operator.;;No
+LocationExtension;Final;FacilityLocation;Facility location;A location for which a time zone and an address can be specified;;No
+LocationExtension;Final;NamedAreaExtended;Named area extended;A named area with an additional code (that is not an ISO subdivision code);;No
+LocationReferencing;Gml;GmlLinearRing;GML linear ring;Closed line string not self-intersecting (i.e. having as last point the first point);;No
+LocationReferencing;Gml;GmlLineString;GML line string;Line string based on GML (EN ISO 19136) definition: a curve defined by a series of two or more coordinate tuples. Unlike GML may be self-intersecting. If srsName attribute is not present, posList is assumed to use "ETRS89-LatLonh" reference system.;;No
+LocationReferencing;Gml;GmlMultiPolygon;GML multi polygon;An area defined by a set of polygons acording to GML (EN ISO 19136).;;No
+LocationReferencing;Gml;GmlPolygon;GML polygon;Planar surface defined by 1 exterior boundary and 0 or more interior boundaries;;No
+Vms;GraphicDataDictionary;GddPictogramAttributes;GDD pictogram attributes;ISO 14823 Graphic Data Dictionary attributes with textual or numeric data to supplement a pictogram identification.;;No
+Vms;GraphicDataDictionary;GddPictogramIdentification;GDD pictogram identification;Group of codes that uniquely identifies a kind of pictogram, according to the ISO 14823 Graphic Data Dictionary;;No
+Vms;GraphicDataDictionary;GddStructure;GDD structure;Graphic Data Dictionary structure, to identify a pictogram by code and optional supplementary attributes;;No
+Parking;IdentifiedArea;IdentifiedArea;Identified area;An identifiable discrete bounded geographic zone that shares common characteristics and is used for parking and mobility related operations or other purposes.;;Yes
+Parking;IdentifiedArea;SpecificArea;Specific area;An identifiable discrete bounded geographic zone that shares common characteristics and that may be used for a function other than vehicular access.;;No
+Parking;IdentifiedArea;SupplementalFacility;Supplemental facility;A specialisation of an identifiedArea referencing an identifiable area with associated identified services or equipment.;;No
+Situation;Impact;Delays;Delays;The details of the delays being caused by the situation element defined in the situation record. It is recommended to only use one of the optional attributes to avoid confusion.;;No
+Situation;Impact;Impact;Impact;An assessment of the impact that an event or operator action defined by the situation record has on the driving conditions.;;No
+RoadTrafficData;IndividualVehicleData;IndividualVehicleDataValues;Individual vehicle data values;Measured or calculated data values relating to individual vehicles derived from detectors at the specified measurement site.;;No
+Parking;JunctionAndRoad;JunctionInformation;Junction information;Information on a junction (on a highway), can also be an interchange or if applicable also a motorway service station (see junctionClassification).;;No
+Parking;JunctionAndRoad;RoadInformationEnhanced;Road information enhanced;Additional road information.;;No
+LocationReferencing;LinearWithinLinearElement;LinearWithinLinearElement;Linear within linear element;A linear section along a linear element where the linear element is either a part of or the whole of a linear object (i.e. a road), consistent with ISO 19148 definitions. ;;No
+LocationReferencing;LocationReference;AreaDestination;Area destination;The specification of the destination of a defined route or itinerary which is an area.;;No
+LocationReferencing;LocationReference;AreaLocation;Area location;Location representing a geographic or geometric defined area which may be qualified by height information to provide additional geospatial discrimination (e.g. for snow in an area but only above a certain altitude).;;No
+LocationReferencing;LocationReference;Destination;Destination;The specification of a destination. This may be either a point location or an area location.;;Yes
+LocationReferencing;LocationReference;ExternalReferencing;External referencing;A location defined by reference to an external/other referencing system.;;No
+LocationReferencing;LocationReference;Itinerary;Itinerary;Multiple (i.e. more than one) physically separate locations arranged as an ordered set that defines an itinerary or route.;;Yes
+LocationReferencing;LocationReference;ItineraryByIndexedLocations;Itinerary by indexed locations;Multiple physically separate locations arranged as an ordered set that defines an itinerary or route. The index qualifier indicates the order.;;No
+LocationReferencing;LocationReference;ItineraryByReference;Itinerary by reference;Multiple (i.e. more than one) physically separate locations which are ordered that constitute an itinerary or route where they are defined by reference to a predefined itinerary.;;No
+LocationReferencing;LocationReference;LinearLocation;Linear location;Location representing a linear section with optional directionality defined between two points. ;;No
+LocationReferencing;LocationReference;Location;Location;The specification of a location either on a network (as a point or a linear location) or as an area. This may be provided in one or more referencing systems.;;Yes
+LocationReferencing;LocationReference;LocationByReference;Location by reference;A location defined by reference to a predefined location.;;No
+LocationReferencing;LocationReference;LocationGroup;Location group;Multiple (i.e. more than one) physically separate locations which have no specific order.;;Yes
+LocationReferencing;LocationReference;LocationGroupByList;Location group by list;A group of (i.e. more than one) physically separate locations which have no specific order and where each location is explicitly listed.;;No
+LocationReferencing;LocationReference;LocationGroupByReference;Location group by reference;A group of (i.e. more than one) physically separate locations which have no specific order that are defined by reference to a predefined non ordered location group.;;No
+LocationReferencing;LocationReference;LocationReference;Location reference;Represents one or more physically separate locations. Multiple locations may be related, as in an itinerary or route, or may be unrelated. One LocationReference should not use multiple Location objects to represent the same physical location.;;Yes
+LocationReferencing;LocationReference;NetworkLocation;Network location;The specification of a location on a network (as a point or a linear location).;;Yes
+LocationReferencing;LocationReference;OffsetDistance;Offset distance;The non-negative offset distance from the ALERT-C referenced point to the actual point.;;No
+LocationReferencing;LocationReference;PointDestination;Point destination;The specification of the destination of a defined route or itinerary which is a point.;;No
+LocationReferencing;LocationReference;PointLocation;Point location;Location representing a single geospatial point.;;No
+LocationReferencing;LocationReference;SingleRoadLinearLocation;Single road linear location;Location representing a linear section along a single road with optional directionality defined between two points on the same road. No matter the kind of linear reference it uses, the constraint of using only a single road must be preserved.;;No
+RoadTrafficData;MeasuredDataPublication;MeasuredDataPublication;Measured data publication;A publication containing one or more measurement data sets, each set being measured at a single measurement site.;;No
+RoadTrafficData;MeasurementSiteTablePublication;MeasurementSiteTablePublication;Measurement site table publication;A publication containing one or more Measurement Site Tables.;;No
+LocationReferencing;NamedArea;IsoNamedArea;ISO named area;The ISO 3166-2 representation for the named area.;;No
+LocationReferencing;NamedArea;NamedArea;Named area;An area defined by a name and/or in terms of known boundaries, such as country or county boundaries or allocated control area of particular authority. The attributes do not form a union; instead, the smallest intersection forms the resulting area.;;No
+LocationReferencing;NamedArea;NutsNamedArea;NUTS named area;The NUTS-Code representation for the named area (Nomenclature of territorial units for statistics) or its LAU code representation (Local Administrative Unit).;;No
+Situation;NetworkManagement;GeneralInstructionOrMessageToRoadUsers;General instruction or message to road users;General instruction and/or message that is issued by the network/road operator which is applicable to drivers and sometimes passengers.;;No
+Situation;NetworkManagement;GeneralNetworkManagement;General network management;Network management action that is instigated either manually or automatically by the network/road operator.  Compliance with any resulting control may be advisory or mandatory.;;No
+Situation;NetworkManagement;NetworkManagement;Network management;Network management action which is applicable to the road network and its users.;;Yes
+Situation;NetworkManagement;ReroutingManagement;Rerouting management;Rerouting management action that is issued by the network/road operator.;;No
+Situation;NetworkManagement;RoadOrCarriagewayOrLaneManagement;Road or carriageway or lane management;Road, carriageway or lane management action that is instigated by the network/road operator.;;No
+Situation;NetworkManagement;SpeedManagement;Speed management;Speed management action that is instigated by the network/road operator.;;No
+Situation;NetworkManagement;WinterDrivingManagement;Winter driving management;Winter driving management action that is instigated by the network/road operator.;;No
+Situation;Obstruction;AnimalPresenceObstruction;Animal presence obstruction;An obstruction on the road resulting from the presence of animals.;;No
+Situation;Obstruction;EnvironmentalObstruction;Environmental obstruction;An obstruction on the road resulting from an environmental cause.;;No
+Situation;Obstruction;GeneralObstruction;General obstruction;Any stationary or moving obstacle of a physical nature, other than of an animal, vehicle, environmental, or damaged equipment nature.;;No
+Situation;Obstruction;InfrastructureDamageObstruction;Infrastructure damage obstruction;An obstruction on the road resulting from the failure or damage of infrastructure on, under, above or close to the road.;;No
+Situation;Obstruction;Obstruction;Obstruction;Any stationary or moving obstacle of a physical nature (e.g. obstacles or vehicles from an earlier accident, shed loads on carriageway, rock fall, abnormal or dangerous loads, or animals etc.) which could disrupt or endanger traffic.;;Yes
+Situation;Obstruction;VehicleObstruction;Vehicle obstruction;An obstruction on the road caused by one or more vehicles.;;No
+LocationReferencing;OpenLR;OpenlrBaseReferencePoint;OpenLR base reference point;Base class used to hold data about a reference point.;;Yes
+LocationReferencing;OpenLR;OpenlrLineAttributes;OpenLR line attributes;Line attributes are part of a location reference point and consists of functional road class (FRC),form of way (FOW) and bearing (BEAR) data.;;No
+LocationReferencing;OpenLR;OpenlrOffsets;OpenLR offsets;Offsets are used to locate the start and end of a location more precisely than bounding to the nodes in a network.;;No
+LocationReferencing;OpenLR;OpenlrPathAttributes;OpenLR path attributes;Properties of the path from the associated location reference point to the next location reference point, which are specified to assist correct identification of the point in an external map data source.;;No
+LocationReferencing;OpenlrArea;OpenlrAreaLocationReference;OpenLR area location reference;A two-dimensional part of the surface of the earth which is bounded by a closed curve. An area location may cover parts of the road network but does not necessarily need to. It is represented according to the OpenLR standard for Area Locations;;Yes
+LocationReferencing;OpenlrArea;OpenlrCircleLocationReference;OpenLR circle location reference;The OpenLR method of area definition by providing a center position and a radius;;No
+LocationReferencing;OpenlrArea;OpenlrClosedLineLocationReference;OpenLR closed line location reference;The OpenLR method of area definition by providing a closed path (i.e. a circuit) in the road network.
+The boundary always consists of road segments;;No
+LocationReferencing;OpenlrArea;OpenlrGridLocationReference;OpenLR grid location reference;Area defined using an OpenLR™ method consisting in defining it by a tessellation of rectangles;;No
+LocationReferencing;OpenlrArea;OpenlrPolygonCorners;OpenLR polygon corners;A geodetic coordinate Tuple that defines the vertices of the underlying geometrical polygon.;;No
+LocationReferencing;OpenlrArea;OpenlrPolygonLocationReference;OpenLR polygon location reference;The OpenLR method of area definition by providing points that bound the area;;No
+LocationReferencing;OpenlrArea;OpenlrRectangle;OpenLR rectangle;Area delimited by a rectangle defined by the geodetic co-ordinates of the two ends of its diagonal from south-west to north-east (the rectangle having two sides that are parallel to lines of latitude);;No
+LocationReferencing;OpenlrArea;OpenlrRectangleLocationReference;OpenLR rectangle location reference;The openLR method of area definition by providing a rectangular shape defined by two geo-coordinate pairs;;No
+LocationReferencing;OpenlrLinear;OpenlrLinear;OpenLR linear;OpenLR line location reference;;No
+LocationReferencing;OpenlrLinear;OpenlrLineLocationReference;OpenLR line location reference;A line location reference is defined by an ordered sequence of location reference points and a terminating last location reference point.;;No
+LocationReferencing;OpenlrPoint;OpenlrBasePointLocation;OpenLR base point location;Holds common data that are used both in OpenlrPointAccessPoint and OpenlrPointAlongLine.;;Yes
+LocationReferencing;OpenlrPoint;OpenlrGeoCoordinate;OpenLR geo coordinate;A geo-coordinate pair is a position in a map defined by its longitude and latitude coordinate values.;;No
+LocationReferencing;OpenlrPoint;OpenlrLastLocationReferencePoint;OpenLR last location reference point;The sequence of location reference points is terminated by a last location reference point.;;No
+LocationReferencing;OpenlrPoint;OpenlrLocationReferencePoint;OpenLR location reference point;The basis of a location reference is a sequence of location reference points (LRPs).;;No
+LocationReferencing;OpenlrPoint;OpenlrPointAlongLine;OpenLR point along line;Point along a line;;No
+LocationReferencing;OpenlrPoint;OpenlrPointLocationReference;OpenLR point location reference;A point location is a zero-dimensional element in a map that specifies a geometric location.;;Yes
+LocationReferencing;OpenlrPoint;OpenlrPoiWithAccessPoint;OpenLR POI with access point;A point of interest (POI) along a line with access is a point location which is defined by a linear reference path, an offset value (defining the access point) from the starting node of this path and a coordinate pair that defines the POI itself.;;No
+Facilities;OperatingHoursPublication;ClosureInformation;Closure information;Information about temporary or permanent closure.;;No
+Facilities;OperatingHoursPublication;OpenAllHours;Open all hours;Open or available all the time (24/7);;No
+Facilities;OperatingHoursPublication;OperatingHours;Operating hours;Operating hours, either by reference or by specification.;;Yes
+Facilities;OperatingHoursPublication;OperatingHoursByReference;Operating hours by reference;Operating hours information that is addressed via a reference.;;No
+Facilities;OperatingHoursPublication;OperatingHoursPublication;Operating hours publication;A publication defining one or more tables that have entries of operating hours specifications.;;No
+Facilities;OperatingHoursPublication;OperatingHoursSpecification;Operating hours specification;A specification of operating hours (e.g. for a parking site, a service facility, an access or the availability for equipment).;;No
+Facilities;OperatingHoursPublication;OperatingHoursTable;Operating hours table;A table comprising a number of operating hours specifications.;;No
+Facilities;OperatingHoursPublication;UndefinedOperatingHours;Undefined operating hours;There are no operating hours specified.;;No
+Facilities;OperatingHoursPublication;UnknownOperatingHours;Unknown operating hours;The operating hours are not known.;;No
+Parking;OperatingPattern;OperatingPattern;Operating pattern;Specifies a usage scenario or operator restriction, optional with a validity and related location.;;Yes
+Parking;OperatingPattern;OperatingRestriction;Operating restriction;A class defining an operating restriction.;;No
+Parking;OperatingPattern;PointOfInterest;Point of interest;A point of interest.;;No
+Parking;OperatingPattern;PublicTransportSchedule;Public transport schedule;A rough schedule for one or more public transport lines from this stop;;No
+Parking;OperatingPattern;PublicTransportStop;Public transport stop;A public transport stop.;;No
+Parking;OperatingPattern;RelatedLocation;Related location;A location related to the specified operating pattern.;;Yes
+Parking;OperatingPattern;UsageScenario;Usage scenario;A special type of usage available for this campus, (sub)place, space or identified area. In the 'ParkingStatusPublication', the operation type (in operation or not) can be defined.;;No
+Situation;OperatorAction;OperatorAction;Operator action;Actions that an authorised operator can decide to implement to prevent or help correct dangerous or poor driving conditions, or any actions affecting normal operation of a road.;;Yes
+Situation;OperatorAction;RoadsideAssistance;Roadside assistance;Details of road side assistance required or being given.;;No
+Facilities;OrganisationPublication;ContactInformation;Contact information;Contact information;;No
+Facilities;OrganisationPublication;ContactPerson;Contact person;A specific contact person;;No
+Facilities;OrganisationPublication;Organisation;Organisation;Information about an organisation including its units and contact information.;;Yes
+Facilities;OrganisationPublication;OrganisationByReference;Organisation by reference;Organisation information that is based on a reference;;No
+Facilities;OrganisationPublication;OrganisationPublication;Organisation publication;A publication defining one or more tables that have entries of organisation specifications.;;No
+Facilities;OrganisationPublication;OrganisationSpecification;Organisation specification;Specification of an organisation. It must contain at least one unit.;;No
+Facilities;OrganisationPublication;OrganisationTable;Organisation table;A table comprising a number of organisation specifications.;;No
+Facilities;OrganisationPublication;OrganisationUnit;Organisation unit;A unit within the organisation, which has got seperate location, operating hours, address and/or contacts.;;No
+Facilities;OrganisationPublication;UndefinedOrganisation;Undefined organisation;The organisation for the specified association end (within the specified validity if applicable) is not defined.;;No
+Facilities;OrganisationPublication;UnknownOrganisation;Unknown organisation;The organisation for the specified association end (within the specified validity if applicable) is unknown.;;No
+Parking;OrganisationRole;OperatorDefinedPlace;Operator defined place;Class providing an operator specified name or identifier for a place hierarchy element - this may be distinct from the name for the HierarchyElement supplied by the data supplier.;;No
+Parking;OrganisationRole;ResponsibilityRoleAssignment;Responsibility role assignment;The assignment of one or more roles to an organisation regarding the responsibility it will have regarding the identified Place (e.g. owner, operators, etc.);;No
+Parking;ParkingRoute;ParkingRoute;Parking route;A parking route, defined by ParkingRouteDetails or by a reference.;;Yes
+Parking;ParkingRoute;ParkingRouteByReference;Parking route by reference;A route defined by a reference to an earlier specified route.;;No
+Parking;ParkingRoute;ParkingRouteDetails;Parking route details;Urban context: Defining parking routes leading to the parking site. Truck parking context: Can be used to define a dynamic route management.;;No
+Parking;ParkingRoute;ParkingVms;Parking VMS;A reference to a record that contains the metadata for a specific VMS unit that may be used to manage the parking (e.g. to indicate to drivers the current availability of spaces) or a parking route.;;No
+Parking;ParkingStatus;AccessStatus;Access status;The opening and fault status of one access.;;No
+Parking;ParkingStatus;CampusStatus;Campus status;Dynamic status information for the static object 'Campus'.;;No
+Parking;ParkingStatus;Occupancy;Occupancy;Information on the used and remaining parking capacity.;;No
+Parking;ParkingStatus;OperatingPatternStatus;Operating pattern status;The current status for this operating pattern.;;No
+Parking;ParkingStatus;ParkingRouteStatus;Parking route status;The status as well as the travel times of a parking route (active/inactive) defined in the static part of the model.;;No
+Parking;ParkingStatus;ParkingStatusInformation;Parking status information;General status information for parking related objects. Can also be historical or forecasted data. In this case, 'StatusValidity' must be specified.;;No
+Parking;ParkingStatus;PlaceStatus;Place status;Dynamic status information for the static object 'Place' or 'SubplaceElement'.;;No
+Parking;ParkingStatus;SpaceStatus;Space status;Status for a single parking space which was defined in the static part of the model.;;No
+Parking;ParkingStatus;StatusValidity;Status validity;To be used only for historical or forecasted data. Choose between an explicit point of time, an offset or all points of time within a specified period.;;Yes
+Parking;ParkingStatus;ValidityByOffset;Validity by offset;The status validity expressed by an offset in seconds to the 'lastUpdated' timestamp.;;No
+Parking;ParkingStatus;ValidityByPeriod;Validity by period;The status validity expressed by the period model.;;No
+Parking;ParkingStatus;ValidityByTime;Validity by time;The status validity expressed by a point of time.;;No
+Parking;ParkingStatusPublication;ParkingStatusPublication;Parking status publication;A publication containing the current status of one or more objects of the place hierarchy defined in the ParkingStatusPublication.;;No
+Parking;ParkingTablePublication;ParkingTable;Parking table;Parking information described by a number of tree-like place hierarchies.;;No
+Parking;ParkingTablePublication;ParkingTablePublication;Parking table publication;A publication to define static information about sites or geographic areas designed to park vehicles, organised in tables.;;No
+Facilities;PaymentMethod;BrandsAcceptedCodeList;Brands accepted code list;Use this class to describe details of the brands that are accepted.;;No
+Facilities;PaymentMethod;BrandsAcceptedText;Brands accepted text;Use this class to describe details of the brands that are accepted.;;No
+Facilities;PaymentMethod;PaymentMethod;Payment method;Provides information on the means of payment available;;No
+RoadTrafficData;PhysicalQuantity;PhysicalQuantity;Physical quantity;A measured or calculated physical quantity, with related properties explaining its context, meaning or status;;Yes
+RoadTrafficData;PhysicalQuantity;PhysicalQuantityFault;Physical quantity fault;Details of a fault related to the derivation of a quantity;;No
+RoadTrafficData;PhysicalQuantity;SinglePhysicalQuantity;Single physical quantity;A measured or calculated physical quantity at a single instant or period in time, with related properties explaining its context, meaning or status;;No
+RoadTrafficData;PhysicalQuantity;TimeProfiledPhysicalQuantity;Time profiled physical quantity;A set of values for a measured or calculated physical quantity over a set of measurement or calculation times;;No
+Parking;Place;Place;Place;A place or location used for parking, loading, unloading, standing, or some other mobility or transport related activity.;;No
+Parking;PlaceHierarchy;Campus;Campus;Typically defines a large facility (such as a university campus, or an airport), or a large geographic zone (such as a city or a town), which may contain numerous places that can be logically reported together.;;No
+Parking;PlaceHierarchy;HierarchyElementGeneral;Hierarchy element general;A generalised component of a place hierarchy, that forms one element in the tree-like hierarchy.;;Yes
+LocationReferencing;PointAlongLinearElement;DistanceAlongLinearElement;Distance along linear element;Distance of a point along a linear element either measured from the start node or a defined referent on that linear element, where the start node is relative to the element definition rather than the direction of traffic flow.;;Yes
+LocationReferencing;PointAlongLinearElement;DistanceFromLinearElementReferent;Distance from linear element referent;Distance of a point along a linear element measured from a "from referent" on the linear element, in the sense relative to the linear element definition rather than the direction of traffic flow or optionally towards a "towards referent".;;No
+LocationReferencing;PointAlongLinearElement;DistanceFromLinearElementStart;Distance from linear element start;Distance of a point along a linear element measured from the start node of the linear element, where start node is relative to the element definition rather than the direction of traffic flow.;;No
+LocationReferencing;PointAlongLinearElement;LinearElement;Linear element;A linear element along a single linear object, consistent with EN ISO 19148 definitions. ;;No
+LocationReferencing;PointAlongLinearElement;LinearElementByCode;Linear element by code;A linear element along a single linear object defined by its identifier or code in a road network reference model (specified in LinearElement class) which segments the road network according to specific business rules.;;No
+LocationReferencing;PointAlongLinearElement;LinearElementByLineString;Linear element by line string;A linear element defined by a line string (class GmlLineString).;;No
+LocationReferencing;PointAlongLinearElement;LinearElementByPoints;Linear element by points;A linear element along a single linear object defined by its start and end points.;;No
+LocationReferencing;PointAlongLinearElement;PercentageDistanceAlongLinearElement;Percentage distance along linear element;Distance of a point along a linear element measured from the start node expressed as a percentage of the whole length of the linear element, where start node is relative to the element definition rather than the direction of traffic flow.;;No
+LocationReferencing;PointAlongLinearElement;PointAlongLinearElement;Point along linear element;A point on a linear element where the linear element is either a part of or the whole of a linear object (i.e. a road), consistent with EN ISO 19148 definitions. ;;No
+LocationReferencing;PointAlongLinearElement;Referent;Referent;A referent on a linear object that has a known location such as a node, a reference marker (e.g. a marker-post), an intersection etc.;;No
+LocationReferencing;PointCoordinates;AltitudeConfidence;Altitude confidence;Evaluation of the altitude confidence assessed according to ETSI ISO 102894-2;;No
+LocationReferencing;PointCoordinates;HeightCoordinate;Height coordinate;Third coordinate for points defined geodetically;;No
+LocationReferencing;PointCoordinates;PointByCoordinates;Point by coordinates;A single point defined only by a coordinate set with an optional bearing direction.;;No
+LocationReferencing;PointCoordinates;PointCoordinates;Point coordinates;A pair of planar coordinates defining the geodetic position of a single point using the European Terrestrial Reference System 1989 (ETRS89).;;No
+LocationReferencing;PointCoordinates;PositionAccuracy;Position accuracy;Horizontal position accuracy parameters defined according to EN 16803-1;;No
+LocationReferencing;PointCoordinates;PositionConfidenceEllipse;Position confidence ellipse;Confidence ellipse position defined in a shape of ellipse with a predefined confidence level (e.g. 95 %). The centre of the ellipse shape corresponds to the reference position point for which the position accuracy is evaluated.;;No
+LocationReferencing;PredefinedLocationsPublication;PredefinedItinerary;Predefined itinerary;An identifiable versioned instance of a predefined itinerary.;;No
+LocationReferencing;PredefinedLocationsPublication;PredefinedLocation;Predefined location;An identifiable versioned instance of a single predefined location.;;No
+LocationReferencing;PredefinedLocationsPublication;PredefinedLocationGroup;Predefined location group;An identifiable versioned instance of a predefined group of non-ordered locations (i.e. more than one).;;No
+LocationReferencing;PredefinedLocationsPublication;PredefinedLocationReference;Predefined location reference;A location reference which is predefined and may be realised by a predefined itinerary, non-ordered group of locations or single location.;;Yes
+LocationReferencing;PredefinedLocationsPublication;PredefinedLocationsPublication;Predefined locations publication;A publication containing one or more groups of predefined locations organised either as itineraries, non-ordered groups or as individual locations.;;No
+Facilities;Rates;AmountInCurrency;Amount in currency;A class supporting the definition of a unit of currency in a defined currency.;;No
+Facilities;Rates;FreeOfCharge;Free of charge;There are no rates or fees to be paid.;;No
+Facilities;Rates;GeneralRateInformation;General rate information;Some general rates and payment information without specifying rates as such.;;No
+Facilities;Rates;RateEligibility;Rate eligibility;Defines the combination of Eligibility requirements with RateTables and associates this combination to a RightSpecification.;;No
+Facilities;Rates;RateLine;Rate line;A specific rate element of a rate line collection within a specific rate table.;;No
+Facilities;Rates;RateLineCollection;Rate line collection;A group of rate line elements that logically group together within one rate table, e.g. such as the rate lines for the different tiers of a time-based tier rate table.;;No
+Facilities;Rates;RateMatrix;Rate matrix;A collection of rate tables as supplied by the data supplier. These may relate to different locations.;;No
+Facilities;Rates;Rates;Rates;Information about rates, either by reference or by a table specification.;;Yes
+Facilities;Rates;RatesByReference;Rates by reference;Reference to a rate table previously specified.;;No
+Facilities;Rates;RatesPublication;Rates publication;A publication to supply rate information.;;No
+Facilities;Rates;RateTable;Rate table;A specific set of rate charges relating to one or more locations and optionally one set of eligibility criteria. ;;No
+Facilities;Rates;RelativeTimeRates;Relative time rates;A class supporting the specification of times for defining rate applicability that are relative to a defined referenceTimeStart of an event.;;No
+Facilities;Rates;UnknownRates;Unknown rates;There is no information about rates.;;No
+Facilities;Rates;UnspecifiedRates;Unspecified rates;Rates are not (yet) specified.;;No
+Facilities;Right;Credential;Credential;Class containing reference to a credential (identifiable persistent identity);;No
+Facilities;Right;CredentialAssigned;Credential assigned;Information concerning a specific credential that is used for verification for one AssignedRight. Specialisation of a general credential.;;No
+Facilities;Right;RateDiscount;Rate discount;Class defining discount rates to be applied to a RateTable;;No
+Facilities;Right;RightSpecification;Right specification;A Right Specification explicitly defines what the owner/manager of a Place is granting specific users or vehicles the ability to do (e.g. park, delivery, pick up).;;No
+Situation;Roadworks;ConstructionWorks;Construction works;Roadworks involving the construction of new infrastructure.;;No
+Situation;Roadworks;MaintenanceVehicles;Maintenance vehicles;Details of the maintenance vehicles involved in the roadworks activity.;;No
+Situation;Roadworks;MaintenanceWorks;Maintenance works;Roadworks involving the maintenance or installation of infrastructure.;;No
+Situation;Roadworks;Roadworks;Roadworks;Road maintenance, installation and construction activities, works in the road, or other construction or maintenance actions that may affect normal operation of a road.;;Yes
+Situation;Roadworks;Subjects;Subjects;The subjects with which the roadworks are associated.;;No
+Situation;ServiceInformation;RoadOperatorServiceDisruption;Road operator service disruption;Details of disruption to normal road operator services;;No
+Situation;ServiceInformation;ServiceDisruption;Service disruption;Details of disruption to normal services which may include roadside services such as those available at designated service areas, or any other relevant services such as nearby parking.;;No
+Situation;ServiceInformation;ServiceInformation;Service information;Information about a service which may influence the behaviour of drivers and hence the characteristics of the traffic flow.;;Yes
+Situation;ServiceInformation;TransitInformation;Transit information;The availability of transit services and information relating to their departures. This is limited to those transit services which are of direct relevance to road users, e.g. connecting rail or ferry services.;;No
+Situation;SituationPublication;SituationPublication;Situation publication;A publication containing zero or more traffic/travel situations.;;No
+Situation;SituationPublication;SituationRecordReference;Situation record reference;Reference to a SituationRecord;;No
+Situation;SituationPublication;SituationReference;Situation reference;Reference to a Situation;;No
+Parking;Space;Space;Space;A single space for parking or other mobility related purposes, usually designed for one vehicle, which may, but not necessarily, be denoted by painted or other road surface marker;;No
+Parking;SubplaceElement;SubplaceElement;Subplace element;A sub-division of a place for the convenience of the operator to segment the place and identify varied uses for parking and mobility related operations or other purposes.;;No
+LocationReferencing;SupplementaryPositionalDescription;Carriageway;Carriageway;Supplementary positional information which details carriageway and lane locations. Several instances may exist where the element being described extends over more than one carriageway.;;No
+LocationReferencing;SupplementaryPositionalDescription;Lane;Lane;Indicates a specific lane or group of lanes.;;No
+LocationReferencing;SupplementaryPositionalDescription;RoadInformation;Road information;Information on a road;;No
+LocationReferencing;SupplementaryPositionalDescription;SupplementaryPositionalDescription;Supplementary positional description;A collection of supplementary positional information which improves the precision of the location.;;No
+Parking;SupplyAndDemand;DemandSpaceType;Demand space type;Defines when a specific space within a place is occupied, for how long, and the total amount for this space for this time. Includes when occupancy was determined.  This class includes actual and estimated start and end times of occupancy.;;No
+Parking;SupplyAndDemand;DemandTable;Demand table;Table structure which defines the parameters of reporting actual usage of parking in a Hierarchy Element;;No
+Parking;SupplyAndDemand;DemandType;Demand type;Defines occupancy at a hierarchy element without specific space details.  This is an aggregate count of demand activity within the Place hierarchy.;;No
+Parking;SupplyAndDemand;OccupancyLevel;Occupancy level;Defines an occupancy level as specified by the data supplier.;;No
+Parking;SupplyAndDemand;Supply;Supply;A class defining concepts relating the parameters of the supply of parking  or others uses in a Place. This is the total number of spaces usable for parking or other mobility operations.  It can be defined as demarcated spaces or non-demarcated.;;No
+Parking;ThresholdConfiguration;AvailableSpacesThresholds;Available spaces thresholds;The threshold is defined by the number of available spaces on the parking.;;No
+Parking;ThresholdConfiguration;OccupiedSpacesThresholds;Occupied spaces thresholds;The threshold is defined by the number of occupied spaces on the parking.;;No
+Parking;ThresholdConfiguration;StatusConfiguration;Status configuration;A parking site status that shall be configured.;;No
+Parking;ThresholdConfiguration;ThresholdConfiguration;Threshold configuration;Configuration of thresholds and colours for the status parameter. Only one status should be active at a time, so that the most recently activated status means that an existing active status should be considered no longer active.;;No
+Parking;ThresholdConfiguration;Thresholds;Thresholds;Threshold values to configure the given parking site status.;;Yes
+Parking;ThresholdConfiguration;VehiclesOnSiteThresholds;Vehicles on site thresholds;The threshold is defined by the number of vehicles on the parking. This may differ from the number of occupied spaces, for example when vehicles share spaces.;;No
+LocationReferencing;TpegAreaLocation;TpegAreaLocation;TPEG area location;A geographic or geometric area defined by a TPEG-Loc structure which may include height information for additional geospatial discrimination.;;Yes
+LocationReferencing;TpegAreaLocation;TpegGeometricArea;TPEG geometric area;A geometric area defined by a centre point and a radius.;;No
+LocationReferencing;TpegAreaLocation;TpegHeight;TPEG height;Height information which provides additional discrimination for the applicable area.;;No
+LocationReferencing;TpegAreaLocation;TpegNamedOnlyArea;TPEG named only area;An area defined by a well-known name.;;No
+LocationReferencing;TpegDescriptor;TpegAreaDescriptor;TPEG area descriptor;A descriptor for describing an area location.;;No
+LocationReferencing;TpegDescriptor;TpegDescriptor;TPEG descriptor;A collection of information providing descriptive references to locations using the TPEG-Loc location referencing approach.;;Yes
+LocationReferencing;TpegDescriptor;TpegIlcPointDescriptor;TPEG ILC point descriptor;A descriptor for describing a junction by defining the intersecting roads.;;No
+LocationReferencing;TpegDescriptor;TpegJunctionPointDescriptor;TPEG junction point descriptor;A descriptor for describing a point at a junction on a road network.;;No
+LocationReferencing;TpegDescriptor;TpegOtherPointDescriptor;TPEG other point descriptor;General descriptor for describing a point.;;No
+LocationReferencing;TpegDescriptor;TpegPointDescriptor;TPEG point descriptor;A descriptor for describing a point location.;;Yes
+LocationReferencing;TpegLinearLocation;TpegLinearLocation;TPEG linear location;A linear section along a single road defined between two points on the same road by a TPEG-Loc structure.;;No
+LocationReferencing;TpegPointLocation;TpegFramedPoint;TPEG framed point;A point on the road network which is framed between two other points on the same road.;;No
+LocationReferencing;TpegPointLocation;TpegJunction;TPEG junction;A point on the road network which is a road junction point.;;No
+LocationReferencing;TpegPointLocation;TpegNonJunctionPoint;TPEG non junction point;A point on the road network which is not a road junction point.;;No
+LocationReferencing;TpegPointLocation;TpegPoint;TPEG point;A point on the road network which is either a junction point or a non junction point.;;Yes
+LocationReferencing;TpegPointLocation;TpegPointLocation;TPEG point location;A single point on the road network defined by a TPEG-Loc structure and which has an associated direction of traffic flow.;;Yes
+LocationReferencing;TpegPointLocation;TpegSimplePoint;TPEG simple point;A point on the road network which is not bounded by any other points on the road network.;;No
+RoadTrafficData;TrafficConcentration;TrafficConcentration;Traffic concentration;Averaged measurements or calculations of traffic concentration.;;No
+RoadTrafficData;TrafficData;TrafficData;Traffic data;Measured or derived values relating to traffic or individual vehicle movements on a specific section or at a specific point on the road network.;;Yes
+Situation;TrafficElement;AbnormalTraffic;Abnormal traffic;A traffic condition which is not normal.;;No
+Situation;TrafficElement;EquipmentOrSystemFault;Equipment or system fault;Equipment or system which is faulty, malfunctioning or not in a fully operational state that may be of interest or concern to road operators and road users.;;No
+Situation;TrafficElement;TrafficElement;Traffic element;An event which is not planned by the traffic operator, which is affecting, or has the potential to affect traffic flow.;;Yes
+RoadTrafficData;TrafficFlow;TrafficFlow;Traffic flow;Averaged measurements or calculations of traffic flow rates.;;No
+RoadTrafficData;TrafficGap;TrafficGap;Traffic gap;Averaged measurements or calculations of traffic gap i.e. the distance or time interval between vehicles, measured between the rear of one vehicle and the front of the following vehicle.;;No
+RoadTrafficData;TrafficHeadway;TrafficHeadway;Traffic headway;Averaged measurements or calculations of traffic headway, i.e. the distance or time interval between vehicles. This is measured one end (normally the front) of one vehicle to the same end of the following vehicle.;;No
+RoadTrafficData;TrafficSpeed;SpeedPercentile;Speed percentile;Details of percentage (from an observation set) of vehicles whose speeds fall below a stated value.;;No
+RoadTrafficData;TrafficSpeed;TrafficSpeed;Traffic speed;Averaged measurements or calculations of traffic speed.;;No
+RoadTrafficData;TrafficStatus;TrafficStatus;Traffic status;The status of traffic conditions on a specific section or at a specific point on the road network.;;No
+RoadTrafficData;TravelTimeData;TravelTimeData;Travel time data;Derived/computed travel time information relating to a linear section of the road network; forecast = true means a forecast for a vehicle at the start of the specified location, forecast = false means calculation/measurement at the end.;;No
+Common;Validity;CalendarWeekWithinMonth;Calendar week within month;Specification of periods defined by relevant calendar weeks in a month, see ISO8601. Note: Calendar weeks start with Monday. First week is the week containing the first of the month.;;No
+Common;Validity;DayWeekMonth;Day week month;Specification of periods defined by the intersection of days or instances of them, calendar weeks and months.;;No
+Common;Validity;InstanceOfDayWithinMonth;Instance of day within month;Specification of periods defined by the instance of a specific weekday within a month (e.g. 3rd Tuesday in May);;No
+Common;Validity;OverallPeriod;Overall period;A continuous or discontinuous period of validity defined by overall bounding start and end times and the possible intersection of valid periods (potentially recurring) with the complement of exception periods (also potentially recurring).;;No
+Common;Validity;Period;Period;A continuous time period or a set of discontinuous time periods defined by the intersection of a set of criteria all within an overall delimiting interval.;;No
+Common;Validity;PublicHoliday;Public holiday;Specification of a specific public holiday in case specialDayType is set to 'publicHoliday'.;;No
+Common;Validity;SpecialDay;Special day;Specification of a special type of day, possibly also a public holiday. Can be country or region specific.;;No
+Common;Validity;TimePeriodOfDay;Time period of day;Specification of a continuous period of time within a 24 hour period.;;No
+Common;Validity;Validity;Validity;Specification of validity, either explicitly or by a validity time period specification which may be discontinuous.;;No
+Common;Vehicle;AxleSpacing;Axle spacing;The spacing details between the axle sets of an individual vehicle numbered from the front to the back of the vehicle. ;;No
+Common;Vehicle;AxleWeight;Axle weight;The weight details of a specific axle on the vehicle. ;;No
+Common;Vehicle;Vehicle;Vehicle;Details of an individual vehicle.;;No
+Common;VehicleCharacteristics;Emissions;Emissions;Emission characteristics of vehicles.;;No
+Common;VehicleCharacteristics;GrossWeightCharacteristic;Gross weight characteristic;Gross weight characteristic of a vehicle.;;No
+Common;VehicleCharacteristics;HeaviestAxleWeightCharacteristic;Heaviest axle weight characteristic;Weight characteristic of the heaviest axle on the vehicle.;;No
+Common;VehicleCharacteristics;HeightCharacteristic;Height characteristic;Height characteristic of a vehicle.;;No
+Common;VehicleCharacteristics;LengthCharacteristic;Length characteristic;Length characteristic of a vehicle.;;No
+Common;VehicleCharacteristics;NumberOfAxlesCharacteristic;Number of axles characteristic;Number of axles characteristic of a vehicle.;;No
+Common;VehicleCharacteristics;VehicleCharacteristics;Vehicle characteristics;The characteristics of a vehicle, e.g. lorry of gross weight greater than 30 tonnes.;;No
+Common;VehicleCharacteristics;WidthCharacteristic;Width characteristic;Width characteristic of a vehicle.;;No
+Parking;VehicleCountAndRate;OccupancyChangeValue;Occupancy change value;A measured or calculated value of change of occupied parking spaces expressed as integer.;;No
+Parking;VehicleCountAndRate;VehicleCountAndRate;Vehicle count and rate;Vehicle rates can be assigned to a parking site or to assigned parking spaces. Furthermore, they can reference to a measurement site or to an entrance/exit.;;No
+Parking;VehicleCountAndRate;VehicleCountValue;Vehicle count value;A measured or calculated value of absolute count of vehicles within a specified period of time expressed as non-negative integer.;;No
+Parking;VehicleCountAndRate;VehicleCountWithinInterval;Vehicle count within interval;Gives incoming and/or outgoing vehicles and/or change of occupied spaces within a given interval.;;No
+Parking;VehicleCountAndRate;VehicleRate;Vehicle rate;Information about vehicle fill and exit rates or the general vehicle flow rate without direction.;;No
+Vms;VmsConfiguration;DisplayArea;Display area;Configuration (static or dynamic) of a display area.;;No
+Vms;VmsConfiguration;DisplayGeometry;Display geometry;Characteristics of the geometry of a display;;No
+Vms;VmsConfiguration;PictogramDisplayArea;Pictogram display area;Characteristics specific to a pictogram display area on the VMS.;;No
+Vms;VmsConfiguration;SupplementaryPanelArea;Supplementary panel area;Characteristics of a panel which can display details (sometimes regulatory in nature) that are supplementary to one pictogram, comprising an additional line of text or another pictogram.;;No
+Vms;VmsConfiguration;TextDisplayArea;Text display area;Characteristics specific to the textual display area on the VMS.;;No
+Vms;VmsConfiguration;VmsConfiguration;VMS configuration;Describes the current configuration and characteristics of a VMS, whether it is statically or dynamically configured.;;No
+Vms;VmsFault;VmsControllerFault;VMS controller fault;Details of the fault which is being reported for the specified variable message sign control unit.;;No
+Vms;VmsFault;VmsFault;VMS fault;Details of the fault which is being reported for the specified variable message sign panel.;;No
+Vms;VmsMessage;CompositePictogram;Composite pictogram;A composite pictogram representing a diagrammatic schema in association with an embedded regular sign.;;No
+Vms;VmsMessage;DisplayAreaSettings;Display area settings;A display of pictograms or text on one area on a VMS.;;Yes
+Vms;VmsMessage;DisplayedNumericalInformation;Displayed numerical information;Numerical information displayed on a sign;;No
+Vms;VmsMessage;Image;Image;An image, with encoded data and identification of format;;No
+Vms;VmsMessage;MultiPageDisplay;Multi page display;A display of multiple pages, sequentially displayed in order of their "pageNumber".;;No
+Vms;VmsMessage;Pictogram;Pictogram;A main pictogram displayable on the VMS panel. Note a main pictogram may have an associated supplementary panel which may itself contain a further pictogram and line of text.;;Yes
+Vms;VmsMessage;PictogramDisplay;Pictogram display;A display of a pictogram on one area on a VMS, potentially with associated supplemental information or instructions.;;No
+Vms;VmsMessage;RegularPictogram;Regular pictogram;A regular pictogram displayable on a VMS panel.;;No
+Vms;VmsMessage;SupplementaryInformationDisplay;Supplementary information display;A display of information or a regulatory instruction which is supplemental to the associated pictogram, comprising either an additional line of text or a pictogram or both.;;Yes
+Vms;VmsMessage;SupplementaryPictogram;Supplementary pictogram;An additional pictogram that is displayed in the panel which is supplemental to the associated pictogram display.;;No
+Vms;VmsMessage;SupplementaryText;Supplementary text;Text used in a supplementary display associated with a pictogram;;No
+Vms;VmsMessage;TextDisplay;Text display;A page of text (comprising one or more ordered lines) that are displayed simultaneously on the VMS. ;;No
+Vms;VmsMessage;TextLine;Text line;A single line of text displayed on a text display area or supplementary panel or corresponding to a displayed text. It may correspond to the entire text in the case that text segmentation in lines is not available.;;No
+Vms;VmsMessage;VmsMessage;VMS message;A message displayed on a VMS which can comprise one or more sequentially displayed text pages and/or pictograms with supplementary details.;;No
+Vms;VmsPublication;VmsPublication;VMS publication;A publication containing the current status and settings of one or more VMS controller units, each unit controlling one or more individual variable message signs.;;No
+Vms;VmsStatus;VmsControllerStatus;VMS controller status;Status of a VMS controller unit;;No
+Vms;VmsStatus;VmsStatus;VMS status;Provides the current status and settings of the VMS and the currently displayed information.;;No
+Vms;VmsTablePublication;VmsTablePublication;VMS table publication;A publication containing one or more VMS controller unit tables each comprising a set of records which hold details of VMS controller units.;;No
+RoadTrafficData;WeatherData;HumidityInformation;Humidity information;Measurements of atmospheric humidity.;;No
+RoadTrafficData;WeatherData;PollutionInformation;Pollution information;Measurements of atmospheric pollution.;;No
+RoadTrafficData;WeatherData;PrecipitationInformation;Precipitation information;Measurements of precipitation.;;No
+RoadTrafficData;WeatherData;PressureInformation;Pressure information;Measurements of atmospheric pressure.;;No
+RoadTrafficData;WeatherData;RoadSurfaceConditionInformation;Road surface condition information;Measurements of road surface conditions which are related to the weather.;;No
+RoadTrafficData;WeatherData;TemperatureInformation;Temperature information;Measurements of atmospheric temperature.;;No
+RoadTrafficData;WeatherData;VisibilityInformation;Visibility information;Measurements of atmospheric visibility.;;No
+RoadTrafficData;WeatherData;WeatherData;Weather data;Measured or derived values relating to the weather at a specific location or locations.;;Yes
+RoadTrafficData;WeatherData;WindInformation;Wind information;Measurements of wind conditions.;;No
+Common;WeatherRelated;Humidity;Humidity;Details of atmospheric humidity.;;No
+Common;WeatherRelated;Pollution;Pollution;Details of atmospheric pollution.;;No
+Common;WeatherRelated;PrecipitationDetail;Precipitation detail;Details of precipitation (rain, snow etc.).;;No
+Common;WeatherRelated;Pressure;Pressure;Details of atmospheric pressure.;;No
+Common;WeatherRelated;RoadSurfaceConditionMeasurements;Road surface condition measurements;Measurements of the road surface condition which relate specifically to the weather.;;No
+Common;WeatherRelated;Temperature;Temperature;Details of atmospheric temperature.;;No
+Common;WeatherRelated;TemperatureBelowOrAboveRoadSurface;Temperature below or above road surface;Mesurement of temperature below or above the road surface.;;No
+Common;WeatherRelated;Visibility;Visibility;Details of atmospheric visibility.;;No
+Common;WeatherRelated;Wind;Wind;Wind conditions on the road. ;;No
+
