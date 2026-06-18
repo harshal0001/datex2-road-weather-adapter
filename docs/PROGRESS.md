@@ -62,17 +62,20 @@ conformance track unblocks once it lands.
       `/api/segments/datex` emits validated XML. **Keystone done.**
 - [x] Emit `X-Validation-Status: valid` header — done on `/datex` and `/datex/city`.
 - [x] Conformance matrix test — all 7 condition literals validate (`tests/test_datex.py`).
-- [ ] **Step 7 — Full mapper extensions**: add `RoadSurfaceConditionMeasurements` (fused
-      temp/humidity/etc. into the record); `confidence → probabilityOfOccurrence`; forecast via
-      `ElaboratedDataPublication`.
-- [ ] **Step 8 — Batch publication** — `/datex/city` now emits a multi-segment publication
-      (validated); remaining: pagination / MeasurementSiteTable cross-reference.
+- [x] **Step 7 (core) — measurements in the record**: fused `road_surface_temp_c` +
+      `water_film_mm` now emitted as `RoadSurfaceConditionMeasurements` (validated).
+      Remaining: `confidence → probabilityOfOccurrence` + forecast via `ElaboratedDataPublication`
+      (needs the model run — observed data uses `certain`).
+- [x] **Step 8 — Batch publication** — `/api/segments/datex/city` emits a validated
+      multi-segment `SituationPublication`. Remaining (optional): MeasurementSiteTable cross-ref.
 
 ### Milestone B — Standard API + sources
 - [ ] **Step 4 — Concrete `Source` plug-ins** (`sws_sqlite`, `dwd_sqlite`, `lorawan_sqlite`,
       `owm_sqlite`, `wdms_api`) — the ABC is currently unused.
 - [ ] **Step 5 — Source registry + `GET /sources`** (auto-discovery).
-- [ ] **Step 9 — Standard endpoints**: `POST /transform`, `GET /publication`, `GET /stations`.
+- [x] **Step 9 (core) — Standard endpoints**: `POST /api/transform` (generic raw → validated
+      DATEX, with `X-Validation-Status`/`X-Source-Used`/`X-Profile` headers) + `GET /api/segments`
+      catalogue + `GET /api/segments/datex/city` (publication). Remaining: a station-style alias if needed.
 - [ ] **Step 3 — Unit harmonization** in the normalizer (precip mm/s vs mm vs mm/3h; cloud
       oktas vs %; `in3h`/`in_3h`).
 
@@ -134,3 +137,6 @@ validation fights back. Step 6 is the swing factor.
   official v3 schema (`adapter/validator.py`); real `SituationPublication` built from generated
   dataclasses; `/api/segments/datex` returns validated XML with `X-Validation-Status: valid`;
   dashboard shows a ✅ XSD-valid badge; 23 tests pass (incl. 7-value conformance matrix).
+- **2026-06-15** — **Steps 7–9 (core)**: fused measurements (surface temp, water film) embedded
+  in the DATEX record; generic `POST /api/transform` (any raw multi-source data → validated
+  DATEX II) + `GET /api/segments` catalogue + validated city publication; 25 tests pass.

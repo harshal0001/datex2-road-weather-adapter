@@ -12,6 +12,7 @@ from fastapi.responses import FileResponse
 from adapter import __version__
 from adapter.profiles import list_profiles
 from api.segments_routes import router as segments_router
+from api.segments_routes import transform_router
 
 ROOT = Path(__file__).resolve().parents[1]
 DEMO_DB = ROOT / "data" / "demo.db"
@@ -35,6 +36,7 @@ app.add_middleware(
 )
 
 app.include_router(segments_router)
+app.include_router(transform_router)
 
 
 def _segments_db_status() -> dict[str, Any]:

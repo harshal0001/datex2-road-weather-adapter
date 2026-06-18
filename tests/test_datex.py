@@ -52,6 +52,41 @@ def test_payload_root_and_xsi_type():
     assert "weatherRelatedRoadConditionType>ice<" in xml
 
 
+def test_measurements_included_and_valid():
+    """Fused surface temp + water film land in RoadSurfaceConditionMeasurements."""
+    seg = Segment(segment_id=2, road_name="M", road_class="St", length_km=0.1,
+                  elevation_m=500.0, lat=50.1, lon=11.9, geom_wkt="")
+    fr = FusionResult(
+        segment_id=2,
+        fields={
+            "surface_condition": FusedField(value=3, source="sws"),
+            "road_surface_temp_c": FusedField(value=-1.5, source="sws"),
+            "water_film_mm": FusedField(value=0.3, source="sws"),
+        },
+        sources_used=["sws"], sources_selected=["sws"],
+    )
+    fs = FusedSegment(segment=seg, fusion=fr, condition_code=3, condition_label="Ice",
+                      condition_label_de="Eis", datex2_value="ice", color="#000")
+    xml = segment_to_datex(fs, ["sws"])
+    assert "roadSurfaceConditionMeasurements" in xml
+    assert "roadSurfaceTemperature" in xml
+    assert validate(xml).valid
+
+
+def test_transform_endpoint_generic_raw_to_datex():
+    """POST /api/transform: arbitrary raw rows → validated DATEX II (no DB needed)."""
+    body = {
+        "lat": 50.1567, "lon": 11.9572, "segment_id": 99,
+        "sources": {"sws": {"road_condition_code": 3.0, "road_surface_temperature_celsius": -2.0}},
+        "selected": ["sws"],
+    }
+    r = client.post("/api/transform", json=body)
+    assert r.status_code == 200
+    assert r.headers.get("X-Validation-Status") == "valid"
+    assert r.headers.get("X-Source-Used") == "sws"
+    assert "weatherRelatedRoadConditionType>ice<" in r.text  # code 3 → ice
+
+
 @needs_db
 def test_datex_endpoint_sets_valid_header():
     fused = client.get("/api/segments/fused?sources=sws&limit=1").json()

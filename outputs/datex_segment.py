@@ -56,6 +56,22 @@ _PO2 = _k("probability_of_occurrence_enum_2", "ProbabilityOfOccurrenceEnum2")
 _PO1 = _k("probability_of_occurrence_enum_1", "ProbabilityOfOccurrenceEnum1")
 _WT2 = _k("weather_related_road_condition_type_enum_2", "WeatherRelatedRoadConditionTypeEnum2")
 _WT1 = _k("weather_related_road_condition_type_enum_1", "WeatherRelatedRoadConditionTypeEnum1")
+_RSCM = _k("road_surface_condition_measurements", "RoadSurfaceConditionMeasurements")
+_TemperatureValue = _k("temperature_value", "TemperatureValue")
+_MetreDistanceValue = _k("floating_point_metre_distance_value", "FloatingPointMetreDistanceValue")
+
+
+def _measurements(fs: FusedSegment):
+    """Map fused measured values into a RoadSurfaceConditionMeasurements (or None)."""
+    surface_temp = fs.fusion.value("road_surface_temp_c")
+    water_film_mm = fs.fusion.value("water_film_mm")
+    kwargs = {}
+    if surface_temp is not None:
+        kwargs["road_surface_temperature"] = _TemperatureValue(temperature=float(surface_temp))
+    if water_film_mm is not None:
+        # DATEX water film is in metres; our source is mm.
+        kwargs["water_film_thickness"] = _MetreDistanceValue(distance=float(water_film_mm) / 1000.0)
+    return _RSCM(**kwargs) if kwargs else None
 
 
 def _now() -> XmlDateTime:
@@ -85,6 +101,7 @@ def _record(fs: FusedSegment):
             )
         ),
         weather_related_road_condition_type=[_WT2(value=_WT1(fs.datex2_value))],
+        road_surface_condition_measurements=_measurements(fs),
     )
 
 

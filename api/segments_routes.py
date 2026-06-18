@@ -3,9 +3,18 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import HTMLResponse, Response
+from pydantic import BaseModel, Field
 
 from adapter.fusion import load_fusion_profile
-from adapter.segments import ALL_SOURCES, fuse_segments, source_coverage
+from adapter.profiles import load_profile
+from adapter.segments import (
+    ALL_SOURCES,
+    FusedSegment,
+    Segment,
+    fuse_segments,
+    load_segments,
+    source_coverage,
+)
 from adapter.segment_map import build_map
 from outputs.datex_segment import (
     city_summary_datex,
@@ -13,6 +22,7 @@ from outputs.datex_segment import (
 )
 
 router = APIRouter(prefix="/api/segments", tags=["segments"])
+transform_router = APIRouter(prefix="/api", tags=["transform"])
 
 
 def _parse_sources(sources: str | None) -> list[str]:
@@ -131,6 +141,75 @@ def datex(segment_id: int, sources: str | None = Query(None)):
         raise HTTPException(404, f"segment {segment_id} not found")
     xml, result = segment_to_datex_validated(match[0], selected)
     headers = {"X-Validation-Status": result.status}
+    if not result.valid:
+        headers["X-Validation-Errors"] = "; ".join(result.errors[:3])[:500]
+    return Response(content=xml, media_type="application/xml", headers=headers)
+
+
+@router.get("")
+def segments_catalogue(limit: int = 500):
+    """Road-segment catalogue (geometry centroid + metadata) — the ≈/stations list."""
+    segs = list(load_segments().values())[:limit]
+    return {
+        "count": len(segs),
+        "segments": [
+            {
+                "segment_id": s.segment_id, "road_name": s.road_name,
+                "road_class": s.road_class, "length_km": s.length_km,
+                "elevation_m": s.elevation_m, "lat": s.lat, "lon": s.lon,
+            }
+            for s in segs
+        ],
+    }
+
+
+class TransformRequest(BaseModel):
+    """Generic raw → DATEX II request: arbitrary per-source rows for one location."""
+    lat: float
+    lon: float
+    sources: dict[str, dict] = Field(
+        ..., description="per-source raw rows, e.g. {'sws': {'road_condition_code': 3.0, ...}}"
+    )
+    segment_id: int = 0
+    selected: list[str] | None = None
+    road_name: str | None = None
+    elevation_m: float | None = None
+
+
+@transform_router.post("/transform")
+def transform(req: TransformRequest):
+    """Transform arbitrary raw multi-source data into validated DATEX II.
+
+    This is the generic adapter operation: drop in raw rows from any selected
+    sources, they are fused per-field (with provenance), mapped to the canonical
+    condition, and emitted as XSD-validated DATEX II. Returns XML with an
+    `X-Validation-Status` header.
+    """
+    selected = req.selected or list(req.sources.keys()) or list(ALL_SOURCES)
+    fp = load_fusion_profile()
+    cond = load_profile("segment_conditions")
+
+    fr = fp.fuse(req.segment_id, req.sources, selected=selected)
+    raw_code = fr.value("surface_condition")
+    code = int(raw_code) if raw_code is not None else 255
+    mapping = cond.condition_codes.get(code) or cond.condition_codes[255]
+
+    fs = FusedSegment(
+        segment=Segment(
+            segment_id=req.segment_id, road_name=req.road_name, road_class=None,
+            length_km=None, elevation_m=req.elevation_m, lat=req.lat, lon=req.lon,
+            geom_wkt="",
+        ),
+        fusion=fr, condition_code=code,
+        condition_label=mapping.label, condition_label_de=mapping.label_de or mapping.label,
+        datex2_value=mapping.datex2, color=mapping.color or "#95a5a6",
+    )
+    xml, result = segment_to_datex_validated(fs, selected)
+    headers = {
+        "X-Validation-Status": result.status,
+        "X-Source-Used": ",".join(fr.sources_used) or "none",
+        "X-Profile": "segment_conditions",
+    }
     if not result.valid:
         headers["X-Validation-Errors"] = "; ".join(result.errors[:3])[:500]
     return Response(content=xml, media_type="application/xml", headers=headers)
