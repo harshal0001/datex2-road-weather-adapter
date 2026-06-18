@@ -119,7 +119,7 @@
       </div>
     </div>
     <div class="card">
-      <h3>DATEX II output <span id="datex-seg" style="color:var(--muted);font-weight:500"></span></h3>
+      <h3>DATEX II output <span><span id="datex-seg" style="color:var(--muted);font-weight:500"></span> <span id="datex-badge" style="font-weight:700"></span></span></h3>
       <div class="body"><pre id="datex">Click a segment to see its standardized DATEX II.</pre></div>
     </div>
   </div>
@@ -181,7 +181,12 @@ function selectSegment(p){
 
 async function fetchDatex(id){
   const r=await fetch(`/api/segments/datex?segment_id=${id}&sources=${encodeURIComponent(qs())}`);
+  const status=r.headers.get("X-Validation-Status");
   document.getElementById("datex").textContent=await r.text();
+  const badge=document.getElementById("datex-badge");
+  if(status==="valid"){badge.textContent="✅ XSD-valid";badge.style.color="#16a34a";}
+  else if(status){badge.textContent="⚠ "+status;badge.style.color="#dc2626";}
+  else badge.textContent="";
 }
 
 async function refreshCoverage(){

@@ -4,12 +4,16 @@
 > (sensor observations **and** AI surface‑condition forecasts) into the **DATEX II v3.4**
 > European standard — validated, reusable for other jurisdictions, and safe to demo offline.
 
-- **Status:** Foundation complete (Steps 0–2). Building the pipeline (Steps 3–14).
+- **Status:** Foundation (Steps 0–2) **and** the fusion / road-segment / interactive-dashboard
+  track are **complete and live**. The conformance track — XSD validation (Step 6) and the
+  full dataclass-based mapper / publications (Steps 7–9) — is the remaining pending work.
 - **Author:** founder@curriculo.me (thesis prototype)
 - **DATEX II version targeted:** **v3.4** (current at project inception). Latest published
   is **v3.6** (June 2025; model download v3.7). The road-weather data model is stable across
   v3.4–v3.6, so the targeting is deliberate and low-risk — see `docs/PANEL_QA.md` §2.
-- **Last updated:** 2026-06-12
+- **Companion docs:** `docs/SOFTWARE_SPECIFICATION_AND_DESIGN.md` (requirements + design),
+  `docs/ARCHITECTURE.md` (component view), `docs/PANEL_QA.md` (defence Q&A).
+- **Last updated:** 2026-06-14
 
 ---
 
@@ -79,6 +83,34 @@ The core idea that delivers **G2 (reusability)**: everything funnels through one
 | **MappingProfile** | `profiles/*.yaml` | Condition‑code table + field‑name map. Pure config. |
 | **OutputFormat** plug-in | `outputs/*.py` | One class per output (DATEX II XML, JSON, …). |
 
+### 2a. The fusion engine — the delivered research contribution
+
+Before standardization, heterogeneous sources covering the *same* road segment must be
+reconciled into **one** canonical view. No single source is complete:
+
+| Field family | Owner(s) |
+|--------------|----------|
+| road surface temp / **condition** / water film | **SWS** (+ LoRaWAN for surface temp) |
+| atmospherics (pressure / visibility / cloud) | **DWD**, **OpenWeather** |
+| air temp / humidity / dew point | all four sources |
+
+The **fusion engine** (`adapter/fusion.py`) resolves this with a **per-field source-priority
+table** driven entirely by config (`profiles/fusion.yaml`) — change a priority, change the
+fused output, no code change. For each canonical field it walks the field's priority list,
+intersected with the sources the user selected, and takes the first non-null value. Crucially,
+it records **provenance**: which source supplied each field (`FusionResult.provenance()`),
+so every fused value is traceable end-to-end. SWS is the trusted base
+(`source_priority: [sws, lorawan, dwd, openweather]`).
+
+> **Key demonstrated insight:** only SWS carries the ground-truth `road_condition_code`, so
+> `surface_condition` has priority `[sws]` only — **deselect SWS and every segment becomes
+> `Unknown`**. This is exercised by a regression test (`test_without_sws_loses_condition`).
+
+This fusion-with-provenance layer is the project's core interoperability contribution: it is
+the step that makes "many local dialects → one European standard" honest rather than lossy.
+See `docs/ARCHITECTURE.md` for the component view and `docs/SOFTWARE_SPECIFICATION_AND_DESIGN.md`
+for the requirements it satisfies.
+
 ---
 
 ## 3. The canonical model (the contract)
@@ -122,7 +154,26 @@ Values below are **verified** against `schemas/DATEXII_3_Profile/literals.csv`.
 > drafts used those and would have failed XSD validation. Corrected 2026-06 after
 > verifying against the official data dictionary. See `docs/PANEL_QA.md` §2.
 
-Horizons: **now**, **+3 h**, **+18 h** (the model's three forecast windows).
+The table above is the original **6-class ID3** scheme (`profiles/bavaria.yaml`). The
+**current production model is LightGBM with a 5-class scheme and four horizons** — this is
+what the live system and the segment dashboard use:
+
+| Code | Canonical (DE / EN) | DATEX II enum (`segment_conditions.yaml`) |
+|------|---------------------|-------------------------------------------|
+| 0 | Trocken / Dry | `dry` |
+| 1 | Feucht / Damp | `moist` |
+| 2 | Nass / Wet | `wet` |
+| 3 | Eisglätte / Ice | `ice` |
+| 4 | Schneeglätte / Snow | `snowOnTheRoad` |
+| 255 | Unbekannt / Unknown | `other` |
+
+Carrying **two** condition `MappingProfile`s (6-class `bavaria.yaml` + 5-class
+`segment_conditions.yaml`) — both XSD-enum-verified, zero code change between them — is itself a
+demonstration of the config-driven reusability claim (G2). The segment dashboard maps the
+SWS 5-class **ground truth**.
+
+Horizons: the 6-class ID3 model used **now / +3 h / +18 h**; the current LightGBM model uses
+**now / +3 h / +6 h / +18 h** (four windows).
 
 ---
 
@@ -146,10 +197,39 @@ authoritative Bavarian feeds; the others extend coverage.
 - SWS carries an **observed** `road_condition_code` — and the AI **predicts** the same
   kind of code. This enables a **predicted‑vs‑observed** comparison, both expressed in
   DATEX II (see §6).
+- **SWS is the only source carrying ground-truth road condition** — see §2a.
 
-> **Open item:** the SWS `road_condition_code` legend likely differs from the AI model's
-> `0=Dry … 5=Ice` scheme. Needs cross‑referencing (enumerate distinct values from the CSV
-> and map in the profile).
+### The per-segment aggregated reality (what the fusion engine actually consumes)
+
+The raw station feeds above have been **aggregated onto the road network**: each source ships
+as an aggregated CSV **keyed by `segment_id` + `event_timestamp`** (`agg_swsdata`,
+`agg_dwddata`, `agg_lorawan`, `agg_openweather_by_segment`, ~5 GB total), already mapped onto
+**1021 road segments** rather than raw station IDs. Geometry comes from
+`road_segments_with_elevation.parquet` (1021 segments, geometry as WKB in **EPSG:25832**,
+transformed to **WGS84**, plus per-segment elevation).
+
+`scripts/build_segment_snapshots.py` streams those CSVs with **DuckDB** (window function →
+latest row per `(segment, source)`, flat memory) and the parquet, writing a tiny, offline,
+demo-safe store at **`data/segments.db` (≈4 MB, committed)**:
+
+| Table | Rows | Notes |
+|-------|------|-------|
+| `segments` | 1021 | geometry (WGS84 WKT + centroid), road name/class, elevation |
+| `segment_snapshot` | 3619 | latest reading per `(segment_id, source)`, raw fields as JSON |
+
+Per-source segment coverage (from `segment_snapshot`):
+
+| Source | Segments covered (of 1021) |
+|--------|-----------------------------|
+| SWS | 1021 |
+| DWD | 1021 |
+| OpenWeather | 911 |
+| LoRaWAN | 666 |
+
+> **SWS `road_condition_code` legend — resolved/verified.** Distribution over the SWS
+> aggregated data: `0` dry 13.4 M · `1` feucht 3.4 M · `2` nass 425 K · `3` eisglätte 83 K ·
+> `4` schneeglätte 7.6 K · blanks = missing. This is the 5-class scheme now encoded in
+> `profiles/segment_conditions.yaml` (no longer an open item).
 
 ---
 
@@ -227,13 +307,25 @@ This adapter is the translator."*
 | Method | Path | Purpose | Status |
 |--------|------|---------|--------|
 | GET | `/` | Service info | ✅ |
-| GET | `/health` | Liveness + demo DB / profile stats | ✅ |
+| GET | `/health` | Liveness + `demo_db` + `segments_db` + `profiles_available` stats | ✅ |
+| GET | `/dashboard` | Interactive Leaflet fusion dashboard (HTML) | ✅ |
+| GET | `/api/segments/coverage` | Source coverage + fused condition distribution | ✅ |
+| GET | `/api/segments/priority` | Per-field fusion priority config (the research artefact) | ✅ |
+| GET | `/api/segments/fused` | Fused per-segment records (JSON) with provenance | ✅ |
+| GET | `/api/segments/geojson` | Fused segments as GeoJSON (client-side recolour) | ✅ |
+| GET | `/api/segments/map` | Folium map HTML (legacy/fallback) | ✅ |
+| GET | `/api/segments/datex` | DATEX II XML for one fused segment | ✅ |
+| GET | `/api/segments/datex/city` | DATEX II city-coverage summary XML | ✅ |
 | GET | `/sources` | List source plug-ins + health (auto-discovery) | ⬜ |
 | GET | `/stations` | Station catalogue | ⬜ |
 | POST | `/transform` | Raw payload → DATEX II (the core operation) | ⬜ |
 | GET | `/publication` | Batch publication (N stations, XML/JSON) | ⬜ |
 | GET | `/scenarios`, `/scenarios/{name}` | Frozen demo moments | ⬜ |
 | GET | `/demo`, `/demo/compare` | Side‑by‑side HTML view | ⬜ |
+
+> The **`/api/segments/*`** family and **`/dashboard`** are the live, demonstrable surface
+> today (`api/segments_routes.py`). The classic `/transform` · `/publication` · `/sources` ·
+> `/stations` · `/scenarios` · `/demo` endpoints remain part of the conformance track.
 
 Response middleware (planned): `X-Transform-Time-Ms`, `X-Validation-Status`,
 `X-Source-Used`, `X-Profile` + colour‑coded logging.
@@ -247,6 +339,9 @@ datex2-adapter/
 ├── adapter/              # core
 │   ├── models.py         # CanonicalObservation, SurfaceCondition, WeatherInputs  ✅
 │   ├── profiles/         # MappingProfile loader (load_profile)                   ✅
+│   ├── fusion.py         # 🔬 multi-source per-field fusion + provenance          ✅
+│   ├── segments.py       # road-segment store → FusedSegment                      ✅
+│   ├── segment_map.py    # folium PolyLine map of fused segments                  ✅
 │   ├── normalizer.py     # FieldNormalizer (in3h/in_3h fix)                       ⬜
 │   ├── mapper.py         # canonical → DATEX II dataclasses                       ⬜
 │   └── validator.py      # xmlschema XSD gate                                     ⬜
@@ -257,19 +352,30 @@ datex2-adapter/
 │   ├── lorawan_sqlite.py #                                                        ⬜
 │   ├── owm_sqlite.py     #                                                        ⬜
 │   └── wdms_api.py       # live Flask                                             ⬜
-├── outputs/              # output plug-ins (DATEX II XML, JSON)                   ⬜
-├── api/main.py           # FastAPI app                                           ✅(partial)
-├── profiles/bavaria.yaml # condition codes + field map                           ✅
+├── outputs/
+│   └── datex_segment.py  # per-segment DATEX II XML (template-based, verified enums) ✅
+├── api/
+│   ├── main.py           # FastAPI app (+ /dashboard, /health)                    ✅
+│   └── segments_routes.py # /api/segments/* (coverage/priority/fused/geojson/…)   ✅
+├── profiles/
+│   ├── bavaria.yaml          # 6-class ID3 condition codes + field map            ✅
+│   ├── segment_conditions.yaml # 5-class SWS/LightGBM condition scheme            ✅
+│   └── fusion.yaml           # 🔬 per-field source-priority table                 ✅
+├── static/
+│   ├── dashboard.html    # interactive Leaflet fusion dashboard                   ✅
+│   └── demo.html         # side-by-side demo page (not yet wired to API)          ⬜
 ├── data/
 │   ├── stations.json     # demo station catalogue                                 ✅
-│   └── demo.db           # pre-indexed SQLite (offline demo)                      ✅
+│   ├── demo.db           # pre-indexed SQLite (LoRaWAN + OWM, offline demo)       ✅
+│   └── segments.db       # road-segment store (1021 segs + snapshots, committed)  ✅
 ├── schemas/DATEXII_3_Profile/  # official DATEX II v3.4 XSDs                       ✅
 ├── generated/datex2/     # 914 xsdata dataclasses (gitignored)                    ✅
 ├── scripts/
-│   ├── build_demo_db.py        # CSV → SQLite indexer                             ✅
-│   └── generate_dataclasses.py # XSD → dataclasses                                ✅
-├── tests/                # smoke ✅ · conformance ⬜ · integration ⬜
-├── docs/PROTOTYPE.md     # this file
+│   ├── build_demo_db.py            # CSV → SQLite indexer                         ✅
+│   ├── build_segment_snapshots.py  # DuckDB CSV+parquet → segments.db            ✅
+│   └── generate_dataclasses.py     # XSD → dataclasses                            ✅
+├── tests/                # 14 pytest tests pass (smoke + fusion/segment) ✅ · conformance ⬜
+├── docs/PROTOTYPE.md     # this file (+ SOFTWARE_SPECIFICATION_AND_DESIGN.md, ARCHITECTURE.md)
 ├── Dockerfile · docker-compose.yml · pyproject.toml                              ✅
 ```
 
@@ -296,32 +402,49 @@ datex2-adapter/
 - [x] Source ABC
 - [x] DATEX II v3.4 dataclasses generated (914 classes)
 - [x] Demo SQLite pre-indexed (LoRaWAN 3.05 M + OWM 1.22 M rows)
-- [x] `/health` green, 5 smoke tests pass
+- [x] `/health` green
 
-### ⬜ Remaining — Pipeline (Steps 3–14)
+### ✅ Done — Fusion / segment / dashboard track
+- [x] 🔬 **Multi-source fusion engine** with per-field source priority **+ provenance**
+      (`adapter/fusion.py`, config-driven by `profiles/fusion.yaml`) — the core contribution
+- [x] **Road-segment store** `data/segments.db` (committed, ≈4 MB): 1021 segments + 3619
+      latest-per-`(segment,source)` snapshots, built by `scripts/build_segment_snapshots.py`
+      (DuckDB streaming the ~5 GB agg CSVs + the elevation parquet, EPSG:25832 → WGS84)
+- [x] `adapter/segments.py` (`FusedSegment`) + `adapter/segment_map.py` (folium map)
+- [x] **Two condition profiles** — `bavaria.yaml` (6-class ID3) + `segment_conditions.yaml`
+      (5-class SWS/LightGBM), both XSD-enum-verified (config-driven reuse)
+- [x] **Interactive Leaflet dashboard** at `/dashboard` (`static/dashboard.html`): source
+      chips, client-side instant recolour via GeoJSON, hover tooltips, click→side panel with
+      fused values + provenance + live DATEX XML, coverage stats, condition distribution,
+      per-field priority table
+- [x] **`/api/segments/*` endpoints** live (coverage/priority/fused/geojson/map/datex/datex/city)
+      + `/health` reports `segments_db`
+- [x] Per-segment DATEX II XML (`outputs/datex_segment.py`) — structurally accurate, verified
+      enums (template-based; **not yet XSD-validated** — that is Step 6)
+- [x] **14 pytest tests pass** — incl. fusion tests, the "no SWS ⇒ Unknown" regression, and a
+      test that every profile enum value is a real `WeatherRelatedRoadConditionTypeEnum` literal
+
+### ⬜ Remaining — Conformance & standard surface
 
 | Step | Deliverable |
 |------|-------------|
-| 2b | **Add SWS + DWD** to `build_demo_db.py` + profile; rebuild `demo.db` (~1.3 GB) |
-| 3 | `FieldNormalizer` (handles `in3h`/`in_3h`, per-source field maps) |
-| 4 | Source plug-ins: SWS, DWD, LoRaWAN, OWM (+ WDMS live, optional) |
-| 5 | Source registry + `GET /sources` |
-| 6 | 🔑 **First valid DATEX II XML** — one station, XSD‑validated |
-| 7 | Full mapper (7 codes × 3 horizons, confidence → probabilityOfOccurrence) |
-| 8 | Batch publication (N stations, XML + JSON) |
+| 6 | 🔑 **KEYSTONE — XSD validation.** Validate the DATEX II output against the official v3.4 XSDs (`xmlschema` gate) — promotes the template output to provably conformant |
+| 7 | Full **dataclass-based mapper** (replace string templates): all condition codes × all horizons, `confidence → probabilityOfOccurrence`, forecast via `ElaboratedDataPublication` |
+| 8 | Batch **publication envelope** (N segments/stations, XML + JSON) |
+| 4 | Concrete **Source plug-ins**: SWS, DWD, LoRaWAN, OWM (+ WDMS live, optional) |
+| 5 | Source **registry** + `GET /sources` |
 | 9 | Standard endpoints (`/transform`, `/publication`, `/stations`) |
-| 10 | Demo endpoints (`/scenarios`, `/demo` side‑by‑side, `/demo/compare`) |
+| 3 | **Unit harmonization** (precip `mm/s` vs `mm` vs `mm/3h`; cloud `oktas` vs `%`) — caveated in `fusion.yaml` today |
+| 10 | Winter-scenario / time selector for the map; wire `static/demo.html` + `/scenarios` + `/demo/compare` |
 | 11 | Middleware (timing/validation/source/profile headers) + colour logging |
-| 12 | Test pyramid (conformance matrix, round‑trip, integration) |
-| 13 | Evaluation / benchmarks across stations |
+| 12 | Test pyramid (conformance matrix, round-trip, integration) |
+| 13 | Evaluation / benchmarks across segments |
 | 14 | Packaging (README adoption guide, `docker compose up`) |
+| — | *(optional)* MapLibre/React frontend upgrade |
 
-**Critical path:** 2b → 3 → 4 → **6**. Step 6 is the riskiest (first XSD‑valid XML) and
-collapses most of the project's uncertainty once it lands.
-
-### Rough effort (remaining)
-~13 h optimistic · **~21 h likely** · up to ~32 h if XSD validation fights back.
-Step 6 is the swing factor.
+**Critical path:** **6 → 7 → 8**. Step 6 (XSD validation) is the keystone: the fused output
+already exists and is structurally aligned to the target, so validation is the small-but-load-bearing
+delta that turns "well-formed" into "provably conformant."
 
 ---
 
@@ -342,11 +465,26 @@ Step 6 is the swing factor.
   `WeatherRelatedRoadConditionTypeEnum`; the invalid `iceOnRoad`/`snowOnRoad`/`unknown`
   values were corrected to `glaze`/`snowOnTheRoad`/`ice`/`other`. A regression test now
   guards every profile value against `literals.csv`.
+- **Fusion = per-field source priority, config-driven** (`profiles/fusion.yaml`): no single
+  source is complete, so each canonical field declares its own priority list. Provenance is
+  tracked per field. Changing priorities never touches code (G2).
+- **SWS is the fusion base** (`source_priority: [sws, lorawan, dwd, openweather]`) and the
+  *only* source of `surface_condition` — deselecting it yields all-`Unknown` (demonstrated).
+- **`segments.db` is committed** (≈4 MB) for demo-safety: the dashboard runs fully offline; the
+  multi-GB source CSVs and parquet are *not* committed (rebuild with `build_segment_snapshots.py`).
+- **Two condition profiles kept on purpose** — `bavaria.yaml` (6-class ID3) and
+  `segment_conditions.yaml` (5-class SWS/LightGBM) — to demonstrate config-driven reuse.
 
 **Open items**
 - [ ] Confirm hoarfrost (code 3) → `glaze` with the road-domain expert (alt: `icyPatches` /
       generic `ice`). Mapping-fidelity decision — justify in the thesis.
-- [ ] SWS `road_condition_code` legend → map to DATEX II enum in the profile.
+- [x] ~~SWS `road_condition_code` legend → map to DATEX II enum~~ — **resolved**: 5-class scheme
+      verified from the data distribution (`0` dry … `4` schneeglätte), encoded in
+      `segment_conditions.yaml`. See §4.
+- [ ] **DATEX II output is template-based** (verified element names + enum literal) but **not yet
+      XSD-validated** — Step 6 is the pending keystone that closes G1/G5.
+- [ ] **Unit harmonization** across sources (precip `mm/s` vs `mm` vs `mm/3h`; cloud `oktas` vs
+      `%`) — currently caveated inline in `fusion.yaml`; resolve in Step 3.
 - [ ] Confirm DWD station `02261` ↔ which SWS/AI stations it should anchor.
 - [ ] Decide default publication(s) for `/transform` (likely Measured + Elaborated).
 - [ ] Decide how confidence is carried (forecast is an *extension* of the official profile).

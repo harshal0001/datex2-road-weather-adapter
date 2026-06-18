@@ -7,7 +7,10 @@ from fastapi.responses import HTMLResponse, Response
 from adapter.fusion import load_fusion_profile
 from adapter.segments import ALL_SOURCES, fuse_segments, source_coverage
 from adapter.segment_map import build_map
-from outputs.datex_segment import city_summary_datex, segment_to_datex
+from outputs.datex_segment import (
+    city_summary_datex,
+    segment_to_datex_validated,
+)
 
 router = APIRouter(prefix="/api/segments", tags=["segments"])
 
@@ -117,18 +120,31 @@ def segment_map(sources: str | None = Query(None)):
 
 @router.get("/datex")
 def datex(segment_id: int, sources: str | None = Query(None)):
-    """DATEX II XML for one fused segment."""
+    """XSD-validated DATEX II XML for one fused segment.
+
+    The response carries `X-Validation-Status: valid|invalid` (validated against the
+    official DATEX II v3 schema) and `X-Validation-Errors` when invalid.
+    """
     selected = _parse_sources(sources)
     match = [fs for fs in fuse_segments(selected) if fs.segment.segment_id == segment_id]
     if not match:
         raise HTTPException(404, f"segment {segment_id} not found")
-    xml = segment_to_datex(match[0], selected)
-    return Response(content=xml, media_type="application/xml")
+    xml, result = segment_to_datex_validated(match[0], selected)
+    headers = {"X-Validation-Status": result.status}
+    if not result.valid:
+        headers["X-Validation-Errors"] = "; ".join(result.errors[:3])[:500]
+    return Response(content=xml, media_type="application/xml", headers=headers)
 
 
 @router.get("/datex/city")
 def datex_city(sources: str | None = Query(None)):
-    """DATEX II city-coverage summary XML."""
+    """XSD-validated DATEX II covering all fused segments (city-wide publication)."""
     selected = _parse_sources(sources)
     xml = city_summary_datex(fuse_segments(selected), selected)
-    return Response(content=xml, media_type="application/xml")
+    from adapter.validator import validate
+
+    result = validate(xml)
+    headers = {"X-Validation-Status": result.status}
+    if not result.valid:
+        headers["X-Validation-Errors"] = "; ".join(result.errors[:3])[:500]
+    return Response(content=xml, media_type="application/xml", headers=headers)

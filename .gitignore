@@ -20,7 +20,7 @@ data/raw/
 # segments.db IS committed (4 MB, makes the dashboard work on clone); ignore sidecars
 data/segments.db-shm
 data/segments.db-wal
-data/_*.html
+data/_*
 
 # DATEX II schema bundle (XSDs + data dictionary CSVs) IS committed so the repo is
 # self-contained and reproducible: clone → scripts/generate_dataclasses.py → tests pass.
