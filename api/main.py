@@ -64,6 +64,14 @@ def _segments_db_status() -> dict[str, Any]:
         return {"status": "error", "detail": str(e)}
 
 
+@app.get("/sources")
+def sources() -> dict[str, Any]:
+    """Auto-discovered source plug-ins + live health (Step 5)."""
+    from sources.registry import health_report
+
+    return {"sources": health_report()}
+
+
 @app.get("/dashboard")
 def dashboard() -> FileResponse:
     """Multi-source fusion + road-segment map dashboard."""

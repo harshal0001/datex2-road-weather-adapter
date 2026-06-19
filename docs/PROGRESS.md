@@ -70,9 +70,10 @@ conformance track unblocks once it lands.
       multi-segment `SituationPublication`. Remaining (optional): MeasurementSiteTable cross-ref.
 
 ### Milestone B — Standard API + sources
-- [ ] **Step 4 — Concrete `Source` plug-ins** (`sws_sqlite`, `dwd_sqlite`, `lorawan_sqlite`,
-      `owm_sqlite`, `wdms_api`) — the ABC is currently unused.
-- [ ] **Step 5 — Source registry + `GET /sources`** (auto-discovery).
+- [x] **Step 4 — Concrete `Source` plug-ins**: `SegmentSqliteSource` base + `sws`/`dwd`/
+      `lorawan`/`openweather` (read segments.db, yield CanonicalObservations) + `wdms` live stub.
+- [x] **Step 5 — Source registry + `GET /sources`**: auto-discovers Source subclasses; endpoint
+      reports per-source health + coverage (sws/dwd 1021, owm 911, lorawan 666; wdms down/optional).
 - [x] **Step 9 (core) — Standard endpoints**: `POST /api/transform` (generic raw → validated
       DATEX, with `X-Validation-Status`/`X-Source-Used`/`X-Profile` headers) + `GET /api/segments`
       catalogue + `GET /api/segments/datex/city` (publication). Remaining: a station-style alias if needed.
@@ -143,3 +144,6 @@ validation fights back. Step 6 is the swing factor.
 - **2026-06-15** — **Steps 7–9 (core)**: fused measurements (surface temp, water film) embedded
   in the DATEX record; generic `POST /api/transform` (any raw multi-source data → validated
   DATEX II) + `GET /api/segments` catalogue + validated city publication; 25 tests pass.
+- **2026-06-20** — **Steps 10–11**: live `/demo` (raw → DATEX → plain English) + scenario
+  endpoints; global `X-Transform-Time-Ms` middleware. **Steps 4–5**: concrete Source plug-ins
+  (sws/dwd/lorawan/openweather/wdms) + auto-discovery registry + `GET /sources`. 31 tests pass.

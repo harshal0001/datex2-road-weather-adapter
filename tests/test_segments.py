@@ -91,3 +91,30 @@ def test_map_renders_leaflet():
 def test_invalid_source_rejected():
     r = client.get("/api/segments/coverage?sources=bogus")
     assert r.status_code == 400
+
+
+def test_registry_discovers_all_sources():
+    from sources.registry import list_sources
+
+    names = set(list_sources())
+    assert {"sws", "dwd", "lorawan", "openweather", "wdms"} <= names
+
+
+def test_sources_endpoint():
+    r = client.get("/sources")
+    assert r.status_code == 200
+    by_name = {s["name"]: s for s in r.json()["sources"]}
+    assert "sws" in by_name
+    # wdms is the optional live system — reported but expected down in the demo
+    assert by_name["wdms"]["status"] == "down"
+
+
+@needs_db
+def test_source_yields_canonical_observation():
+    from adapter.models import CanonicalObservation
+    from sources.registry import get_source
+
+    obs = next(get_source("sws").iter_observations(), None)
+    assert isinstance(obs, CanonicalObservation)
+    assert obs.source == "sws"
+    assert -90 <= obs.coordinates.lat <= 90
