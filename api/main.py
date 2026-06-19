@@ -39,6 +39,17 @@ app.include_router(segments_router)
 app.include_router(transform_router)
 
 
+@app.middleware("http")
+async def add_timing_header(request, call_next):
+    """Stamp every response with how long it took to produce (Step 11)."""
+    import time
+
+    t0 = time.perf_counter()
+    response = await call_next(request)
+    response.headers["X-Transform-Time-Ms"] = f"{(time.perf_counter() - t0) * 1000:.1f}"
+    return response
+
+
 def _segments_db_status() -> dict[str, Any]:
     if not SEGMENTS_DB.exists():
         return {"status": "missing",
@@ -57,6 +68,12 @@ def _segments_db_status() -> dict[str, Any]:
 def dashboard() -> FileResponse:
     """Multi-source fusion + road-segment map dashboard."""
     return FileResponse(STATIC_DIR / "dashboard.html")
+
+
+@app.get("/demo")
+def demo() -> FileResponse:
+    """Non-technical demo: raw data → validated DATEX II → plain English."""
+    return FileResponse(STATIC_DIR / "demo.html")
 
 
 def _demo_db_status() -> dict[str, Any]:

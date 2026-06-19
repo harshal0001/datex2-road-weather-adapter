@@ -87,6 +87,28 @@ def test_transform_endpoint_generic_raw_to_datex():
     assert "weatherRelatedRoadConditionType>ice<" in r.text  # code 3 → ice
 
 
+def test_scenarios_list_and_transform():
+    """Each demo scenario drives /transform to valid DATEX II."""
+    lst = client.get("/api/scenarios").json()["scenarios"]
+    assert len(lst) >= 4
+    icy = client.get("/api/scenarios/icy-mountain-night").json()
+    body = {"lat": icy["lat"], "lon": icy["lon"], "segment_id": 0,
+            "selected": icy["selected"], "sources": icy["sources"]}
+    r = client.post("/api/transform", json=body)
+    assert r.headers.get("X-Validation-Status") == "valid"
+    assert "weatherRelatedRoadConditionType>ice<" in r.text
+
+
+def test_unknown_scenario_404():
+    assert client.get("/api/scenarios/nope").status_code == 404
+
+
+def test_demo_page_served():
+    r = client.get("/demo")
+    assert r.status_code == 200
+    assert "Live Demo" in r.text
+
+
 @needs_db
 def test_datex_endpoint_sets_valid_header():
     fused = client.get("/api/segments/fused?sources=sws&limit=1").json()

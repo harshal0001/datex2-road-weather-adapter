@@ -5,330 +5,174 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DATEX II Adapter — Live Demo</title>
 <style>
-  :root {
-    --bg:        #f4f6fb;
-    --card:      #ffffff;
-    --ink:       #1a2233;
-    --muted:     #6b7689;
-    --line:      #e4e8f0;
-    --brand:     #1b4ea8;      /* govtech blue */
-    --brand-dk:  #123a80;
-    --eu:        #f5c518;      /* EU flag gold  */
-    --ok:        #1a9d5a;
-    --ok-bg:     #e6f7ee;
-    --ice:       #2f8fd6;
-    --code-bg:   #0f1b30;
-    --code-ink:  #d7e3f5;
-    --arrow:     #c2cad8;
-    --shadow:    0 1px 3px rgba(20,30,50,.06), 0 8px 24px rgba(20,30,50,.06);
+  :root{
+    --bg:#f4f6fb;--card:#fff;--ink:#1a2233;--muted:#6b7689;--line:#e4e8f0;
+    --brand:#1b4ea8;--brand-dk:#123a80;--eu:#f5c518;--ok:#1a9d5a;--ok-bg:#e6f7ee;
+    --code-bg:#0f1b30;--code-ink:#d7e3f5;--shadow:0 1px 3px rgba(20,30,50,.06),0 8px 24px rgba(20,30,50,.06);
   }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    line-height: 1.5;
-  }
-
-  /* ---------- Header ---------- */
-  header {
-    background: linear-gradient(120deg, var(--brand-dk), var(--brand));
-    color: #fff;
-    padding: 22px 32px;
-  }
-  .head-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; max-width: 1280px; margin: 0 auto; }
-  .brand { display: flex; align-items: center; gap: 14px; }
-  .logo {
-    width: 46px; height: 46px; border-radius: 11px;
-    background: #fff; color: var(--brand);
-    display: grid; place-items: center; font-weight: 800; font-size: 19px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.2);
-  }
-  .brand h1 { font-size: 20px; margin: 0; letter-spacing: .2px; }
-  .brand p  { font-size: 13px; margin: 2px 0 0; opacity: .85; }
-  .eu-badge {
-    display: flex; align-items: center; gap: 9px;
-    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
-    padding: 8px 14px; border-radius: 30px; font-size: 13px; font-weight: 600;
-  }
-  .eu-stars { color: var(--eu); font-size: 15px; letter-spacing: 1px; }
-
-  /* ---------- Tagline ---------- */
-  .tagline {
-    max-width: 1280px; margin: 0 auto; padding: 18px 32px 0;
-    color: var(--muted); font-size: 15px;
-  }
-  .tagline b { color: var(--ink); }
-
-  /* ---------- Scenario picker ---------- */
-  .scenarios {
-    max-width: 1280px; margin: 0 auto; padding: 16px 32px 4px;
-    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
-  }
-  .scenarios .label { font-size: 13px; color: var(--muted); margin-right: 4px; font-weight: 600; }
-  .chip {
-    border: 1px solid var(--line); background: var(--card); color: var(--ink);
-    padding: 9px 16px; border-radius: 30px; font-size: 14px; cursor: pointer;
-    transition: all .15s; font-weight: 500;
-  }
-  .chip:hover { border-color: var(--brand); color: var(--brand); }
-  .chip.active { background: var(--brand); border-color: var(--brand); color: #fff; box-shadow: 0 4px 12px rgba(27,78,168,.3); }
-  .chip.drop { border-style: dashed; color: var(--muted); }
-
-  /* ---------- Main 3-panel grid ---------- */
-  main { max-width: 1280px; margin: 0 auto; padding: 20px 32px 8px; }
-  .flow {
-    display: grid;
-    grid-template-columns: 1fr 56px 1.15fr 56px 1fr;
-    align-items: stretch; gap: 0;
-  }
-  @media (max-width: 980px) {
-    .flow { grid-template-columns: 1fr; gap: 14px; }
-    .arrow { display: none !important; }
-  }
-  .panel {
-    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
-    box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column;
-  }
-  .panel-head {
-    padding: 14px 18px; border-bottom: 1px solid var(--line);
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  }
-  .panel-head .t { font-size: 13px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: var(--muted); }
-  .panel-head .emoji { font-size: 18px; }
-  .panel-body { padding: 18px; flex: 1; }
-
-  .arrow { display: grid; place-items: center; color: var(--arrow); font-size: 30px; }
-
-  /* ----- Left: raw data ----- */
-  .kv { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px dashed var(--line); font-size: 15px; }
-  .kv:last-child { border-bottom: none; }
-  .kv .k { color: var(--muted); }
-  .kv .v { font-weight: 700; font-variant-numeric: tabular-nums; }
-  .src-tag { display:inline-block; margin-top: 4px; font-size: 12px; color: var(--muted); background: var(--bg); padding: 3px 10px; border-radius: 20px; }
-  .hl { background: #fff6d8; border-radius: 4px; padding: 0 4px; }
-
-  /* ----- Middle: DATEX II ----- */
-  .valid-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--ok-bg); color: var(--ok); font-weight: 700; font-size: 12px;
-    padding: 5px 11px; border-radius: 20px;
-  }
-  pre.code {
-    margin: 0; background: var(--code-bg); color: var(--code-ink);
-    border-radius: 10px; padding: 16px; font-size: 12.5px; line-height: 1.7;
-    font-family: "SF Mono", "Cascadia Code", Consolas, monospace; overflow-x: auto;
-  }
-  .code .tag  { color: #6fb3ff; }
-  .code .val  { color: #ffd479; font-weight: 600; }
-  .code .cond { color: #7ee0a8; font-weight: 700; }
-
-  /* ----- Right: plain english ----- */
-  .says { font-size: 16px; }
-  .says .big { font-size: 17px; font-weight: 700; display: block; margin-bottom: 8px; }
-  .pill { display: inline-block; padding: 2px 10px; border-radius: 20px; font-weight: 700; font-size: 14px; }
-  .pill.ice  { background: #e3f1fb; color: var(--ice); }
-  .pill.snow { background: #eef2f7; color: #5a6b85; }
-  .pill.wet  { background: #e6f0ff; color: #2b62c9; }
-  .pill.dry  { background: var(--ok-bg); color: var(--ok); }
-  .why { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
-  .why b { color: var(--ink); }
-
-  /* ---------- Data passport ---------- */
-  .passport {
-    max-width: 1280px; margin: 18px auto 0; padding: 0 32px;
-  }
-  .passport-card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
-    box-shadow: var(--shadow); padding: 18px 22px;
-    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-  }
-  .passport-title { font-weight: 800; font-size: 14px; display:flex; align-items:center; gap:8px; margin-right: 6px; }
-  .stamp {
-    display: inline-flex; align-items: center; gap: 7px;
-    font-size: 13px; font-weight: 600; color: var(--ink);
-    background: var(--bg); padding: 8px 13px; border-radius: 10px;
-  }
-  .stamp .i { font-size: 15px; }
-
-  footer { max-width: 1280px; margin: 0 auto; padding: 20px 32px 40px; color: var(--muted); font-size: 12.5px; }
-  footer code { background: #eef1f7; padding: 1px 6px; border-radius: 5px; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+  header{background:linear-gradient(120deg,var(--brand-dk),var(--brand));color:#fff;padding:20px 30px}
+  .head-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;max-width:1320px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:13px}
+  .logo{width:44px;height:44px;border-radius:11px;background:#fff;color:var(--brand);display:grid;place-items:center;font-weight:800;font-size:18px}
+  .brand h1{font-size:19px;margin:0}.brand p{font-size:12.5px;margin:2px 0 0;opacity:.85}
+  .eu-badge{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:7px 13px;border-radius:30px;font-size:12.5px;font-weight:600}
+  .eu-stars{color:var(--eu)}
+  .wrap{max-width:1320px;margin:0 auto;padding:16px 30px}
+  .tagline{color:var(--muted);font-size:14px;margin:6px 0 14px}.tagline b{color:var(--ink)}
+  .chips{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}
+  .chip{border:1px solid var(--line);background:var(--card);border-radius:30px;padding:9px 15px;font-size:13.5px;cursor:pointer;font-weight:600;transition:.15s}
+  .chip:hover{border-color:var(--brand);color:var(--brand)}
+  .chip.active{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 4px 12px rgba(27,78,168,.3)}
+  .flow{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:16px}
+  @media(max-width:980px){.flow{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+  .panel-head{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .panel-head .t{font-size:12.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--muted)}
+  .panel-body{padding:16px;flex:1}
+  .kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .kv:last-child{border:0}.kv .k{color:var(--muted)}.kv .v{font-weight:700;font-variant-numeric:tabular-nums}
+  .src-tag{display:inline-block;margin-top:8px;font-size:11.5px;color:var(--muted);background:var(--bg);padding:3px 10px;border-radius:20px}
+  .valid-badge{display:inline-flex;align-items:center;gap:6px;background:var(--ok-bg);color:var(--ok);font-weight:700;font-size:12px;padding:5px 11px;border-radius:20px}
+  .invalid-badge{background:#fdecec;color:#dc2626}
+  pre.code{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px;font-size:11.5px;line-height:1.55;font-family:"SF Mono",Consolas,monospace;overflow:auto;max-height:420px;white-space:pre-wrap}
+  .says .big{font-size:16px;font-weight:700;display:block;margin-bottom:8px}
+  .pill{display:inline-block;padding:2px 10px;border-radius:20px;font-weight:700;font-size:14px;color:#fff}
+  .why{margin-top:14px;padding-top:13px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}.why b{color:var(--ink)}
+  .passport{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .passport .title{font-weight:800;font-size:13.5px;margin-right:4px}
+  .stamp{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;background:var(--bg);padding:7px 12px;border-radius:9px}
+  .edit{margin-top:10px}.edit summary{font-size:12px;color:var(--muted);cursor:pointer}
+  textarea{width:100%;height:150px;font-family:monospace;font-size:11px;border:1px solid var(--line);border-radius:8px;padding:8px;margin-top:6px}
+  .btn{margin-top:6px;background:var(--brand);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:600;cursor:pointer}
+  footer{max-width:1320px;margin:0 auto;padding:14px 30px 36px;color:var(--muted);font-size:12px}
+  footer code{background:#eef1f7;padding:1px 6px;border-radius:5px}
 </style>
 </head>
 <body>
-
 <header>
   <div class="head-row">
     <div class="brand">
       <div class="logo">D2</div>
-      <div>
-        <h1>DATEX II Adapter</h1>
-        <p>Road-weather data, standardized for Europe</p>
-      </div>
+      <div><h1>DATEX II Adapter — Live Demo</h1><p>Road-weather data, standardized for Europe</p></div>
     </div>
-    <div class="eu-badge">
-      <span class="eu-stars">★</span> DATEX II v3.4 &nbsp;·&nbsp; CEN/TS 16157
-    </div>
+    <div class="eu-badge"><span class="eu-stars">★</span> DATEX II v3 · CEN/TS 16157</div>
   </div>
 </header>
 
-<p class="tagline">
-  Your sensor speaks Bavarian. <b>DATEX II is the European common language.</b>
-  This adapter is the translator — drop in raw data, get a message every European traffic centre can read.
-</p>
+<div class="wrap">
+  <div class="tagline">Your sensor speaks Bavarian. <b>DATEX II is the European common language.</b> Pick a scenario — raw data is fused, standardized, and <b>validated against the official schema</b>, live.</div>
+  <div class="chips" id="chips"></div>
 
-<div class="scenarios">
-  <span class="label">Try a scenario:</span>
-  <button class="chip active" data-s="ice">❄️ Icy mountain night</button>
-  <button class="chip" data-s="snow">🌨️ Urban snow</button>
-  <button class="chip" data-s="wet">💧 Freezing transition</button>
-  <button class="chip" data-s="dry">☀️ Lowland dry day</button>
-  <button class="chip drop">⬆️ Drop your own file…</button>
-</div>
-
-<main>
   <div class="flow">
-
-    <!-- LEFT: raw data -->
     <section class="panel">
-      <div class="panel-head">
-        <span class="t">Your data</span>
-        <span class="emoji">📥</span>
-      </div>
+      <div class="panel-head"><span class="t">📥 Your data (raw)</span></div>
       <div class="panel-body">
-        <div class="kv"><span class="k">Station</span><span class="v" id="r-station">P047</span></div>
-        <div class="kv"><span class="k">Time</span><span class="v" id="r-time">03:00, 15 Jan</span></div>
-        <div class="kv"><span class="k">Air temp</span><span class="v"><span class="hl" id="r-air">−1.5 °C</span></span></div>
-        <div class="kv"><span class="k">Road surface</span><span class="v" id="r-surface">ICE</span></div>
-        <div class="kv"><span class="k">Humidity</span><span class="v" id="r-hum">95 %</span></div>
-        <div class="kv"><span class="k">Confidence</span><span class="v" id="r-conf">0.87</span></div>
-        <span class="src-tag" id="r-src">source: SWS road station (CSV)</span>
+        <div id="raw"></div>
+        <span class="src-tag" id="raw-src"></span>
+        <details class="edit">
+          <summary>Edit raw input &amp; re-transform</summary>
+          <textarea id="raw-json"></textarea>
+          <button class="btn" id="run">Transform →</button>
+        </details>
       </div>
     </section>
 
-    <div class="arrow">➜</div>
-
-    <!-- MIDDLE: DATEX II -->
     <section class="panel">
-      <div class="panel-head">
-        <span class="t">DATEX II v3.4</span>
-        <span class="valid-badge">✅ VALID</span>
-      </div>
-      <div class="panel-body">
-<pre class="code"><span class="tag">&lt;measurementSiteReference</span> id=<span class="val">"<span id="x-station">P047</span>"</span><span class="tag">/&gt;</span>
-<span class="tag">&lt;measurementOrCalculationTime&gt;</span>
-   <span class="val" id="x-time">2026-01-15T03:00:00Z</span>
-<span class="tag">&lt;/measurementOrCalculationTime&gt;</span>
-<span class="tag">&lt;airTemperature&gt;</span><span class="val" id="x-air">-1.5</span><span class="tag">&lt;/airTemperature&gt;</span>
-<span class="tag">&lt;weatherRelatedRoadConditionType&gt;</span>
-   <span class="cond" id="x-cond">ice</span>
-<span class="tag">&lt;/weatherRelatedRoadConditionType&gt;</span>
-<span class="tag">&lt;probabilityOfOccurrence&gt;</span><span class="val" id="x-conf">87</span><span class="tag">&lt;/probabilityOfOccurrence&gt;</span></pre>
-      </div>
+      <div class="panel-head"><span class="t">📤 DATEX II v3</span><span id="badge"></span></div>
+      <div class="panel-body"><pre class="code" id="xml">…</pre></div>
     </section>
 
-    <div class="arrow">➜</div>
-
-    <!-- RIGHT: plain english -->
     <section class="panel">
-      <div class="panel-head">
-        <span class="t">What it means</span>
-        <span class="emoji">🗣️</span>
-      </div>
+      <div class="panel-head"><span class="t">🗣️ What it means</span></div>
       <div class="panel-body">
-        <div class="says">
-          <span class="big">Station <span id="p-station">P047</span> · Hof, Bavaria</span>
-          At <span id="p-time">03:00</span> the road surface is
-          <span class="pill ice" id="p-cond">ICE</span>
-          <span id="p-conf">(87% confidence)</span>.
-          Air temperature is <span id="p-air">−1.5 °C</span>.
-        </div>
-        <div class="why">
-          <b>Why this matters:</b> this message conforms to DATEX II v3.4, the standard used by
-          traffic authorities in 30+ European countries. Germany's MDM, Austria's ASFINAG or
-          France's Bison Futé can consume it directly — <b>no translation needed.</b>
-        </div>
+        <div class="says" id="says"></div>
+        <div class="why"><b>Why this matters:</b> this message conforms to DATEX II v3 (CEN/TS 16157), the standard used by traffic authorities across 30+ European countries — Germany's MDM, Austria's ASFINAG, France's Bison Futé can consume it directly, <b>no translation needed.</b></div>
       </div>
     </section>
-
   </div>
-</main>
 
-<!-- DATA PASSPORT -->
-<div class="passport">
-  <div class="passport-card">
-    <span class="passport-title">🛂 Data Passport</span>
-    <span class="stamp"><span class="i">✅</span> DATEX II v3.4 conformant</span>
-    <span class="stamp"><span class="i">🇪🇺</span> European standard (CEN/TS 16157)</span>
-    <span class="stamp"><span class="i">📡</span> Ready for National Access Point</span>
-    <span class="stamp"><span class="i">⏱️</span> Transformed in <b>&nbsp;47 ms</b></span>
-    <span class="stamp"><span class="i">🔬</span> Validated against official XSD</span>
+  <div class="passport">
+    <span class="title">🛂 Data Passport</span>
+    <span class="stamp" id="p-valid">⏳ validating…</span>
+    <span class="stamp">🇪🇺 European standard (CEN/TS 16157)</span>
+    <span class="stamp">📡 Ready for National Access Point</span>
+    <span class="stamp" id="p-src">📥 source: —</span>
+    <span class="stamp" id="p-time">⏱️ —</span>
   </div>
 </div>
 
-<footer>
-  Prototype mockup · data flows <code>raw source → canonical model → DATEX II XML</code> ·
-  runs fully offline from a pre-indexed demo database (no live network needed).
-</footer>
+<footer>Raw multi-source data → per-field fusion → <code>POST /api/transform</code> → XSD-validated DATEX II. Scenarios are representative illustrative readings; the transform path is identical to production.</footer>
 
 <script>
-  // Frozen demo scenarios — representative of the real demo.db data.
-  const SCENARIOS = {
-    ice: {
-      station:"P047", place:"Hof, Bavaria", time:"03:00", date:"03:00, 15 Jan",
-      iso:"2026-01-15T03:00:00Z", air:"−1.5 °C", airx:"-1.5", surface:"ICE",
-      hum:"95 %", conf:"0.87", confpct:"87", cond:"ice",
-      label:"ICE", pill:"ice", src:"source: SWS road station (CSV)"
-    },
-    snow: {
-      station:"DOE-TPK-0002", place:"Döhlau, Bavaria", time:"21:30", date:"21:30, 08 Feb",
-      iso:"2026-02-08T21:30:00Z", air:"−3.2 °C", airx:"-3.2", surface:"SNOW",
-      hum:"92 %", conf:"0.81", confpct:"81", cond:"snowOnTheRoad",
-      label:"SNOW", pill:"snow", src:"source: LoRaWAN network (CSV)"
-    },
-    wet: {
-      station:"TOE-TPK-0004", place:"Töpen, Bavaria", time:"06:15", date:"06:15, 20 Mar",
-      iso:"2026-03-20T06:15:00Z", air:"0.4 °C", airx:"0.4", surface:"WET",
-      hum:"88 %", conf:"0.73", confpct:"73", cond:"wet",
-      label:"WET", pill:"wet", src:"source: SWS road station (CSV)"
-    },
-    dry: {
-      station:"RGL-TPK-0001", place:"Regnitzlosau, Bavaria", time:"14:00", date:"14:00, 12 Apr",
-      iso:"2026-04-12T14:00:00Z", air:"11.8 °C", airx:"11.8", surface:"DRY",
-      hum:"54 %", conf:"0.96", confpct:"96", cond:"dry",
-      label:"DRY", pill:"dry", src:"source: DWD climate (CSV)"
-    }
-  };
+const CONDCOLOR={dry:"#2ecc71",moist:"#3498db",wet:"#2980b9",ice:"#e74c3c",glaze:"#e67e22",snowOnTheRoad:"#9b59b6",other:"#95a5a6"};
+const CONDLABEL={dry:"Dry",moist:"Damp",wet:"Wet",ice:"Ice",glaze:"Hoarfrost",snowOnTheRoad:"Snow",other:"Unknown"};
+let current=null;
 
-  function apply(s) {
-    const d = SCENARIOS[s];
-    // left
-    set("r-station", d.station); set("r-time", d.date); set("r-air", d.air);
-    set("r-surface", d.surface); set("r-hum", d.hum); set("r-conf", d.conf);
-    set("r-src", d.src);
-    // middle (xml)
-    set("x-station", d.station); set("x-time", d.iso); set("x-air", d.airx);
-    set("x-cond", d.cond); set("x-conf", d.confpct);
-    // right (plain english)
-    set("p-station", d.station + " · " + d.place.split(",")[0]);
-    set("p-time", d.time); set("p-air", d.air);
-    set("p-conf", "(" + d.confpct + "% confidence)");
-    const pc = document.getElementById("p-cond");
-    pc.textContent = d.label; pc.className = "pill " + d.pill;
-  }
-  function set(id, txt){ const el=document.getElementById(id); if(el) el.textContent = txt; }
-
-  document.querySelectorAll(".chip[data-s]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-      btn.classList.add("active");
-      apply(btn.dataset.s);
-    });
+async function loadChips(){
+  const d=await (await fetch("/api/scenarios")).json();
+  const box=document.getElementById("chips");
+  d.scenarios.forEach((s,i)=>{
+    const b=document.createElement("button");
+    b.className="chip"+(i===0?" active":"");b.textContent=`${s.emoji} ${s.title}`;
+    b.onclick=()=>{document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));b.classList.add("active");select(s.id);};
+    box.appendChild(b);
   });
-  document.querySelector(".chip.drop").addEventListener("click", () =>
-    alert("In the live app this opens a file picker — drop a CSV or JSON and it transforms instantly."));
-</script>
+  if(d.scenarios.length) select(d.scenarios[0].id);
+}
 
+async function select(id){
+  const s=await (await fetch("/api/scenarios/"+id)).json();
+  current=s;
+  // left: raw values (flatten sources)
+  const raw=document.getElementById("raw");raw.innerHTML="";
+  for(const [src,row] of Object.entries(s.sources)){
+    for(const [k,v] of Object.entries(row)){
+      const d=document.createElement("div");d.className="kv";
+      d.innerHTML=`<span class="k">${k} <i style="opacity:.6">[${src}]</i></span><span class="v">${v}</span>`;
+      raw.appendChild(d);
+    }
+  }
+  document.getElementById("raw-src").textContent=`${s.road_name} · ${s.elevation_m} m`;
+  document.getElementById("raw-json").value=JSON.stringify(
+    {lat:s.lat,lon:s.lon,segment_id:0,selected:s.selected,sources:s.sources},null,2);
+  runTransform();
+}
+
+async function runTransform(){
+  const body=JSON.parse(document.getElementById("raw-json").value);
+  const t0=performance.now();
+  const r=await fetch("/api/transform",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const ms=Math.round(performance.now()-t0);
+  const xml=await r.text();
+  const status=r.headers.get("X-Validation-Status");
+  const srcUsed=r.headers.get("X-Source-Used")||"—";
+  document.getElementById("xml").textContent=xml;
+  // badge
+  const badge=document.getElementById("badge");
+  if(status==="valid"){badge.className="valid-badge";badge.textContent="✅ VALID";}
+  else{badge.className="valid-badge invalid-badge";badge.textContent="⚠ "+(status||"error");}
+  // condition from xml
+  const m=xml.match(/weatherRelatedRoadConditionType>([a-zA-Z]+)</);
+  const cond=m?m[1]:"other";
+  const says=document.getElementById("says");
+  const st=body.sources.sws?.road_surface_temperature_celsius;
+  const at=body.sources.sws?.air_temperature_celsius;
+  says.innerHTML=`<span class="big">${current.road_name}</span>`+
+    `The road surface is <span class="pill" style="background:${CONDCOLOR[cond]||'#888'}">${CONDLABEL[cond]||cond}</span> `+
+    `(DATEX II <code>${cond}</code>).`+
+    (st!=null?` Surface temperature ${st} °C`:"")+(at!=null?`, air ${at} °C.`:".");
+  // passport
+  const pv=document.getElementById("p-valid");
+  if(status==="valid"){pv.textContent="✅ DATEX II v3 — XSD-validated";pv.style.color="#1a9d5a";}
+  else{pv.textContent="⚠ "+status;pv.style.color="#dc2626";}
+  document.getElementById("p-src").textContent="📥 source: "+srcUsed;
+  document.getElementById("p-time").textContent="⏱️ transformed in "+ms+" ms";
+}
+
+document.getElementById("run").onclick=runTransform;
+loadChips();
+</script>
 </body>
 </html>

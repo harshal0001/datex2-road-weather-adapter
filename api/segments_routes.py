@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 from adapter.fusion import load_fusion_profile
 from adapter.profiles import load_profile
+from adapter.scenarios import get_scenario, list_scenarios
 from adapter.segments import (
     ALL_SOURCES,
     FusedSegment,
@@ -174,6 +175,21 @@ class TransformRequest(BaseModel):
     selected: list[str] | None = None
     road_name: str | None = None
     elevation_m: float | None = None
+
+
+@transform_router.get("/scenarios")
+def scenarios():
+    """Predefined illustrative demo scenarios (icy night, snow, freezing, dry)."""
+    return {"scenarios": list_scenarios()}
+
+
+@transform_router.get("/scenarios/{scenario_id}")
+def scenario(scenario_id: str):
+    """Full scenario incl. the raw per-source rows (POST these to /api/transform)."""
+    s = get_scenario(scenario_id)
+    if not s:
+        raise HTTPException(404, f"unknown scenario: {scenario_id}")
+    return s
 
 
 @transform_router.post("/transform")

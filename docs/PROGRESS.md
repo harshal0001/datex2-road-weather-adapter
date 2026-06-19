@@ -80,11 +80,14 @@ conformance track unblocks once it lands.
       oktas vs %; `in3h`/`in_3h`).
 
 ### Milestone C — Demo polish
-- [ ] **Winter scenario / time selector** so the map shows real ice/snow colors
-      (data has 83K ice + 7.6K snow SWS rows).
-- [ ] Wire `static/demo.html` (raw → DATEX → plain-English) to live transforms.
-- [ ] `/scenarios`, `/scenarios/{name}`, `/demo/compare` endpoints.
-- [ ] **Step 11 — Middleware**: `X-Transform-Time-Ms`, `X-Source-Used`, `X-Profile` + colour logging.
+- [x] **Step 10 — `/demo` view wired live**: 3-panel (raw → validated DATEX II → plain English)
+      driving `POST /api/transform`; scenario picker (icy night / snow / freezing / dry) via
+      `GET /api/scenarios` + `/api/scenarios/{id}`; ✅ VALID badge + Data Passport.
+- [x] **Step 11 — timing middleware**: every response carries `X-Transform-Time-Ms`
+      (`/transform` also sets `X-Source-Used` / `X-Profile`).
+- [ ] Winter **map** colors — needs the source CSVs re-supplied (cleaned from Downloads);
+      the `/demo` view already shows ice/snow via representative scenarios.
+- [ ] `/demo/compare` side-by-side (optional).
 
 ### Milestone D — Quality / evaluation / packaging
 - [ ] **Step 12 — Test pyramid**: conformance matrix (every code × horizon validates),
