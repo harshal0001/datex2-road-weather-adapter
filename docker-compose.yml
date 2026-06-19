@@ -5,10 +5,10 @@ services:
     ports:
       - "8000:8000"
     volumes:
+      # generated/ is built inside the image (do NOT mount it — would shadow it)
       - ./data:/app/data
       - ./schemas:/app/schemas:ro
       - ./profiles:/app/profiles:ro
-      - ./generated:/app/generated:ro
     environment:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped

@@ -91,11 +91,14 @@ conformance track unblocks once it lands.
 - [ ] `/demo/compare` side-by-side (optional).
 
 ### Milestone D — Quality / evaluation / packaging
-- [ ] **Step 12 — Test pyramid**: conformance matrix (every code × horizon validates),
-      semantic round-trip, integration tests.
-- [ ] **Step 13 — Evaluation**: transform latency + conformance coverage; predicted-vs-observed agreement.
-- [ ] **Step 14 — Packaging**: README adoption guide, verified `docker compose up`,
-      add `playwright` to dev deps.
+- [x] **Step 12 — Test pyramid**: XSD conformance matrix (7 condition values), **semantic
+      round-trip** (re-parse → assert values survived), fusion/source/endpoint integration tests
+      (32 tests total).
+- [x] **Step 13 — Evaluation** (`scripts/evaluate.py`): transform latency (mean ~5.7 ms,
+      p95 ~6.9 ms), XSD conformance (100% on sample), condition distribution + source provenance.
+- [x] **Step 14 — Packaging**: README adoption guide; Dockerfile regenerates dataclasses
+      (clean-clone build); `playwright` added to dev deps; compose no longer shadows `generated/`.
+      Remaining: predicted-vs-observed agreement (needs the model).
 
 ### Milestone E — Frontend (later, per request)
 - [ ] Optional MapLibre/React (or Vue) upgrade; layout refinements.
@@ -147,3 +150,7 @@ validation fights back. Step 6 is the swing factor.
 - **2026-06-20** — **Steps 10–11**: live `/demo` (raw → DATEX → plain English) + scenario
   endpoints; global `X-Transform-Time-Ms` middleware. **Steps 4–5**: concrete Source plug-ins
   (sws/dwd/lorawan/openweather/wdms) + auto-discovery registry + `GET /sources`. 31 tests pass.
+- **2026-06-20** — **Steps 12–14**: semantic round-trip test + `scripts/evaluate.py`
+  (latency / conformance / provenance numbers); README adoption guide; Dockerfile regenerates
+  dataclasses for clean-clone builds; playwright dev dep. 32 tests pass. **All non-data/model
+  steps complete.**

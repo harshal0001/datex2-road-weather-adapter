@@ -44,6 +44,32 @@ def test_every_condition_value_produces_valid_datex(value):
     assert result.valid, f"'{value}' produced invalid DATEX II: {result.errors[:3]}"
 
 
+def test_semantic_round_trip():
+    """Re-parse the generated DATEX II and assert the values survived the transform."""
+    from lxml import etree
+
+    seg = Segment(segment_id=42, road_name="RT", road_class="St", length_km=0.1,
+                  elevation_m=600.0, lat=50.1234, lon=11.9876, geom_wkt="")
+    fr = FusionResult(
+        segment_id=42,
+        fields={
+            "surface_condition": FusedField(value=3, source="sws"),
+            "road_surface_temp_c": FusedField(value=-1.5, source="sws"),
+        },
+        sources_used=["sws"], sources_selected=["sws"],
+    )
+    fs = FusedSegment(segment=seg, fusion=fr, condition_code=3, condition_label="Ice",
+                      condition_label_de="Eis", datex2_value="ice", color="#000")
+    xml = segment_to_datex(fs, ["sws"])
+    root = etree.fromstring(xml.encode())
+    ns = {"sit": "http://datex2.eu/schema/3/situation",
+          "com": "http://datex2.eu/schema/3/common",
+          "loc": "http://datex2.eu/schema/3/locationReferencing"}
+    assert root.findtext(".//sit:weatherRelatedRoadConditionType", namespaces=ns) == "ice"
+    assert root.findtext(".//com:roadSurfaceTemperature/com:temperature", namespaces=ns) == "-1.5"
+    assert root.findtext(".//loc:latitude", namespaces=ns) == "50.1234"
+
+
 def test_payload_root_and_xsi_type():
     xml = segment_to_datex(_fake_segment("ice"), ["sws"])
     assert "<payload" in xml

@@ -34,6 +34,7 @@ dev = [
     "pytest-benchmark>=4.0",
     "httpx>=0.26",
     "ruff>=0.3",
+    "playwright>=1.40",   # optional: dashboard screenshots
 ]
 
 [build-system]
