@@ -13,6 +13,7 @@ from adapter.segments import (
     FusedSegment,
     Segment,
     fuse_segments,
+    list_moments,
     load_segments,
     source_coverage,
 )
@@ -36,11 +37,17 @@ def _parse_sources(sources: str | None) -> list[str]:
     return picked or list(ALL_SOURCES)
 
 
+@router.get("/moments")
+def moments():
+    """Available map moments (historical timestamps + 'latest')."""
+    return {"moments": list_moments()}
+
+
 @router.get("/coverage")
-def coverage(sources: str | None = Query(None)):
+def coverage(sources: str | None = Query(None), moment: str = Query("latest")):
     """Source coverage + fused condition distribution for the selection."""
     selected = _parse_sources(sources)
-    fused = fuse_segments(selected)
+    fused = fuse_segments(selected, moment)
     by_cond: dict[str, int] = {}
     unknown = 0
     for fs in fused:
@@ -67,11 +74,11 @@ def priority():
 
 
 @router.get("/fused")
-def fused(sources: str | None = Query(None), limit: int = 200):
+def fused(sources: str | None = Query(None), limit: int = 200, moment: str = Query("latest")):
     """Fused per-segment records (JSON) with provenance — for the data table."""
     selected = _parse_sources(sources)
     out = []
-    for fs in fuse_segments(selected)[:limit]:
+    for fs in fuse_segments(selected, moment)[:limit]:
         out.append({
             "segment_id": fs.segment.segment_id,
             "road_name": fs.segment.road_name,
@@ -87,7 +94,7 @@ def fused(sources: str | None = Query(None), limit: int = 200):
 
 
 @router.get("/geojson")
-def geojson(sources: str | None = Query(None)):
+def geojson(sources: str | None = Query(None), moment: str = Query("latest")):
     """Fused segments as a GeoJSON FeatureCollection (for client-side Leaflet).
 
     Each feature carries the fused condition, colour, values and per-field
@@ -98,7 +105,7 @@ def geojson(sources: str | None = Query(None)):
 
     selected = _parse_sources(sources)
     features = []
-    for fs in fuse_segments(selected):
+    for fs in fuse_segments(selected, moment):
         if not fs.segment.geom_wkt:
             continue
         geom = mapping(shapely_wkt.loads(fs.segment.geom_wkt))
@@ -130,14 +137,14 @@ def segment_map(sources: str | None = Query(None)):
 
 
 @router.get("/datex")
-def datex(segment_id: int, sources: str | None = Query(None)):
+def datex(segment_id: int, sources: str | None = Query(None), moment: str = Query("latest")):
     """XSD-validated DATEX II XML for one fused segment.
 
     The response carries `X-Validation-Status: valid|invalid` (validated against the
     official DATEX II v3 schema) and `X-Validation-Errors` when invalid.
     """
     selected = _parse_sources(sources)
-    match = [fs for fs in fuse_segments(selected) if fs.segment.segment_id == segment_id]
+    match = [fs for fs in fuse_segments(selected, moment) if fs.segment.segment_id == segment_id]
     if not match:
         raise HTTPException(404, f"segment {segment_id} not found")
     xml, result = segment_to_datex_validated(match[0], selected)

@@ -81,6 +81,10 @@
       <span class="chip active" data-s="dwd">DWD <span class="cov" id="cov-dwd"></span></span>
       <span class="chip active" data-s="openweather">OpenWeather <span class="cov" id="cov-openweather"></span></span>
     </div>
+    <div class="chips">
+      <span class="lbl">Moment:</span>
+      <select id="moment" style="border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600;color:var(--teal);background:var(--teal-soft);cursor:pointer"></select>
+    </div>
   </div>
 
   <!-- TOP: map + stats/selected -->
@@ -128,7 +132,7 @@
 <script>
 const COLORS={Dry:"#2ecc71",Damp:"#3498db",Wet:"#2980b9",Ice:"#e74c3c",Snow:"#9b59b6",Unknown:"#95a5a6"};
 let active=new Set(["sws","lorawan","dwd","openweather"]);
-let geoLayer=null, selectedId=null;
+let geoLayer=null, selectedId=null, moment="latest";
 
 const map=L.map("map",{preferCanvas:true}).setView([50.31,11.91],11);
 L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
@@ -143,7 +147,7 @@ function styleFor(props,selected){
 
 async function loadGeo(){
   setLoading(true);
-  const r=await fetch("/api/segments/geojson?sources="+encodeURIComponent(qs()));
+  const r=await fetch("/api/segments/geojson?sources="+encodeURIComponent(qs())+"&moment="+moment);
   const gj=await r.json();
   if(geoLayer) geoLayer.remove();
   geoLayer=L.geoJSON(gj,{
@@ -180,7 +184,7 @@ function selectSegment(p){
 }
 
 async function fetchDatex(id){
-  const r=await fetch(`/api/segments/datex?segment_id=${id}&sources=${encodeURIComponent(qs())}`);
+  const r=await fetch(`/api/segments/datex?segment_id=${id}&sources=${encodeURIComponent(qs())}&moment=${moment}`);
   const status=r.headers.get("X-Validation-Status");
   document.getElementById("datex").textContent=await r.text();
   const badge=document.getElementById("datex-badge");
@@ -190,7 +194,7 @@ async function fetchDatex(id){
 }
 
 async function refreshCoverage(){
-  const r=await fetch("/api/segments/coverage?sources="+encodeURIComponent(qs()));
+  const r=await fetch("/api/segments/coverage?sources="+encodeURIComponent(qs())+"&moment="+moment);
   const d=await r.json();
   document.getElementById("s-sel").textContent=d.selected_sources.join(", ")||"none";
   document.getElementById("s-total").textContent=d.total_segments;
@@ -221,7 +225,14 @@ function toggle(s){
 }
 document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>toggle(c.dataset.s)));
 
-loadPriority();refreshCoverage();loadGeo();
+async function loadMoments(){
+  const d=await (await fetch("/api/segments/moments")).json();
+  const sel=document.getElementById("moment");
+  sel.innerHTML=d.moments.map(m=>`<option value="${m.id}">${m.label}</option>`).join("");
+  sel.onchange=()=>{moment=sel.value;refreshCoverage();loadGeo();if(selectedId!==null)fetchDatex(selectedId);};
+}
+
+loadMoments();loadPriority();refreshCoverage();loadGeo();
 // keep Leaflet sized correctly after layout settles
 setTimeout(()=>map.invalidateSize(),300);
 window.addEventListener("resize",()=>map.invalidateSize());

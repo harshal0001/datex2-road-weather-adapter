@@ -86,8 +86,9 @@ conformance track unblocks once it lands.
       `GET /api/scenarios` + `/api/scenarios/{id}`; ✅ VALID badge + Data Passport.
 - [x] **Step 11 — timing middleware**: every response carries `X-Transform-Time-Ms`
       (`/transform` also sets `X-Source-Used` / `X-Profile`).
-- [ ] Winter **map** colors — needs the source CSVs re-supplied (cleaned from Downloads);
-      the `/demo` view already shows ice/snow via representative scenarios.
+- [x] **Winter map colors** — real historical "moments" (`scripts/build_moments.py`) from the
+      24 Nov 2025 ice event (696 ice segments) + hard-freeze + wet-autumn; map has a moment
+      selector (`GET /api/segments/moments`, `?moment=` on geojson/coverage/fused/datex).
 - [ ] `/demo/compare` side-by-side (optional).
 
 ### Milestone D — Quality / evaluation / packaging
@@ -127,6 +128,12 @@ conformance track unblocks once it lands.
 validation fights back. Step 6 is the swing factor.
 
 ---
+
+### Still blocked on external input
+- [ ] **Forecast path** (`confidence → probabilityOfOccurrence`, `ElaboratedDataPublication`,
+      predicted-vs-observed) — needs the trained **LightGBM model files** (`road_condition_*.txt`),
+      not present in the supplied data.
+- [ ] **Step 3 unit harmonization** (precip mm/s vs mm vs mm/3h; cloud oktas vs %) — doable now.
 
 ## Open decisions (need a call)
 - [ ] Hoarfrost (ID3 code 3) → `glaze` vs `icyPatches` vs generic `ice` (domain expert).

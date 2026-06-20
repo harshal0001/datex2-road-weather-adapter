@@ -109,6 +109,24 @@ def test_sources_endpoint():
     assert by_name["wdms"]["status"] == "down"
 
 
+def test_moments_endpoint_lists_latest():
+    r = client.get("/api/segments/moments")
+    assert r.status_code == 200
+    ids = [m["id"] for m in r.json()["moments"]]
+    assert "latest" in ids
+
+
+@needs_db
+def test_ice_moment_shows_ice_segments():
+    """The 2025-11-24 ice event moment must colour many segments Ice (real data)."""
+    r = client.get("/api/segments/coverage?sources=sws&moment=ice-event-night")
+    if "ice-event-night" not in [m["id"] for m in client.get("/api/segments/moments").json()["moments"]]:
+        import pytest
+        pytest.skip("moments not built (run scripts/build_moments.py)")
+    dist = r.json()["condition_distribution"]
+    assert dist.get("Ice", 0) > 100
+
+
 @needs_db
 def test_source_yields_canonical_observation():
     from adapter.models import CanonicalObservation

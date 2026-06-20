@@ -71,15 +71,40 @@ def load_segments() -> dict[int, Segment]:
     return out
 
 
-@lru_cache(maxsize=1)
-def _snapshots() -> dict[int, dict[str, dict]]:
-    """{segment_id: {source: raw_row_dict}}"""
+@lru_cache(maxsize=8)
+def _snapshots(moment: str = "latest") -> dict[int, dict[str, dict]]:
+    """{segment_id: {source: raw_row_dict}} for a moment ('latest' = current snapshot)."""
     con = _conn()
     out: dict[int, dict[str, dict]] = {}
-    for r in con.execute("SELECT segment_id, source, raw_json FROM segment_snapshot"):
+    if moment == "latest":
+        rows = con.execute("SELECT segment_id, source, raw_json FROM segment_snapshot")
+    else:
+        rows = con.execute(
+            "SELECT segment_id, source, raw_json FROM segment_moment WHERE moment=?",
+            (moment,),
+        )
+    for r in rows:
         out.setdefault(r["segment_id"], {})[r["source"]] = json.loads(r["raw_json"])
     con.close()
     return out
+
+
+def list_moments() -> list[dict]:
+    """Available historical moments for the map time-selector (+ 'latest')."""
+    moments = [{"id": "latest", "label": "Latest reading"}]
+    if not DB.exists():
+        return moments
+    con = _conn()
+    try:
+        rows = con.execute(
+            "SELECT moment, label FROM moment_meta ORDER BY rowid"
+        ).fetchall()
+        moments += [{"id": r["moment"], "label": r["label"]} for r in rows]
+    except sqlite3.Error:
+        pass  # moment_meta not built yet
+    finally:
+        con.close()
+    return moments
 
 
 def source_coverage() -> dict[str, int]:
@@ -92,13 +117,15 @@ def source_coverage() -> dict[str, int]:
     return cov
 
 
-def fuse_segments(selected: list[str] | None = None) -> list[FusedSegment]:
-    """Fuse every segment using the given source selection."""
+def fuse_segments(
+    selected: list[str] | None = None, moment: str = "latest"
+) -> list[FusedSegment]:
+    """Fuse every segment using the given source selection, for a given moment."""
     selected = selected or ALL_SOURCES
     fp = load_fusion_profile()
     cond_profile = load_profile("segment_conditions")
     segments = load_segments()
-    snaps = _snapshots()
+    snaps = _snapshots(moment)
 
     results: list[FusedSegment] = []
     for seg_id, seg in segments.items():
