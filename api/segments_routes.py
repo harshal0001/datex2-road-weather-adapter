@@ -138,6 +138,9 @@ def geojson(sources: str | None = Query(None), moment: str = Query("latest")):
                 "color": fs.color,
                 "values": {k: v.value for k, v in fs.fusion.fields.items() if v.value is not None},
                 "provenance": fs.fusion.provenance(),
+                "candidates": {k: v.candidates for k, v in fs.fusion.fields.items() if len(v.candidates) > 1},
+                "agreement": {k: v.agreement for k, v in fs.fusion.fields.items() if v.value is not None},
+                "confidence": fs.fusion.confidence(),
                 "sources_used": fs.fusion.sources_used,
             },
         })

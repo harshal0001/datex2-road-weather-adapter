@@ -100,4 +100,21 @@ unit_conversions:
   dwd:
     cloud_cover_oktas:            {factor: 12.5, clamp: [0, 100]}  # oktas 0-8 -> %
   openweather:
+    temp:                         {offset: -273.15}       # Kelvin -> °C
     rain:                         {factor: 0.3333333}     # mm over 3h -> mm/h
+
+# Cross-source agreement tolerance (canonical units). When two or more selected
+# sources report a field, they "agree" if their spread (max-min) is within this
+# tolerance; otherwise the field is flagged as a disagreement. Drives the
+# per-field confidence indicator on the dashboard.
+agreement_tolerance:
+  air_temp_c:          1.0     # °C
+  road_surface_temp_c: 1.5     # °C
+  dew_point_c:         1.0     # °C
+  humidity_pct:        5.0     # %
+  pressure_hpa:        2.0     # hPa
+  precipitation_mm_h:  0.3     # mm/h
+  wind_speed_ms:       1.5     # m/s
+  wind_direction_deg:  30.0    # degrees
+  visibility_m:        2000.0  # m
+  cloud_cover_pct:     25.0    # %

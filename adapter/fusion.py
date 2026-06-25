@@ -21,6 +21,10 @@ PROFILES_DIR = Path(__file__).resolve().parents[1] / "profiles"
 class FusedField(BaseModel):
     value: float | int | str | None
     source: str | None  # which source supplied it (None if no source had it)
+    # cross-source view (the basis for the agreement/confidence indicator)
+    candidates: dict[str, float | int | str] = {}  # every selected source's value
+    agreement: str = "none"   # none | single | agree | spread
+    spread: float | None = None  # max-min across numeric candidates (when >1)
 
 
 class FusionResult(BaseModel):
@@ -36,6 +40,16 @@ class FusionResult(BaseModel):
     def provenance(self) -> dict[str, str | None]:
         return {k: v.source for k, v in self.fields.items()}
 
+    def confidence(self) -> dict:
+        """Overall fusion confidence from cross-checkable (multi-source) fields."""
+        multi = [f for f in self.fields.values() if f.agreement in ("agree", "spread")]
+        if not multi:
+            return {"level": "single", "agree": 0, "total": 0}
+        agree = sum(1 for f in multi if f.agreement == "agree")
+        ratio = agree / len(multi)
+        level = "high" if ratio >= 0.8 else "medium" if ratio >= 0.5 else "low"
+        return {"level": level, "agree": agree, "total": len(multi)}
+
 
 class FusionProfile(BaseModel):
     name: str
@@ -46,6 +60,22 @@ class FusionProfile(BaseModel):
     source_fields: dict[str, dict[str, str]] = {}
     # Step 3 — unit harmonization. {source: {raw_col: {factor, offset, clamp}}}
     unit_conversions: dict[str, dict[str, dict]] = {}
+    # Per-field absolute tolerance for "sources agree" (canonical units).
+    agreement_tolerance: dict[str, float] = {}
+
+    def _agreement(self, field: str, candidates: dict):
+        """Classify cross-source agreement for one field's candidate values."""
+        vals = list(candidates.values())
+        if len(vals) <= 1:
+            return ("single" if vals else "none"), None
+        nums = [v for v in vals if isinstance(v, (int, float)) and not isinstance(v, bool)]
+        if len(nums) == len(vals):                       # all numeric
+            spread = max(nums) - min(nums)
+            tol = self.agreement_tolerance.get(field)
+            if tol is None:                              # sane default if unspecified
+                tol = max(0.5, 0.03 * max(abs(x) for x in nums))
+            return ("agree" if spread <= tol else "spread"), round(spread, 3)
+        return ("agree" if len(set(vals)) == 1 else "spread"), None  # categorical
 
     def _harmonize(self, source: str, raw_col: str, value):
         """Apply the declared linear unit conversion for a raw column, if any.
@@ -105,16 +135,24 @@ class FusionProfile(BaseModel):
         fields: dict[str, FusedField] = {}
         used: set[str] = set()
         for field in self.all_fields():
-            chosen = FusedField(value=None, source=None)
-            for src in self.priority_for(field):
-                if src not in selected:
-                    continue
-                row = canon_by_source.get(src, {})
-                if field in row and row[field] is not None:
-                    chosen = FusedField(value=row[field], source=src)
-                    used.add(src)
-                    break
-            fields[field] = chosen
+            # every selected source that carries this field is a candidate ...
+            candidates = {
+                src: canon_by_source[src][field]
+                for src in selected
+                if field in canon_by_source.get(src, {})
+                and canon_by_source[src][field] is not None
+            }
+            # ... the winner is the first candidate in priority order
+            winner = next((s for s in self.priority_for(field) if s in candidates), None)
+            if winner is None:
+                fields[field] = FusedField(value=None, source=None)
+                continue
+            used.add(winner)
+            agreement, spread = self._agreement(field, candidates)
+            fields[field] = FusedField(
+                value=candidates[winner], source=winner,
+                candidates=candidates, agreement=agreement, spread=spread,
+            )
 
         return FusionResult(
             segment_id=segment_id,

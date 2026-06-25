@@ -70,6 +70,9 @@
   .seg-empty{color:var(--muted);font-size:12.5px}
   .prov td:last-child{color:var(--muted)}
   .leaflet-tooltip{font-size:12px}
+  .adot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .aglegend{margin-top:8px;font-size:11px;color:var(--muted)}
+  .aglegend .adot{margin-right:4px}
   /* Plain/XML toggle */
   .viewtg{display:inline-flex;border:1px solid var(--border);border-radius:999px;overflow:hidden}
   .viewtg .tg{font-size:11px;padding:4px 10px;cursor:pointer;color:var(--muted);font-weight:600;background:#fff}
@@ -166,6 +169,8 @@
 
 <script>
 const COLORS={Dry:"#2ecc71",Damp:"#3498db",Wet:"#2980b9",Ice:"#e74c3c",Snow:"#9b59b6",Unknown:"#95a5a6"};
+const AGREE_COLOR={agree:"#16a34a",spread:"#f59e0b",single:"#94a3b8",none:"#cbd5e1"};
+const CONF_COLOR={high:"#16a34a",medium:"#f59e0b",low:"#dc2626",single:"#94a3b8"};
 const SOURCES=["sws","lorawan","dwd","openweather"];
 const FIELD_LABELS={
   surface_condition:["Road condition code",""],
@@ -247,17 +252,33 @@ async function selectSegment(p, reveal=true){
   markSelected(p);
   document.getElementById("seg-id").textContent="#"+p.segment_id;
   document.getElementById("datex-seg").textContent="#"+p.segment_id;
+  const ag=p.agreement||{}, cand=p.candidates||{};
   const rows=Object.entries(p.values).map(([k,v])=>{
     const src=p.provenance[k];
     const lbl=(FIELD_LABELS[k]||[k,""]);
     const val=(typeof v==="number")?v.toFixed(1):v;
-    return `<tr><td>${lbl[0]}</td><td><b>${val}${lbl[1]}</b></td><td>[${src||"—"}]</td></tr>`;
+    const dot=`<span class="adot" title="${ag[k]||"none"}" style="background:${AGREE_COLOR[ag[k]]||AGREE_COLOR.none}"></span>`;
+    let extra="";
+    const c=cand[k];
+    if(c && Object.keys(c).length>1){
+      const others=Object.entries(c).filter(([s])=>s!==src)
+        .map(([s,cv])=>`${s} ${(typeof cv==="number"?cv.toFixed(1):cv)}`).join(", ");
+      extra=`<div style="color:#94a3b8;font-size:11px">also ${others}</div>`;
+    }
+    return `<tr><td>${dot}${lbl[0]}</td><td><b>${val}${lbl[1]}</b>${extra}</td><td>[${src||"—"}]</td></tr>`;
   }).join("");
+  const conf=p.confidence||{level:"single",agree:0,total:0};
+  const confBadge=`<span class="pill" style="background:${CONF_COLOR[conf.level]||"#94a3b8"}">`+
+    `Confidence: ${conf.level}${conf.total?` (${conf.agree}/${conf.total} agree)`:""}</span>`;
   document.getElementById("seg-body").className="";
   document.getElementById("seg-body").innerHTML=
-    `<div style="margin-bottom:8px">${p.road_name||"?"} · ${p.elevation_m?p.elevation_m.toFixed(0)+" m":""} · `+
-    `<span class="pill" style="background:${p.color}">${p.condition_de}</span></div>`+
+    `<div style="margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">`+
+    `<span>${p.road_name||"?"}${p.elevation_m?` · ${p.elevation_m.toFixed(0)} m`:""}</span> `+
+    `<span class="pill" style="background:${p.color}">${p.condition_de}</span> ${confBadge}</div>`+
     `<table class="prov"><thead><tr><th>Field</th><th>Value</th><th>Source</th></tr></thead><tbody>${rows}</tbody></table>`+
+    `<div class="aglegend"><span class="adot" style="background:${AGREE_COLOR.agree}"></span>sources agree`+
+    `<span class="adot" style="background:${AGREE_COLOR.spread};margin-left:10px"></span>disagree`+
+    `<span class="adot" style="background:${AGREE_COLOR.single};margin-left:10px"></span>single source</div>`+
     `<div id="nearest"></div>`;
   if(reveal) await ensureSensors();   // a fresh click reveals the ground sensors
   showNearest(p);
@@ -362,9 +383,18 @@ function renderPlain(el){
     ? `No source in the current selection reports a road-surface condition for this segment, so it is published as <b>unknown</b>.`
     : `The road surface is <span class="cond" style="background:${p.color}">${p.condition_de} (${p.condition})</span>, `+
       `published in DATEX II as <code>${p.datex2}</code>`+(condSrc?`, measured by <b>${condSrc.toUpperCase()}</b>.`:".");
+  const conf=p.confidence||{level:"single",agree:0,total:0};
+  const disagree=Object.entries(p.agreement||{}).filter(([,a])=>a==="spread")
+    .map(([k])=>(FIELD_LABELS[k]||[k])[0]);
+  const confSentence = conf.total
+    ? `Cross-source confidence is <b style="color:${CONF_COLOR[conf.level]}">${conf.level}</b> — `+
+      `${conf.agree} of ${conf.total} cross-checkable fields agree across sources`+
+      (disagree.length?`; sources disagree on ${disagree.join(", ")}.`:".")
+    : `Only one source per field here, so values cannot be cross-checked.`;
   el.innerHTML=
     `<h4>Road segment #${p.segment_id}${p.road_name?` · ${p.road_name}`:""}</h4>`+
     `<div class="lead">${condLine}</div>`+
+    `<div class="lead" style="color:#475569">${confSentence}</div>`+
     (measured?`<div class="kv"><span class="k" style="grid-column:1/-1;text-transform:uppercase;font-size:10.5px">Measured values (fused, with source)</span></div>`+
               `<div style="display:grid;gap:3px;font-size:12.5px">${measured}</div>`:"")+
     `<div class="kv" style="margin-top:12px">`+

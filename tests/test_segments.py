@@ -89,6 +89,37 @@ def test_fusion_compares_like_units_after_harmonization():
     assert owm_only.value("precipitation_mm_h") == pytest.approx(3.6)
 
 
+def test_owm_air_temp_kelvin_harmonized_to_celsius():
+    """OpenWeather reports air temp in Kelvin — it must be converted to °C."""
+    from adapter.fusion import load_fusion_profile
+
+    fp = load_fusion_profile()
+    row = fp.canonical_row("openweather", {"temp": 276.15})
+    assert row["air_temp_c"] == pytest.approx(3.0, abs=0.01)
+
+
+def test_fusion_reports_cross_source_agreement():
+    """Multi-source fields carry candidates + an agreement/confidence verdict."""
+    from adapter.fusion import load_fusion_profile
+
+    fp = load_fusion_profile()
+    raw = {
+        "sws": {"air_temperature_celsius": 2.0},
+        "dwd": {"air_temperature_celsius": 2.3},
+        "openweather": {"temp": 275.3},   # 2.15 °C after K→°C
+    }
+    res = fp.fuse(1, raw, selected=["sws", "dwd", "openweather"])
+    at = res.fields["air_temp_c"]
+    assert at.source == "sws" and at.value == 2.0
+    assert set(at.candidates) == {"sws", "dwd", "openweather"}
+    assert at.agreement == "agree"          # spread 0.3 within 1.0 °C tolerance
+    # an outlier flips it to disagreement
+    raw["openweather"]["temp"] = 290.0      # ~16.8 °C
+    res2 = fp.fuse(1, raw, selected=["sws", "dwd", "openweather"])
+    assert res2.fields["air_temp_c"].agreement == "spread"
+    assert res2.confidence()["level"] in {"low", "medium", "high"}
+
+
 def test_segment_conditions_profile_enum_valid():
     """5-class scheme values must be real DATEX II literals."""
     from adapter.profiles import load_profile
