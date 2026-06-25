@@ -27,6 +27,11 @@
   .chip:hover{border-color:var(--teal)}
   .chip.active{background:var(--teal-soft);border-color:#9ad9d2;color:var(--teal)}
   .chip .cov{font-size:11px;opacity:.7;font-weight:500}
+  .chip.ctl{background:#f1f5f9;color:#475569;border-color:#e2e8f0}
+  .chip.ctl:hover{border-color:#94a3b8;color:#1e293b}
+  .chip.sensor-chip{border-color:#fcd34d;color:#b45309;background:#fffbeb}
+  .chip.sensor-chip:hover{border-color:#f59e0b}
+  .chip.sensor-chip.active{background:#f59e0b;border-color:#b45309;color:#fff}
 
   /* top row: map (wide) + stats/selected (narrow), equal height */
   .top{display:grid;grid-template-columns:1.85fr 1fr;gap:14px;align-items:stretch}
@@ -65,6 +70,21 @@
   .seg-empty{color:var(--muted);font-size:12.5px}
   .prov td:last-child{color:var(--muted)}
   .leaflet-tooltip{font-size:12px}
+  /* Plain/XML toggle */
+  .viewtg{display:inline-flex;border:1px solid var(--border);border-radius:999px;overflow:hidden}
+  .viewtg .tg{font-size:11px;padding:4px 10px;cursor:pointer;color:var(--muted);font-weight:600;background:#fff}
+  .viewtg .tg.active{background:var(--teal);color:#fff}
+  /* selected-segment point marker */
+  .sel-dot{width:16px;height:16px;border-radius:50%;background:#0f766e;border:3px solid #fff;
+    box-shadow:0 0 0 3px rgba(15,118,110,.45),0 2px 6px rgba(0,0,0,.4)}
+  /* plain-English DATEX summary */
+  .plain h4{margin:0 0 8px;font-size:15px}
+  .plain .lead{font-size:13.5px;line-height:1.5;margin-bottom:10px}
+  .plain .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:12.5px;margin:8px 0}
+  .plain .kv .k{color:var(--muted)}
+  .plain .ok{color:#16a34a;font-weight:700}
+  .plain .bad{color:#dc2626;font-weight:700}
+  .plain .cond{display:inline-block;padding:2px 10px;border-radius:999px;color:#fff;font-weight:700}
 </style>
 </head>
 <body>
@@ -76,10 +96,13 @@
     </div>
     <div class="chips" id="chips">
       <span class="lbl">Sources:</span>
-      <span class="chip active" data-s="sws">SWS <span class="cov" id="cov-sws"></span></span>
-      <span class="chip active" data-s="lorawan">LoRaWAN <span class="cov" id="cov-lorawan"></span></span>
-      <span class="chip active" data-s="dwd">DWD <span class="cov" id="cov-dwd"></span></span>
-      <span class="chip active" data-s="openweather">OpenWeather <span class="cov" id="cov-openweather"></span></span>
+      <span class="chip" data-s="sws">SWS</span>
+      <span class="chip" data-s="lorawan">LoRaWAN</span>
+      <span class="chip" data-s="dwd">DWD</span>
+      <span class="chip" data-s="openweather">OpenWeather</span>
+      <span class="chip ctl" id="btn-all">All</span>
+      <span class="chip ctl" id="btn-none">Reset</span>
+      <span class="chip sensor-chip" id="btn-sensors">📡 Ground sensors</span>
     </div>
     <div class="chips">
       <span class="lbl">Moment:</span>
@@ -123,16 +146,46 @@
       </div>
     </div>
     <div class="card">
-      <h3>DATEX II output <span><span id="datex-seg" style="color:var(--muted);font-weight:500"></span> <span id="datex-badge" style="font-weight:700"></span></span></h3>
-      <div class="body"><pre id="datex">Click a segment to see its standardized DATEX II.</pre></div>
+      <h3>DATEX II output
+        <span style="display:flex;align-items:center;gap:8px">
+          <span id="datex-seg" style="color:var(--muted);font-weight:500"></span>
+          <span id="datex-badge" style="font-weight:700"></span>
+          <span class="viewtg">
+            <span class="tg active" data-v="xml">DATEX II XML</span>
+            <span class="tg" data-v="plain">Plain English</span>
+          </span>
+        </span>
+      </h3>
+      <div class="body">
+        <pre id="datex">Click a segment to see its standardized DATEX II.</pre>
+        <div id="datex-plain" class="seg-empty" style="display:none">Click a segment to see its standardized DATEX II, in plain language.</div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
 const COLORS={Dry:"#2ecc71",Damp:"#3498db",Wet:"#2980b9",Ice:"#e74c3c",Snow:"#9b59b6",Unknown:"#95a5a6"};
-let active=new Set(["sws","lorawan","dwd","openweather"]);
-let geoLayer=null, selectedId=null, moment="latest";
+const SOURCES=["sws","lorawan","dwd","openweather"];
+const FIELD_LABELS={
+  surface_condition:["Road condition code",""],
+  road_surface_temp_c:["Road surface temp","°C"],
+  subsurface_temp_5cm_c:["Subsurface temp (5cm)","°C"],
+  water_film_mm:["Water film","mm"],
+  air_temp_c:["Air temperature","°C"],
+  dew_point_c:["Dew point","°C"],
+  humidity_pct:["Humidity","%"],
+  precipitation_mm_h:["Precipitation","mm/h"],
+  wind_speed_ms:["Wind speed","m/s"],
+  wind_direction_deg:["Wind direction","°"],
+  pressure_hpa:["Pressure","hPa"],
+  visibility_m:["Visibility","m"],
+  cloud_cover_pct:["Cloud cover","%"],
+};
+let active=new Set();   // start with nothing selected (use "All" or click chips)
+let geoLayer=null, selectedId=null, selectedProps=null, moment="latest";
+let sensorsOn=false, stations=[], selectMarker=null, lastXml="", lastStatus="", datexView="xml";
+const stationLayer=L.layerGroup(), linkLayer=L.layerGroup();
 
 const map=L.map("map",{preferCanvas:true}).setView([50.31,11.91],11);
 L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
@@ -142,11 +195,19 @@ const qs=()=>[...active].join(",");
 const setLoading=on=>document.getElementById("loading").classList.toggle("on",on);
 
 function styleFor(props,selected){
-  return {color:props.color||"#888",weight:selected?7:5,opacity:selected?1:.8};
+  if(selected) return {color:props.color||"#888",weight:9,opacity:1};
+  const faded = selectedId!==null;            // another segment is selected → fade the rest
+  return {color:props.color||"#888",weight:faded?3:5,opacity:faded?.18:.75};
 }
 
 async function loadGeo(){
   setLoading(true);
+  // no sources selected (incl. Reset) → blank map, nothing drawn
+  if(!active.size){
+    if(geoLayer){geoLayer.remove();geoLayer=null;}
+    if(selectedId!==null) clearSelection();
+    setLoading(false); return;
+  }
   const r=await fetch("/api/segments/geojson?sources="+encodeURIComponent(qs())+"&moment="+moment);
   const gj=await r.json();
   if(geoLayer) geoLayer.remove();
@@ -162,35 +223,156 @@ async function loadGeo(){
       layer.on("click",()=>selectSegment(p));
     }
   }).addTo(map);
+  if(sensorsOn) bringSensorsFront();
+  // keep the selected segment's panel + DATEX/plain text in sync with the new fusion
+  if(selectedId!==null){
+    const feat=gj.features.find(f=>f.properties.segment_id===selectedId);
+    if(feat) await selectSegment(feat.properties, false);
+    else clearSelection();
+  }
   setLoading(false);
 }
 
-function selectSegment(p){
-  selectedId=p.segment_id;
+function markSelected(p){
+  if(selectMarker) selectMarker.remove();
+  if(p.lat==null) return;
+  selectMarker=L.marker([p.lat,p.lon],{
+    icon:L.divIcon({className:"sel-pin",html:'<div class="sel-dot"></div>',iconSize:[20,20],iconAnchor:[10,10]}),
+    interactive:false, zIndexOffset:1000,
+  }).addTo(map);
+}
+async function selectSegment(p, reveal=true){
+  selectedId=p.segment_id; selectedProps=p;
   if(geoLayer) geoLayer.setStyle(f=>styleFor(f.properties,f.properties.segment_id===selectedId));
+  markSelected(p);
   document.getElementById("seg-id").textContent="#"+p.segment_id;
   document.getElementById("datex-seg").textContent="#"+p.segment_id;
   const rows=Object.entries(p.values).map(([k,v])=>{
     const src=p.provenance[k];
+    const lbl=(FIELD_LABELS[k]||[k,""]);
     const val=(typeof v==="number")?v.toFixed(1):v;
-    return `<tr><td>${k}</td><td><b>${val}</b></td><td>[${src||"—"}]</td></tr>`;
+    return `<tr><td>${lbl[0]}</td><td><b>${val}${lbl[1]}</b></td><td>[${src||"—"}]</td></tr>`;
   }).join("");
   document.getElementById("seg-body").className="";
   document.getElementById("seg-body").innerHTML=
     `<div style="margin-bottom:8px">${p.road_name||"?"} · ${p.elevation_m?p.elevation_m.toFixed(0)+" m":""} · `+
     `<span class="pill" style="background:${p.color}">${p.condition_de}</span></div>`+
-    `<table class="prov"><thead><tr><th>Field</th><th>Value</th><th>Source</th></tr></thead><tbody>${rows}</tbody></table>`;
+    `<table class="prov"><thead><tr><th>Field</th><th>Value</th><th>Source</th></tr></thead><tbody>${rows}</tbody></table>`+
+    `<div id="nearest"></div>`;
+  if(reveal) await ensureSensors();   // a fresh click reveals the ground sensors
+  showNearest(p);
   fetchDatex(p.segment_id);
+}
+
+// ---- Ground sensors (nearest physical station) ----
+function haversine(la1,lo1,la2,lo2){
+  const R=6371,r=x=>x*Math.PI/180;
+  const dp=r(la2-la1),dl=r(lo2-lo1);
+  const a=Math.sin(dp/2)**2+Math.cos(r(la1))*Math.cos(r(la2))*Math.sin(dl/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+async function loadStations(){
+  const d=await(await fetch("/api/segments/stations?moment="+moment)).json();
+  stations=d.stations||[];
+}
+async function ensureSensors(){
+  if(!stations.length) await loadStations();
+  renderStations();
+  stationLayer.addTo(map); linkLayer.addTo(map);
+  if(!sensorsOn){sensorsOn=true;document.getElementById("btn-sensors").classList.add("active");}
+}
+function stationStyle(hi){
+  return hi?{radius:11,fillColor:"#dc2626",color:"#fff",weight:3,fillOpacity:1}
+           :{radius:7,fillColor:"#f59e0b",color:"#7c2d12",weight:2,fillOpacity:1};
+}
+function renderStations(){
+  stationLayer.clearLayers();
+  stations.forEach(st=>{
+    const m=L.circleMarker([st.lat,st.lon],stationStyle(false));
+    m.bindTooltip("📡 "+st.name+" · LoRaWAN",{direction:"top"});
+    m.on("click",e=>{L.DomEvent.stop(e);});
+    st._marker=m; m.addTo(stationLayer);
+  });
+}
+function bringSensorsFront(){
+  stationLayer.eachLayer(l=>l.bringToFront&&l.bringToFront());
+  linkLayer.eachLayer(l=>l.bringToFront&&l.bringToFront());
+}
+function clearNearest(){
+  linkLayer.clearLayers();
+  stations.forEach(st=>st._marker&&st._marker.setStyle(stationStyle(false)));
+  const n=document.getElementById("nearest"); if(n)n.innerHTML="";
+}
+function showNearest(p){
+  clearNearest();
+  if(!sensorsOn||!stations.length||p.lat==null) return;
+  let best=null,bd=Infinity;
+  for(const st of stations){const d=haversine(p.lat,p.lon,st.lat,st.lon);if(d<bd){bd=d;best=st;}}
+  if(!best) return;
+  best._marker.setStyle(stationStyle(true));
+  L.polyline([[p.lat,p.lon],[best.lat,best.lon]],
+    {color:"#dc2626",weight:2,dashArray:"6 6",opacity:.9})
+    .bindTooltip(`≈ ${bd.toFixed(1)} km to ${best.name}`,{sticky:true}).addTo(linkLayer);
+  bringSensorsFront();
+  const r=best.reading||{};
+  const f=(v,u)=>v==null?"—":((typeof v==="number"?v.toFixed(1):v)+u);
+  const n=document.getElementById("nearest"); if(!n)return;
+  n.innerHTML=
+    `<div style="margin-top:10px;padding:10px 12px;border:1px solid #fcd34d;background:#fffbeb;border-radius:10px">`+
+    `<div style="font-weight:700;color:#92400e">📡 Nearest ground sensor</div>`+
+    `<div style="margin:4px 0"><b>${best.name}</b> · LoRaWAN`+
+    (best.profile_tag?` · <span style="color:#b45309">${best.profile_tag}</span>`:"")+`</div>`+
+    `<div style="font-size:12.5px;color:#7c2d12">Distance from segment centroid: <b>${bd.toFixed(1)} km</b></div>`+
+    `<div style="margin-top:6px;font-size:12.5px">Surface ${f(r.road_surface_temp_c,"°C")} · `+
+    `Air ${f(r.air_temp_c,"°C")} · Humidity ${f(r.humidity_pct,"%")}</div></div>`;
 }
 
 async function fetchDatex(id){
   const r=await fetch(`/api/segments/datex?segment_id=${id}&sources=${encodeURIComponent(qs())}&moment=${moment}`);
-  const status=r.headers.get("X-Validation-Status");
-  document.getElementById("datex").textContent=await r.text();
+  lastStatus=r.headers.get("X-Validation-Status")||"";
+  lastXml=await r.text();
   const badge=document.getElementById("datex-badge");
-  if(status==="valid"){badge.textContent="✅ XSD-valid";badge.style.color="#16a34a";}
-  else if(status){badge.textContent="⚠ "+status;badge.style.color="#dc2626";}
+  if(lastStatus==="valid"){badge.textContent="✅ XSD-valid";badge.style.color="#16a34a";}
+  else if(lastStatus){badge.textContent="⚠ "+lastStatus;badge.style.color="#dc2626";}
   else badge.textContent="";
+  renderDatexView();
+}
+
+function renderDatexView(){
+  const pre=document.getElementById("datex"), plain=document.getElementById("datex-plain");
+  pre.style.display   = datexView==="xml" ? "block":"none";
+  plain.style.display = datexView==="xml" ? "none":"block";
+  pre.textContent = lastXml || "Click a segment to see its standardized DATEX II.";
+  if(datexView!=="xml") renderPlain(plain);
+}
+
+function renderPlain(el){
+  const p=selectedProps;
+  if(!p){el.className="seg-empty";el.textContent="Click a segment to see its standardized DATEX II, in plain language.";return;}
+  el.className="plain";
+  const v=p.values||{}, prov=p.provenance||{};
+  const condSrc=prov.surface_condition;
+  const used=(p.sources_used||[]).join(", ")||"none";
+  const f=(k)=>{const lbl=FIELD_LABELS[k]||[k,""];const x=v[k];
+    return x==null?null:`${lbl[0]} <b>${(typeof x==="number"?x.toFixed(1):x)}${lbl[1]}</b> <span style="color:#94a3b8">[${prov[k]||"—"}]</span>`;};
+  const measured=["road_surface_temp_c","air_temp_c","humidity_pct","precipitation_mm_h",
+                  "pressure_hpa","visibility_m","cloud_cover_pct","wind_speed_ms"]
+                  .map(f).filter(Boolean).map(s=>`<div>${s}</div>`).join("");
+  const condLine = p.condition==="Unknown"
+    ? `No source in the current selection reports a road-surface condition for this segment, so it is published as <b>unknown</b>.`
+    : `The road surface is <span class="cond" style="background:${p.color}">${p.condition_de} (${p.condition})</span>, `+
+      `published in DATEX II as <code>${p.datex2}</code>`+(condSrc?`, measured by <b>${condSrc.toUpperCase()}</b>.`:".");
+  el.innerHTML=
+    `<h4>Road segment #${p.segment_id}${p.road_name?` · ${p.road_name}`:""}</h4>`+
+    `<div class="lead">${condLine}</div>`+
+    (measured?`<div class="kv"><span class="k" style="grid-column:1/-1;text-transform:uppercase;font-size:10.5px">Measured values (fused, with source)</span></div>`+
+              `<div style="display:grid;gap:3px;font-size:12.5px">${measured}</div>`:"")+
+    `<div class="kv" style="margin-top:12px">`+
+      `<span class="k">Location</span><span>${p.lat?.toFixed(4)}, ${p.lon?.toFixed(4)}${p.elevation_m?` · ${p.elevation_m.toFixed(0)} m elevation`:""}</span>`+
+      `<span class="k">Data fused from</span><span>${used}</span>`+
+      `<span class="k">Standard</span><span>DATEX II v3 · SituationPublication → WeatherRelatedRoadConditions</span>`+
+      `<span class="k">Schema validation</span><span>${lastStatus==="valid"?`<span class="ok">✅ valid against the official DATEX II v3 XSD</span>`:`<span class="bad">⚠ ${lastStatus||"—"}</span>`}</span>`+
+    `</div>`;
 }
 
 async function refreshCoverage(){
@@ -199,8 +381,6 @@ async function refreshCoverage(){
   document.getElementById("s-sel").textContent=d.selected_sources.join(", ")||"none";
   document.getElementById("s-total").textContent=d.total_segments;
   document.getElementById("s-unknown").textContent=d.segments_without_condition;
-  for(const s of ["sws","lorawan","dwd","openweather"])
-    document.getElementById("cov-"+s).textContent="("+(d.coverage_per_source[s]||0)+")";
   const dist=document.getElementById("dist");dist.innerHTML="";
   for(const [k,v] of Object.entries(d.condition_distribution)){
     const el=document.createElement("span");el.className="pill";
@@ -217,19 +397,61 @@ async function loadPriority(){
   }
 }
 
-function toggle(s){
-  if(active.has(s)){if(active.size>1)active.delete(s);}else active.add(s);
-  document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("active",active.has(c.dataset.s)));
-  loadPriority();refreshCoverage();loadGeo();
-  if(selectedId!==null)fetchDatex(selectedId);
+function syncChips(){
+  document.querySelectorAll(".chip[data-s]").forEach(c=>c.classList.toggle("active",active.has(c.dataset.s)));
 }
-document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>toggle(c.dataset.s)));
+function refresh(){
+  syncChips();loadPriority();refreshCoverage();loadGeo();
+}
+function toggle(s){
+  if(active.has(s)) active.delete(s); else active.add(s);  // empty selection allowed
+  refresh();
+}
+document.querySelectorAll(".chip[data-s]").forEach(c=>c.addEventListener("click",()=>toggle(c.dataset.s)));
+function clearSelection(){
+  selectedId=null; selectedProps=null;
+  if(selectMarker){selectMarker.remove(); selectMarker=null;}
+  sensorsOn=false; document.getElementById("btn-sensors").classList.remove("active");
+  clearNearest(); stationLayer.remove(); linkLayer.remove();
+  document.getElementById("seg-id").textContent="";
+  document.getElementById("datex-seg").textContent="";
+  document.getElementById("datex-badge").textContent="";
+  lastXml=""; lastStatus="";
+  const sb=document.getElementById("seg-body");
+  sb.className="seg-empty";
+  sb.textContent="Click a road segment on the map to inspect its fused values and source provenance.";
+  renderDatexView();
+}
+document.querySelectorAll(".viewtg .tg").forEach(t=>t.addEventListener("click",()=>{
+  datexView=t.dataset.v;
+  document.querySelectorAll(".viewtg .tg").forEach(x=>x.classList.toggle("active",x===t));
+  renderDatexView();
+}));
+document.getElementById("btn-all").onclick=()=>{active=new Set(SOURCES);refresh();};
+document.getElementById("btn-none").onclick=()=>{          // Reset → wipe the map clean
+  active=new Set();
+  clearSelection();
+  refresh();
+};
+document.getElementById("btn-sensors").onclick=async()=>{
+  if(sensorsOn){
+    sensorsOn=false;document.getElementById("btn-sensors").classList.remove("active");
+    clearNearest();stationLayer.remove();linkLayer.remove();
+  }else{
+    await ensureSensors();
+    if(selectedProps)showNearest(selectedProps);
+  }
+};
 
 async function loadMoments(){
   const d=await (await fetch("/api/segments/moments")).json();
   const sel=document.getElementById("moment");
   sel.innerHTML=d.moments.map(m=>`<option value="${m.id}">${m.label}</option>`).join("");
-  sel.onchange=()=>{moment=sel.value;refreshCoverage();loadGeo();if(selectedId!==null)fetchDatex(selectedId);};
+  sel.onchange=async()=>{
+    moment=sel.value;
+    if(sensorsOn){await loadStations();renderStations();}  // fresh readings for this moment
+    refreshCoverage();loadGeo();                           // loadGeo re-selects + re-renders
+  };
 }
 
 loadMoments();loadPriority();refreshCoverage();loadGeo();

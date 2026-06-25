@@ -99,6 +99,36 @@ def test_segment_conditions_profile_enum_valid():
     assert p.datex2_for(4) == "snowOnTheRoad"
 
 
+def test_haversine_distance_sane():
+    """Haversine sanity: ~1 deg latitude ≈ 111 km; identical points = 0."""
+    from adapter.segments import haversine_km
+
+    assert haversine_km(50.0, 11.0, 50.0, 11.0) == pytest.approx(0.0)
+    assert haversine_km(50.0, 11.0, 51.0, 11.0) == pytest.approx(111.2, abs=1.0)
+
+
+@needs_db
+def test_stations_endpoint_returns_located_sensors():
+    """Ground-sensor layer: real LoRaWAN stations with coords + a reading."""
+    r = client.get("/api/segments/stations")
+    assert r.status_code == 200
+    sts = r.json()["stations"]
+    assert len(sts) >= 1
+    s = sts[0]
+    assert -90 <= s["lat"] <= 90 and -180 <= s["lon"] <= 180
+    assert s["name"]
+    # reading is canonical-unit keyed (or empty if no lorawan segment nearby)
+    assert isinstance(s["reading"], dict)
+
+
+@needs_db
+def test_geojson_carries_segment_centroid():
+    """Client needs the segment centroid to find the nearest ground sensor."""
+    gj = client.get("/api/segments/geojson?sources=sws").json()
+    props = gj["features"][0]["properties"]
+    assert "lat" in props and "lon" in props
+
+
 @needs_db
 def test_coverage_endpoint():
     r = client.get("/api/segments/coverage?sources=sws,dwd")
@@ -106,6 +136,24 @@ def test_coverage_endpoint():
     d = r.json()
     assert d["total_segments"] > 0
     assert d["coverage_per_source"]["sws"] > 0
+
+
+@needs_db
+def test_empty_selection_means_no_sources():
+    """sources= (present but empty) must mean NO sources, not a silent 'all'."""
+    r = client.get("/api/segments/coverage?sources=")
+    d = r.json()
+    assert d["selected_sources"] == []
+    # every segment fuses to no data -> all Unknown
+    assert d["segments_without_condition"] == d["total_segments"]
+    assert set(d["condition_distribution"]) <= {"Unknown"}
+
+
+@needs_db
+def test_omitted_sources_defaults_to_all():
+    """Omitting the param entirely still defaults to all sources (back-compat)."""
+    d = client.get("/api/segments/coverage").json()
+    assert set(d["selected_sources"]) == {"sws", "lorawan", "dwd", "openweather"}
 
 
 @needs_db

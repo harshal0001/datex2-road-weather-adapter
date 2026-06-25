@@ -93,7 +93,8 @@ class FusionProfile(BaseModel):
         per_source_raw: {source_name: raw_csv_row_dict}
         selected:       sources the user enabled (default: all in source_priority)
         """
-        selected = selected or list(self.source_priority)
+        # None = all sources; [] = explicit empty selection (fuses to no data)
+        selected = list(self.source_priority) if selected is None else selected
         # pre-map every available source's row to canonical fields
         canon_by_source = {
             src: self.canonical_row(src, raw)

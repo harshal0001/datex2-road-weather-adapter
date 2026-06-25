@@ -108,6 +108,6 @@ def map_html(selected: list[str] | None = None) -> str:
     """Convenience: fuse + render, return the full HTML document as a string."""
     from adapter.segments import ALL_SOURCES, fuse_segments
 
-    selected = selected or ALL_SOURCES
+    selected = ALL_SOURCES if selected is None else selected
     fused = fuse_segments(selected)
     return build_map(fused, selected).get_root().render()

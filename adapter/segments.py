@@ -7,6 +7,7 @@ for DATEX II standardization.
 from __future__ import annotations
 
 import json
+import math
 import sqlite3
 from dataclasses import dataclass
 from functools import lru_cache
@@ -16,7 +17,18 @@ from adapter.fusion import FusionResult, load_fusion_profile
 from adapter.profiles import load_profile
 
 DB = Path(__file__).resolve().parents[1] / "data" / "segments.db"
+STATIONS_FILE = Path(__file__).resolve().parents[1] / "data" / "stations.json"
 ALL_SOURCES = ["sws", "lorawan", "dwd", "openweather"]
+
+
+def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Great-circle distance in km between two WGS84 points."""
+    r = 6371.0
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlmb = math.radians(lon2 - lon1)
+    a = math.sin(dphi / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlmb / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(a))
 
 
 @dataclass
@@ -120,8 +132,12 @@ def source_coverage() -> dict[str, int]:
 def fuse_segments(
     selected: list[str] | None = None, moment: str = "latest"
 ) -> list[FusedSegment]:
-    """Fuse every segment using the given source selection, for a given moment."""
-    selected = selected or ALL_SOURCES
+    """Fuse every segment using the given source selection, for a given moment.
+
+    selected=None means "all sources"; selected=[] is an explicit empty selection
+    (every segment fuses to no data -> Unknown).
+    """
+    selected = ALL_SOURCES if selected is None else selected
     fp = load_fusion_profile()
     cond_profile = load_profile("segment_conditions")
     segments = load_segments()
@@ -146,3 +162,58 @@ def fuse_segments(
             color=mapping.color or "#95a5a6",
         ))
     return results
+
+
+@lru_cache(maxsize=1)
+def load_stations() -> list[dict]:
+    """The physical ground-sensor stations with real coordinates (stations.json)."""
+    if not STATIONS_FILE.exists():
+        return []
+    data = json.loads(STATIONS_FILE.read_text(encoding="utf-8"))
+    return [s for s in data.get("stations", []) if s.get("lat") and s.get("lon")]
+
+
+def station_readings(moment: str = "latest") -> list[dict]:
+    """Ground stations + a representative reading for each.
+
+    Only LoRaWAN stations carry true coordinates in the data. Each station's
+    reading is taken from the road segment nearest to the station that actually
+    holds a LoRaWAN snapshot (i.e. the segment its readings were assigned to),
+    mapped to canonical fields/units. This is what the dashboard draws as the
+    "nearest ground sensor" when a segment is selected.
+    """
+    stations = load_stations()
+    if not stations:
+        return []
+    fp = load_fusion_profile()
+    segments = load_segments()
+    snaps = _snapshots(moment)
+    lorawan_segs = [
+        (sid, segments[sid])
+        for sid in snaps
+        if "lorawan" in snaps.get(sid, {}) and sid in segments
+    ]
+
+    out: list[dict] = []
+    for st in stations:
+        best_sid, best_d = None, None
+        for sid, seg in lorawan_segs:
+            d = haversine_km(st["lat"], st["lon"], seg.lat, seg.lon)
+            if best_d is None or d < best_d:
+                best_sid, best_d = sid, d
+        reading = (
+            fp.canonical_row("lorawan", snaps[best_sid]["lorawan"])
+            if best_sid is not None
+            else {}
+        )
+        out.append({
+            "id": st.get("id"),
+            "name": st.get("name"),
+            "lat": st["lat"],
+            "lon": st["lon"],
+            "source": st.get("source", "lorawan"),
+            "profile_tag": st.get("profile_tag"),
+            "nearest_segment_id": best_sid,
+            "reading": reading,
+        })
+    return out

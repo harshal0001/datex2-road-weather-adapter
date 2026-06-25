@@ -28,13 +28,15 @@ transform_router = APIRouter(prefix="/api", tags=["transform"])
 
 
 def _parse_sources(sources: str | None) -> list[str]:
-    if not sources:
+    # None  = parameter omitted        -> default to all sources
+    # ""    = parameter present, empty  -> an explicit empty selection (no sources)
+    if sources is None:
         return list(ALL_SOURCES)
     picked = [s.strip().lower() for s in sources.split(",") if s.strip()]
     bad = [s for s in picked if s not in ALL_SOURCES]
     if bad:
         raise HTTPException(400, f"unknown source(s): {bad}. valid: {ALL_SOURCES}")
-    return picked or list(ALL_SOURCES)
+    return picked  # may be [] when the user deselects everything
 
 
 @router.get("/moments")
@@ -61,6 +63,18 @@ def coverage(sources: str | None = Query(None), moment: str = Query("latest")):
         "condition_distribution": by_cond,
         "segments_without_condition": unknown,
     }
+
+
+@router.get("/stations")
+def stations(moment: str = Query("latest")):
+    """Physical ground-sensor stations (real coordinates) + representative reading.
+
+    Used by the dashboard to draw the ground-sensor layer and, when a segment is
+    selected, the nearest station (haversine) with a connector line.
+    """
+    from adapter.segments import station_readings
+
+    return {"stations": station_readings(moment)}
 
 
 @router.get("/priority")
@@ -116,6 +130,8 @@ def geojson(sources: str | None = Query(None), moment: str = Query("latest")):
                 "segment_id": fs.segment.segment_id,
                 "road_name": fs.segment.road_name,
                 "elevation_m": fs.segment.elevation_m,
+                "lat": fs.segment.lat,
+                "lon": fs.segment.lon,
                 "condition": fs.condition_label,
                 "condition_de": fs.condition_label_de,
                 "datex2": fs.datex2_value,
