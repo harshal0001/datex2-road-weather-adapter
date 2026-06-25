@@ -102,14 +102,15 @@ def _snapshots(moment: str = "latest") -> dict[int, dict[str, dict]]:
 
 
 def list_moments() -> list[dict]:
-    """Available historical moments for the map time-selector (+ 'latest')."""
+    """Named historical moments for the dropdown (+ 'latest'). Excludes the
+    hourly time-series steps (ts:*), which the time slider serves separately."""
     moments = [{"id": "latest", "label": "Latest reading"}]
     if not DB.exists():
         return moments
     con = _conn()
     try:
         rows = con.execute(
-            "SELECT moment, label FROM moment_meta ORDER BY rowid"
+            "SELECT moment, label FROM moment_meta WHERE moment NOT LIKE 'ts:%' ORDER BY rowid"
         ).fetchall()
         moments += [{"id": r["moment"], "label": r["label"]} for r in rows]
     except sqlite3.Error:
@@ -117,6 +118,22 @@ def list_moments() -> list[dict]:
     finally:
         con.close()
     return moments
+
+
+def list_timeline() -> list[dict]:
+    """Ordered hourly time-series steps (ts:*) for the map time slider."""
+    if not DB.exists():
+        return []
+    con = _conn()
+    try:
+        rows = con.execute(
+            "SELECT moment, label FROM moment_meta WHERE moment LIKE 'ts:%' ORDER BY moment"
+        ).fetchall()
+        return [{"id": r["moment"], "ts": r["moment"][3:], "label": r["label"]} for r in rows]
+    except sqlite3.Error:
+        return []
+    finally:
+        con.close()
 
 
 def source_coverage() -> dict[str, int]:

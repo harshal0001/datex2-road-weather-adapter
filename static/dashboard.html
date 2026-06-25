@@ -133,6 +133,14 @@
     </div>
   </div>
 
+  <div class="topbar" id="timebar" style="display:none;gap:12px">
+    <span class="lbl">Time:</span>
+    <button id="tl-play" class="chip ctl">▶ Play</button>
+    <input id="tl-range" type="range" min="0" max="0" value="0" style="flex:1;accent-color:var(--teal)">
+    <span id="tl-label" style="font-weight:700;color:var(--teal);min-width:110px;text-align:right">—</span>
+    <span class="chip ctl" id="tl-exit" title="Back to latest">Latest</span>
+  </div>
+
   <!-- TOP: map + stats/selected -->
   <div class="top">
     <div class="card map-wrap">
@@ -592,7 +600,41 @@ async function loadMoments(){
   };
 }
 
-loadMoments();loadPriority();refreshCoverage();loadGeo();
+// ---- Time slider over the historical window ----
+let timeline=[], tlIdx=0, tlTimer=null;
+async function loadTimeline(){
+  const d=await(await fetch("/api/segments/timeline")).json();
+  timeline=d.timeline||[];
+  const bar=document.getElementById("timebar");
+  if(!timeline.length){ bar.style.display="none"; return; }
+  bar.style.display="flex";
+  const range=document.getElementById("tl-range");
+  range.max=timeline.length-1; range.value=0;
+  document.getElementById("tl-label").textContent=timeline[0].label;
+  range.oninput=()=>setTimeStep(+range.value);
+  document.getElementById("tl-play").onclick=toggleTlPlay;
+  document.getElementById("tl-exit").onclick=()=>{ stopTl(); moment="latest";
+    document.getElementById("tl-label").textContent="latest";
+    refreshStations(); refreshCoverage(); loadGeo(); };
+}
+async function refreshStations(){ if(sensorsOn){ await loadStations(); renderStations(); } }
+async function setTimeStep(idx){
+  tlIdx=Math.max(0,Math.min(timeline.length-1,idx));
+  const step=timeline[tlIdx];
+  document.getElementById("tl-range").value=tlIdx;
+  document.getElementById("tl-label").textContent=step.label;
+  moment=step.id;
+  await refreshStations();
+  refreshCoverage(); loadGeo();
+}
+function stopTl(){ if(tlTimer){clearInterval(tlTimer);tlTimer=null;document.getElementById("tl-play").textContent="▶ Play";} }
+function toggleTlPlay(){
+  if(tlTimer){ stopTl(); return; }
+  document.getElementById("tl-play").textContent="⏸ Pause";
+  tlTimer=setInterval(()=>setTimeStep(tlIdx+1>timeline.length-1?0:tlIdx+1),1400);
+}
+
+loadMoments();loadTimeline();loadPriority();refreshCoverage();loadGeo();
 // keep Leaflet sized correctly after layout settles
 setTimeout(()=>map.invalidateSize(),300);
 window.addEventListener("resize",()=>map.invalidateSize());

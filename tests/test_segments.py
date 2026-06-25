@@ -250,6 +250,23 @@ def test_moments_endpoint_lists_latest():
     assert r.status_code == 200
     ids = [m["id"] for m in r.json()["moments"]]
     assert "latest" in ids
+    # time-series steps must NOT clutter the named-moment dropdown
+    assert not any(i.startswith("ts:") for i in ids)
+
+
+@needs_db
+def test_timeline_endpoint_is_ordered():
+    """Time slider: ordered ts:* steps, each usable as a ?moment= value."""
+    tl = client.get("/api/segments/timeline").json()["timeline"]
+    if not tl:
+        import pytest
+        pytest.skip("time series not built (run scripts/build_timeseries.py)")
+    ids = [s["id"] for s in tl]
+    assert all(i.startswith("ts:") for i in ids)
+    assert ids == sorted(ids)  # chronological
+    # a step drives the same fusion path as any moment
+    r = client.get(f"/api/segments/coverage?sources=sws&moment={ids[0]}")
+    assert r.status_code == 200 and r.json()["total_segments"] > 0
 
 
 @needs_db

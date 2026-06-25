@@ -46,6 +46,14 @@ def moments():
     return {"moments": list_moments()}
 
 
+@router.get("/timeline")
+def timeline():
+    """Ordered hourly time-series steps for the map time slider."""
+    from adapter.segments import list_timeline
+
+    return {"timeline": list_timeline()}
+
+
 @router.get("/coverage")
 def coverage(sources: str | None = Query(None), moment: str = Query("latest")):
     """Source coverage + fused condition distribution for the selection."""
