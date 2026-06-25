@@ -79,15 +79,26 @@ def _now() -> XmlDateTime:
     return XmlDateTime.from_string("2026-01-15T03:00:00Z")
 
 
-def _record(fs: FusedSegment):
-    """One WeatherRelatedRoadConditions record for a fused segment."""
+def _prob_enum(probability: float | None):
+    """Model confidence → DATEX probabilityOfOccurrence. None = observed (certain)."""
+    if probability is None:
+        return _PO1.CERTAIN
+    return _PO1.PROBABLE if probability >= 0.66 else _PO1.RISK_OF
+
+
+def _record(fs: FusedSegment, probability: float | None = None):
+    """One WeatherRelatedRoadConditions record for a fused segment.
+
+    probability=None → observed (probabilityOfOccurrence=certain); a value marks a
+    forecast and maps to probable/riskOf.
+    """
     ts = _now()
     return _WRRC(
         id=f"SEG-{fs.segment.segment_id}-RWC",
         version="1",
         situation_record_creation_time=ts,
         situation_record_version_time=ts,
-        probability_of_occurrence=_PO2(value=_PO1.CERTAIN),  # SWS = observed
+        probability_of_occurrence=_PO2(value=_prob_enum(probability)),
         validity=_Validity(
             validity_status=_VS2(value=_VS1.ACTIVE),
             validity_time_specification=_OverallPeriod(overall_start_time=ts),
@@ -105,17 +116,17 @@ def _record(fs: FusedSegment):
     )
 
 
-def _situation(fs: FusedSegment):
+def _situation(fs: FusedSegment, probability: float | None = None):
     return _Situation(
         id=f"HOF-SEG-{fs.segment.segment_id}",
         header_information=_HeaderInformation(
             information_status=_IS2(value=_IS1.REAL)
         ),
-        situation_record=[_record(fs)],
+        situation_record=[_record(fs, probability)],
     )
 
 
-def build_publication(fused: list[FusedSegment]):
+def build_publication(fused: list[FusedSegment], probability: float | None = None):
     """Build a SituationPublication covering the given fused segments."""
     return _SituationPublication(
         publication_time=_now(),
@@ -124,7 +135,7 @@ def build_publication(fused: list[FusedSegment]):
             national_identifier=PUBLICATION_CREATOR_ID,
         ),
         lang="de",
-        situation=[_situation(fs) for fs in fused],
+        situation=[_situation(fs, probability) for fs in fused],
     )
 
 
@@ -169,6 +180,18 @@ def segment_to_datex(fs: FusedSegment, selected: list[str]) -> str:
 
 def segment_to_datex_validated(fs: FusedSegment, selected: list[str]) -> tuple[str, ValidationResult]:
     xml = segment_to_datex(fs, selected)
+    return xml, validate(xml)
+
+
+def segment_forecast_to_datex_validated(
+    fs: FusedSegment, probability: float
+) -> tuple[str, ValidationResult]:
+    """Validated DATEX II for a PREDICTED condition (probabilityOfOccurrence from
+    the model's confidence — probable/riskOf, never certain)."""
+    pub = build_publication([fs], probability=probability)
+    comment = (f" DATEX II forecast — predicted road condition '{fs.datex2_value}', "
+               f"probabilityOfOccurrence from model confidence {probability:.2f} ")
+    xml = to_payload_xml(pub, comment)
     return xml, validate(xml)
 
 

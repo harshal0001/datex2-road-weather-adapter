@@ -280,6 +280,39 @@ def test_ice_moment_shows_ice_segments():
     assert dist.get("Ice", 0) > 100
 
 
+def test_forecast_module_predicts_or_absent():
+    """Forecast inference: absent model returns None; present model predicts a class."""
+    from adapter import forecast as fc
+
+    if not fc.available():
+        assert fc.predict({"air_temp_c": -3}) is None
+        import pytest
+        pytest.skip("forecast model not built (run scripts/train_forecast.py)")
+    # a cold, sub-zero surface should lean towards ice/snow, with a valid prob dist
+    out = fc.predict({"air_temp_c": -4, "road_surface_temp_c": -3, "humidity_pct": 96,
+                      "dew_point_c": -4, "elevation_m": 600})
+    assert out["label"] in {"Dry", "Damp", "Wet", "Ice", "Snow"}
+    assert 0.0 <= out["probability"] <= 1.0
+    assert abs(sum(out["probabilities"].values()) - 1.0) < 0.01
+
+
+@needs_db
+def test_forecast_endpoint_predicted_vs_observed():
+    from adapter import forecast as fc
+
+    if not fc.available():
+        import pytest
+        pytest.skip("forecast model not built")
+    fused = client.get("/api/segments/fused?sources=sws&limit=1").json()
+    seg = fused["segments"][0]["segment_id"]
+    d = client.get(f"/api/segments/forecast/{seg}?moment=ice-event-night").json()
+    assert d["predicted"]["label"] in {"Dry", "Damp", "Wet", "Ice", "Snow"}
+    assert "observed" in d and "match" in d
+    # the predicted condition is published as valid DATEX II (forecast)
+    assert d["datex"]["status"] == "valid"
+    assert d["datex"]["probability_of_occurrence"] in {"probable", "riskOf"}
+
+
 @needs_db
 def test_source_yields_canonical_observation():
     from adapter.models import CanonicalObservation

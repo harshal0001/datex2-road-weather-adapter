@@ -333,10 +333,46 @@ async function selectSegment(p, reveal=true){
     `<div class="aglegend"><span class="adot" style="background:${AGREE_COLOR.agree}"></span>sources agree`+
     `<span class="adot" style="background:${AGREE_COLOR.spread};margin-left:10px"></span>disagree`+
     `<span class="adot" style="background:${AGREE_COLOR.single};margin-left:10px"></span>single source</div>`+
+    `<div id="forecast"></div>`+
     `<div id="nearest"></div>`;
   if(reveal) await ensureSensors();   // a fresh click reveals the ground sensors
   showNearest(p);
+  renderForecast(p.segment_id);
   fetchDatex(p.segment_id);
+}
+
+async function renderForecast(id){
+  const el=document.getElementById("forecast"); if(!el) return;
+  el.innerHTML="";
+  let d;
+  try{
+    const r=await fetch(`/api/segments/forecast/${id}?moment=${moment}`);
+    if(!r.ok) return;            // model not built → silently skip
+    d=await r.json();
+  }catch(e){ return; }
+  const pr=d.predicted; if(!pr) return;
+  const bars=Object.entries(pr.probabilities).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([lab,p])=>
+    `<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin:2px 0">`+
+    `<span style="width:42px;color:#475569">${lab}</span>`+
+    `<span style="flex:1;background:#e2e8f0;border-radius:4px;height:8px;overflow:hidden">`+
+    `<span style="display:block;height:100%;width:${Math.round(p*100)}%;background:${COLORS[lab]||"#64748b"}"></span></span>`+
+    `<span style="width:34px;text-align:right">${Math.round(p*100)}%</span></div>`).join("");
+  const obs=d.observed;
+  const verdict = obs.has_truth
+    ? (d.match?`<span style="color:#16a34a;font-weight:700">✓ matches SWS</span>`
+              :`<span style="color:#dc2626;font-weight:700">✗ differs from SWS (${obs.label})</span>`)
+    : `<span style="color:#94a3b8">no SWS ground truth here</span>`;
+  el.innerHTML=
+    `<div style="margin-top:10px;padding:10px 12px;border:1px solid #c7d2fe;background:#eef2ff;border-radius:10px">`+
+    `<div style="font-weight:700;color:#3730a3">🔮 Predicted condition (no road sensor)</div>`+
+    `<div style="margin:4px 0 8px"><span class="pill" style="background:${COLORS[pr.label]||"#64748b"}">${pr.label}</span> `+
+    `confidence ${Math.round(pr.probability*100)}% · ${verdict}</div>`+
+    bars+
+    (d.datex&&d.datex.status==="valid"
+      ? `<div style="margin-top:8px;font-size:11px">DATEX II forecast: <span style="color:#16a34a;font-weight:700">✅ valid</span> · probabilityOfOccurrence: <b>${d.datex.probability_of_occurrence}</b></div>`
+      : "")+
+    `<div style="margin-top:6px;font-size:10.5px;color:#6366f1">model trained on DWD/LoRaWAN/OpenWeather → SWS, `+
+    `held-out accuracy ${Math.round((pr.accuracy||0)*100)}% · features: ${d.feature_sources.join(", ")||"none"}</div></div>`;
 }
 
 // ---- Ground sensors (nearest physical station) ----

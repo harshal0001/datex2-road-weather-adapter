@@ -141,6 +141,57 @@ def fused_one(segment_id: int, sources: str | None = Query(None), moment: str = 
     }
 
 
+FORECAST_FEATURE_SOURCES = ["dwd", "lorawan", "openweather"]  # non-SWS (no road sensor)
+
+
+@router.get("/forecast/{segment_id}")
+def forecast_segment(segment_id: int, moment: str = Query("latest")):
+    """Predict road condition from atmospheric sources only (no SWS road sensor),
+    and compare to the observed SWS condition for the same segment/moment."""
+    from adapter import forecast as fc
+
+    if not fc.available():
+        raise HTTPException(503, "forecast model not built (run scripts/train_forecast.py)")
+
+    feat_fs = fuse_one(segment_id, FORECAST_FEATURE_SOURCES, moment)
+    if feat_fs is None:
+        raise HTTPException(404, f"segment {segment_id} not found")
+    features = {k: v.value for k, v in feat_fs.fusion.fields.items() if v.value is not None}
+    features["elevation_m"] = feat_fs.segment.elevation_m
+    pred = fc.predict(features)
+
+    obs_fs = fuse_one(segment_id, ["sws"], moment)
+    observed = {
+        "label": obs_fs.condition_label if obs_fs else "Unknown",
+        "datex2": obs_fs.datex2_value if obs_fs else "other",
+        "has_truth": bool(obs_fs and obs_fs.condition_code != 255),
+    }
+
+    # publish the predicted condition as validated DATEX II (probabilityOfOccurrence)
+    datex = {"status": "n/a"}
+    if pred:
+        pred_fs = FusedSegment(
+            segment=feat_fs.segment, fusion=feat_fs.fusion,
+            condition_code=pred["code"], condition_label=pred["label"],
+            condition_label_de=pred["label"], datex2_value=pred["datex2"], color="",
+        )
+        from outputs.datex_segment import segment_forecast_to_datex_validated
+
+        xml, result = segment_forecast_to_datex_validated(pred_fs, pred["probability"])
+        datex = {"status": result.status,
+                 "probability_of_occurrence": "probable" if pred["probability"] >= 0.66 else "riskOf"}
+
+    return {
+        "segment_id": segment_id,
+        "moment": moment,
+        "feature_sources": [s for s in FORECAST_FEATURE_SOURCES if s in feat_fs.fusion.sources_used],
+        "predicted": pred,
+        "observed": observed,
+        "match": bool(pred and observed["has_truth"] and pred["label"] == observed["label"]),
+        "datex": datex,
+    }
+
+
 @router.get("/geojson")
 def geojson(sources: str | None = Query(None), moment: str = Query("latest")):
     """Fused segments as a GeoJSON FeatureCollection (for client-side Leaflet).
