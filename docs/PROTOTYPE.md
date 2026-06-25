@@ -424,27 +424,30 @@ datex2-adapter/
 - [x] **14 pytest tests pass** — incl. fusion tests, the "no SWS ⇒ Unknown" regression, and a
       test that every profile enum value is a real `WeatherRelatedRoadConditionTypeEnum` literal
 
-### ⬜ Remaining — Conformance & standard surface
+### ✅ Conformance & standard surface — complete
 
-| Step | Deliverable |
-|------|-------------|
-| 6 | 🔑 **KEYSTONE — XSD validation.** Validate the DATEX II output against the official v3.4 XSDs (`xmlschema` gate) — promotes the template output to provably conformant |
-| 7 | Full **dataclass-based mapper** (replace string templates): all condition codes × all horizons, `confidence → probabilityOfOccurrence`, forecast via `ElaboratedDataPublication` |
-| 8 | Batch **publication envelope** (N segments/stations, XML + JSON) |
-| 4 | Concrete **Source plug-ins**: SWS, DWD, LoRaWAN, OWM (+ WDMS live, optional) |
-| 5 | Source **registry** + `GET /sources` |
-| 9 | Standard endpoints (`/transform`, `/publication`, `/stations`) |
-| 3 | **Unit harmonization** (precip `mm/s` vs `mm` vs `mm/3h`; cloud `oktas` vs `%`) — caveated in `fusion.yaml` today |
-| 10 | Winter-scenario / time selector for the map; wire `static/demo.html` + `/scenarios` + `/demo/compare` |
-| 11 | Middleware (timing/validation/source/profile headers) + colour logging |
-| 12 | Test pyramid (conformance matrix, round-trip, integration) |
-| 13 | Evaluation / benchmarks across segments |
-| 14 | Packaging (README adoption guide, `docker compose up`) |
-| — | *(optional)* MapLibre/React frontend upgrade |
+All of Steps 3–14 have landed (see `docs/PROGRESS.md` for the per-step log):
 
-**Critical path:** **6 → 7 → 8**. Step 6 (XSD validation) is the keystone: the fused output
-already exists and is structurally aligned to the target, so validation is the small-but-load-bearing
-delta that turns "well-formed" into "provably conformant."
+| Step | Deliverable | State |
+|------|-------------|-------|
+| 6 | 🔑 **XSD validation** against the official v3 XSDs (`xmlschema` gate) | ✅ |
+| 7 | **Dataclass-based mapper** — real `SituationPublication` + fused measurements | ✅ (core) |
+| 8 | Batch **publication envelope** (`/api/segments/datex/city`) | ✅ |
+| 4 | Concrete **Source plug-ins**: SWS, DWD, LoRaWAN, OWM (+ WDMS live stub) | ✅ |
+| 5 | Source **registry** + `GET /sources` | ✅ |
+| 9 | Standard endpoints (`POST /api/transform`, `/api/segments` catalogue) | ✅ (core) |
+| 3 | **Unit harmonization** (`unit_conversions` in `fusion.yaml`; precip → mm/h, cloud oktas → %) | ✅ |
+| 10 | Winter-moment map selector + live `/demo` + `/scenarios` | ✅ |
+| 11 | Middleware (timing / validation / source / profile headers) | ✅ |
+| 12 | Test pyramid (conformance matrix, round-trip, integration) — 37 tests | ✅ |
+| 13 | Evaluation / benchmarks (`scripts/evaluate.py`) | ✅ |
+| 14 | Packaging (README adoption guide, Dockerfile clean-clone build) | ✅ |
+
+**Optional / deferred** (not in the required scope):
+- Forecast path — `confidence → probabilityOfOccurrence`, `ElaboratedDataPublication`,
+  predicted-vs-observed. **Made optional by the professor**; would need the trained LightGBM
+  model files (not supplied).
+- MapLibre/React frontend upgrade; `/demo/compare` side-by-side.
 
 ---
 
@@ -481,10 +484,13 @@ delta that turns "well-formed" into "provably conformant."
 - [x] ~~SWS `road_condition_code` legend → map to DATEX II enum~~ — **resolved**: 5-class scheme
       verified from the data distribution (`0` dry … `4` schneeglätte), encoded in
       `segment_conditions.yaml`. See §4.
-- [ ] **DATEX II output is template-based** (verified element names + enum literal) but **not yet
-      XSD-validated** — Step 6 is the pending keystone that closes G1/G5.
-- [ ] **Unit harmonization** across sources (precip `mm/s` vs `mm` vs `mm/3h`; cloud `oktas` vs
-      `%`) — currently caveated inline in `fusion.yaml`; resolve in Step 3.
+- [x] ~~**DATEX II output is template-based** … not yet XSD-validated~~ — **resolved (Step 6)**:
+      output is built from generated dataclasses and XSD-validated against the official v3 schema.
+- [x] ~~**Unit harmonization** across sources (precip `mm/s` vs `mm` vs `mm/3h`; cloud `oktas`
+      vs `%`)~~ — **resolved (Step 3)**: `unit_conversions` block in `fusion.yaml` harmonizes
+      precip → mm/h and cloud oktas → %, applied in `canonical_row`.
 - [ ] Confirm DWD station `02261` ↔ which SWS/AI stations it should anchor.
-- [ ] Decide default publication(s) for `/transform` (likely Measured + Elaborated).
-- [ ] Decide how confidence is carried (forecast is an *extension* of the official profile).
+- [ ] Decide default publication(s) for `/transform` (likely Measured + Elaborated) — relevant
+      only if the optional forecast path is added.
+- [ ] Decide how confidence is carried (forecast is an *extension* of the official profile) —
+      deferred with the optional forecast path.

@@ -44,14 +44,33 @@ class FusionProfile(BaseModel):
     source_priority: list[str]
     field_priority: dict[str, list[str]] = {}
     source_fields: dict[str, dict[str, str]] = {}
+    # Step 3 — unit harmonization. {source: {raw_col: {factor, offset, clamp}}}
+    unit_conversions: dict[str, dict[str, dict]] = {}
+
+    def _harmonize(self, source: str, raw_col: str, value):
+        """Apply the declared linear unit conversion for a raw column, if any.
+
+        value * factor + offset, then optional clamp. Non-numeric values
+        (e.g. condition codes) and unlisted columns pass through unchanged so
+        sources are reconciled in a single canonical unit before fusion.
+        """
+        conv = self.unit_conversions.get(source, {}).get(raw_col)
+        if conv is None or not isinstance(value, (int, float)) or isinstance(value, bool):
+            return value
+        out = value * conv.get("factor", 1.0) + conv.get("offset", 0.0)
+        clamp = conv.get("clamp")
+        if clamp:
+            lo, hi = clamp
+            out = max(lo, min(hi, out))
+        return out
 
     def canonical_row(self, source: str, raw: dict) -> dict:
-        """Map a source's raw CSV row to canonical field names."""
+        """Map a source's raw CSV row to canonical field names (with units harmonized)."""
         mapping = self.source_fields.get(source, {})
         out: dict[str, object] = {}
         for raw_col, canon in mapping.items():
             if raw_col in raw and raw[raw_col] is not None:
-                out[canon] = raw[raw_col]
+                out[canon] = self._harmonize(source, raw_col, raw[raw_col])
         return out
 
     def all_fields(self) -> list[str]:

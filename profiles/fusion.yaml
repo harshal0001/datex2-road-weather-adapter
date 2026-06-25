@@ -13,8 +13,19 @@
 # Verified against the aggregated CSV headers (keyed by segment_id, event_timestamp).
 
 name: hof_fusion
-version: "1.0"
+version: "1.1"
 description: "Per-field source priority for SWS / LoRaWAN / DWD / OpenWeather"
+
+# Canonical units (every fused field is expressed in these — see unit_conversions):
+#   temperatures        °C
+#   precipitation_mm_h  mm/h  (rate; raw sources differ: mm/s, mm/1h, mm/3h)
+#   cloud_cover_pct     %     (raw DWD is oktas 0-8)
+#   humidity_pct        %
+#   pressure_hpa        hPa
+#   wind_speed_ms       m/s
+#   wind_direction_deg  degrees
+#   visibility_m        m
+#   water_film_mm       mm
 
 # Global priority (highest first). Applied to any field without an explicit
 # override below. The user's stated priority: SWS is the trusted base.
@@ -31,7 +42,7 @@ field_priority:
   dew_point_c:           [sws, lorawan, dwd]
   air_temp_c:            [sws, lorawan, dwd, openweather]
   humidity_pct:          [sws, lorawan, dwd, openweather]
-  precipitation_mm:      [sws, dwd, openweather]
+  precipitation_mm_h:    [sws, dwd, openweather]
   wind_speed_ms:         [sws, dwd, openweather]
   wind_direction_deg:    [dwd, openweather]
   pressure_hpa:          [dwd, openweather]
@@ -39,7 +50,8 @@ field_priority:
   cloud_cover_pct:       [dwd, openweather]
 
 # Per-source raw CSV column -> canonical field name.
-# (Unit caveats noted; harmonization is a documented future-work item.)
+# Where a raw column is NOT already in the canonical unit, a conversion is
+# declared in `unit_conversions` below (applied during canonical mapping).
 source_fields:
   sws:
     road_condition_code:               surface_condition
@@ -49,7 +61,7 @@ source_fields:
     air_temperature_celsius:           air_temp_c
     dew_point_celsius:                 dew_point_c
     relative_humidity_percent:         humidity_pct
-    precipitation_intensity_mm_s:      precipitation_mm   # NOTE: mm/s, not mm
+    precipitation_intensity_mm_s:      precipitation_mm_h   # raw mm/s -> mm/h
     wind_speed_ms:                     wind_speed_ms
   lorawan:
     surface_temperature:               road_surface_temp_c
@@ -61,18 +73,31 @@ source_fields:
     relative_humidity_percent:         humidity_pct
     dew_point_celsius:                 dew_point_c
     soil_temperature_5cm_celsius:      subsurface_temp_5cm_c
-    precipitation_mm:                  precipitation_mm
+    precipitation_mm:                  precipitation_mm_h   # raw mm/1h -> mm/h (identity)
     wind_speed_ms:                     wind_speed_ms
     wind_direction_degrees:            wind_direction_deg
     air_pressure_sea_level_hpa:        pressure_hpa
     visibility_meters:                 visibility_m
-    cloud_cover_oktas:                 cloud_cover_pct    # NOTE: oktas 0-8, not %
+    cloud_cover_oktas:                 cloud_cover_pct      # raw oktas 0-8 -> %
   openweather:
     temp:                              air_temp_c
     humidity:                          humidity_pct
-    rain:                              precipitation_mm   # NOTE: mm/3h
+    rain:                              precipitation_mm_h   # raw mm/3h -> mm/h
     wind_speed:                        wind_speed_ms
     wind_deg:                          wind_direction_deg
     pressure:                          pressure_hpa
     visibility:                        visibility_m
     clouds:                            cloud_cover_pct
+
+# Unit harmonization (Step 3). Per source, per RAW column: a linear transform
+# `value * factor + offset`, with an optional `clamp: [lo, hi]`, applied as the
+# raw value is mapped to its canonical field. Declaring it here (not in code)
+# keeps the engine config-driven: a new jurisdiction adjusts conversions without
+# touching Python. Raw columns not listed are assumed already canonical.
+unit_conversions:
+  sws:
+    precipitation_intensity_mm_s: {factor: 3600}          # mm/s -> mm/h
+  dwd:
+    cloud_cover_oktas:            {factor: 12.5, clamp: [0, 100]}  # oktas 0-8 -> %
+  openweather:
+    rain:                         {factor: 0.3333333}     # mm over 3h -> mm/h

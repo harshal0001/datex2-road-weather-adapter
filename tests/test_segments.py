@@ -45,6 +45,50 @@ def test_fusion_picks_by_priority():
     assert res2.value("surface_condition") is None
 
 
+def test_unit_harmonization_to_canonical_units():
+    """Step 3 — raw units (mm/s, mm/3h, oktas) are converted to canonical units."""
+    from adapter.fusion import load_fusion_profile
+
+    fp = load_fusion_profile()
+    # SWS precipitation intensity 0.001 mm/s -> 3.6 mm/h
+    sws = fp.canonical_row("sws", {"precipitation_intensity_mm_s": 0.001})
+    assert sws["precipitation_mm_h"] == pytest.approx(3.6)
+    # DWD cloud cover 4 oktas -> 50 %
+    dwd = fp.canonical_row("dwd", {"cloud_cover_oktas": 4})
+    assert dwd["cloud_cover_pct"] == pytest.approx(50.0)
+    # DWD precipitation is already mm/h -> identity passthrough
+    assert fp.canonical_row("dwd", {"precipitation_mm": 2.0})["precipitation_mm_h"] == 2.0
+    # OpenWeather 3 mm over 3h -> 1 mm/h
+    owm = fp.canonical_row("openweather", {"rain": 3.0})
+    assert owm["precipitation_mm_h"] == pytest.approx(1.0)
+
+
+def test_unit_harmonization_clamps_and_skips_non_numeric():
+    from adapter.fusion import load_fusion_profile
+
+    fp = load_fusion_profile()
+    # oktas 9 (sky obscured) clamps to 100 %, never above
+    assert fp.canonical_row("dwd", {"cloud_cover_oktas": 9})["cloud_cover_pct"] == 100.0
+    # condition codes (non-converted) pass through unchanged
+    assert fp.canonical_row("sws", {"road_condition_code": 3})["surface_condition"] == 3
+
+
+def test_fusion_compares_like_units_after_harmonization():
+    """After harmonization, the same rainfall from two sources is comparable."""
+    from adapter.fusion import load_fusion_profile
+
+    fp = load_fusion_profile()
+    raw = {
+        "dwd": {"precipitation_mm": 3.6},            # mm/h
+        "openweather": {"rain": 10.8},               # mm/3h -> 3.6 mm/h
+    }
+    res = fp.fuse(1, raw, selected=["dwd", "openweather"])
+    # DWD wins by priority; both now express the SAME physical rate
+    assert res.value("precipitation_mm_h") == pytest.approx(3.6)
+    owm_only = fp.fuse(1, raw, selected=["openweather"])
+    assert owm_only.value("precipitation_mm_h") == pytest.approx(3.6)
+
+
 def test_segment_conditions_profile_enum_valid():
     """5-class scheme values must be real DATEX II literals."""
     from adapter.profiles import load_profile

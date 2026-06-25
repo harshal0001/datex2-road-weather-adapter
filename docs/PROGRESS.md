@@ -4,7 +4,7 @@
 > `docs/PROTOTYPE.md` (what & why), `docs/ARCHITECTURE.md` (how),
 > `docs/PANEL_QA.md` (defense), `docs/SOFTWARE_SPECIFICATION_AND_DESIGN.md` (paper).
 >
-> **Last updated:** 2026-06-14
+> **Last updated:** 2026-06-25
 
 ---
 
@@ -14,13 +14,16 @@
 |-------|-------|
 | Foundation (repo, canonical model, schema, demo store) | ✅ Done |
 | **Multi-source fusion + road-segment map dashboard** | ✅ Done (the research core, demoable) |
-| **Conformance track (DATEX II XSD validation + mapper)** | ⬜ Pending — **next priority** |
-| Standard API + source plug-ins | ⬜ Pending |
-| Demo polish (scenarios, side-by-side, middleware) | ⬜ Partial |
-| Quality / evaluation / packaging | ⬜ Pending |
+| **Conformance track (DATEX II XSD validation + mapper)** | ✅ Done (Steps 6–8) |
+| Standard API + source plug-ins | ✅ Done (Steps 4–5, 9) |
+| **Unit harmonization** (Step 3) | ✅ Done |
+| Demo polish (scenarios, winter map, middleware) | ✅ Done (Steps 10–11) |
+| Quality / evaluation / packaging | ✅ Done (Steps 12–14, 37 tests) |
+| Forecast path (predicted-vs-observed) | ⬜ **Optional** (professor's call) — blocked on LightGBM model files |
+| Frontend upgrade (MapLibre/React) | ⬜ Optional |
 
-**Keystone next step:** Step 6 — XSD-validate the DATEX II output. Everything in the
-conformance track unblocks once it lands.
+**Status:** all required scope is complete. The only open items are explicitly optional
+(forecast path, frontend upgrade).
 
 ---
 
@@ -77,8 +80,11 @@ conformance track unblocks once it lands.
 - [x] **Step 9 (core) — Standard endpoints**: `POST /api/transform` (generic raw → validated
       DATEX, with `X-Validation-Status`/`X-Source-Used`/`X-Profile` headers) + `GET /api/segments`
       catalogue + `GET /api/segments/datex/city` (publication). Remaining: a station-style alias if needed.
-- [ ] **Step 3 — Unit harmonization** in the normalizer (precip mm/s vs mm vs mm/3h; cloud
-      oktas vs %; `in3h`/`in_3h`).
+- [x] **Step 3 — Unit harmonization** ✅ `fusion.yaml` now has a `unit_conversions` block
+      (per source, per raw column: linear `factor`/`offset` + optional `clamp`), applied in
+      `FusionProfile.canonical_row`. Precip harmonized to **mm/h** (SWS mm/s ×3600, OWM mm/3h ÷3,
+      DWD identity); DWD cloud **oktas 0–8 → %** (×12.5, clamped 0–100). Config-driven, no code
+      change needed to add a conversion. 3 tests added (37 total).
 
 ### Milestone C — Demo polish
 - [x] **Step 10 — `/demo` view wired live**: 3-panel (raw → validated DATEX II → plain English)
@@ -129,11 +135,10 @@ validation fights back. Step 6 is the swing factor.
 
 ---
 
-### Still blocked on external input
+### Optional / blocked on external input
 - [ ] **Forecast path** (`confidence → probabilityOfOccurrence`, `ElaboratedDataPublication`,
-      predicted-vs-observed) — needs the trained **LightGBM model files** (`road_condition_*.txt`),
-      not present in the supplied data.
-- [ ] **Step 3 unit harmonization** (precip mm/s vs mm vs mm/3h; cloud oktas vs %) — doable now.
+      predicted-vs-observed) — **made optional by the professor.** Would need the trained
+      **LightGBM model files** (`road_condition_*.txt`), not present in the supplied data.
 
 ## Open decisions (need a call)
 - [ ] Hoarfrost (ID3 code 3) → `glaze` vs `icyPatches` vs generic `ice` (domain expert).
@@ -161,3 +166,8 @@ validation fights back. Step 6 is the swing factor.
   (latency / conformance / provenance numbers); README adoption guide; Dockerfile regenerates
   dataclasses for clean-clone builds; playwright dev dep. 32 tests pass. **All non-data/model
   steps complete.**
+- **2026-06-25** — **Step 3 — unit harmonization** landed: `fusion.yaml` `unit_conversions`
+  block (linear `factor`/`offset` + `clamp`, per source/raw column) applied in
+  `canonical_row`; precip → mm/h, DWD cloud oktas → %. Canonical field renamed
+  `precipitation_mm` → `precipitation_mm_h` (honest unit). 37 tests pass. **Forecast path
+  set optional by professor → required scope is now complete.**

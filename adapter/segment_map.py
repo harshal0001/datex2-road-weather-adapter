@@ -27,7 +27,7 @@ _FIELDS_IN_TOOLTIP = [
     ("road_surface_temp_c", "Surface temp", "°C"),
     ("air_temp_c", "Air temp", "°C"),
     ("humidity_pct", "Humidity", "%"),
-    ("precipitation_mm", "Precip", ""),
+    ("precipitation_mm_h", "Precip", "mm/h"),
     ("visibility_m", "Visibility", "m"),
     ("pressure_hpa", "Pressure", "hPa"),
 ]
