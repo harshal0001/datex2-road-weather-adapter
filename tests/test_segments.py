@@ -205,6 +205,19 @@ def test_datex_uses_verified_enum():
 
 
 @needs_db
+def test_fused_one_endpoint_for_compare():
+    """Single-segment fuse (compare view): condition depends on the selection."""
+    fused = client.get("/api/segments/fused?sources=sws&limit=1").json()
+    seg = fused["segments"][0]["segment_id"]
+    a = client.get(f"/api/segments/fused/{seg}?sources=sws,dwd").json()
+    b = client.get(f"/api/segments/fused/{seg}?sources=dwd,openweather").json()
+    assert a["validation"]["status"] == "valid"
+    assert "confidence" in a and "agreement" in a
+    # dropping SWS removes the ground-truth condition
+    assert b["condition"] == "Unknown"
+
+
+@needs_db
 def test_map_renders_leaflet():
     r = client.get("/api/segments/map?sources=sws")
     assert r.status_code == 200

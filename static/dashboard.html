@@ -73,6 +73,25 @@
   .adot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
   .aglegend{margin-top:8px;font-size:11px;color:var(--muted)}
   .aglegend .adot{margin-right:4px}
+  .dlbtn{border:1px solid var(--border);border-radius:999px;padding:4px 10px;cursor:pointer;
+    font-size:11px;font-weight:600;color:var(--muted)}
+  .dlbtn:hover{border-color:var(--teal);color:var(--teal)}
+  /* compare modal */
+  .modal{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:2000;
+    display:flex;align-items:center;justify-content:center;padding:20px}
+  .modal-card{background:#fff;border-radius:14px;max-width:920px;width:100%;max-height:88vh;
+    overflow:auto;box-shadow:var(--shadow)}
+  .modal-head{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border);font-size:14px}
+  .modal-x{margin-left:auto;cursor:pointer;color:var(--muted);font-size:16px}
+  .modal-body{padding:16px 18px}
+  .cmp-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.cmp-cols{grid-template-columns:1fr}}
+  .cmp-col{border:1px solid var(--border);border-radius:10px;padding:12px}
+  .cmp-title{font-weight:700;font-size:13px;margin-bottom:8px}
+  .cmp-srcs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+  .cmp-chk{font-size:12px;display:flex;align-items:center;gap:4px;cursor:pointer}
+  .cmp-diff{background:#fff7ed}
+  .cmp-diff td{font-weight:600}
   /* Plain/XML toggle */
   .viewtg{display:inline-flex;border:1px solid var(--border);border-radius:999px;overflow:hidden}
   .viewtg .tg{font-size:11px;padding:4px 10px;cursor:pointer;color:var(--muted);font-weight:600;background:#fff}
@@ -106,6 +125,7 @@
       <span class="chip ctl" id="btn-all">All</span>
       <span class="chip ctl" id="btn-none">Reset</span>
       <span class="chip sensor-chip" id="btn-sensors">📡 Ground sensors</span>
+      <span class="chip ctl" id="btn-compare">⇄ Compare</span>
     </div>
     <div class="chips">
       <span class="lbl">Moment:</span>
@@ -157,11 +177,37 @@
             <span class="tg active" data-v="xml">DATEX II XML</span>
             <span class="tg" data-v="plain">Plain English</span>
           </span>
+          <span class="dlbtn" id="btn-download" title="Download DATEX II XML">⬇ XML</span>
         </span>
       </h3>
       <div class="body">
         <pre id="datex">Click a segment to see its standardized DATEX II.</pre>
         <div id="datex-plain" class="seg-empty" style="display:none">Click a segment to see its standardized DATEX II, in plain language.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cmp-modal" class="modal" style="display:none">
+  <div class="modal-card">
+    <div class="modal-head">
+      <b>Compare source selections</b>
+      <span id="cmp-seg" style="color:var(--muted)"></span>
+      <span class="modal-x" id="cmp-close">✕</span>
+    </div>
+    <div class="modal-body">
+      <div class="sub" style="margin-bottom:10px">Same segment, two source selections — see how the fused condition, values and DATEX II output change. Differences are highlighted.</div>
+      <div class="cmp-cols">
+        <div class="cmp-col">
+          <div class="cmp-title">Selection A</div>
+          <div class="cmp-srcs" id="cmp-a-srcs"></div>
+          <div class="cmp-res" id="cmp-a-res"></div>
+        </div>
+        <div class="cmp-col">
+          <div class="cmp-title">Selection B</div>
+          <div class="cmp-srcs" id="cmp-b-srcs"></div>
+          <div class="cmp-res" id="cmp-b-res"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -457,6 +503,68 @@ document.querySelectorAll(".viewtg .tg").forEach(t=>t.addEventListener("click",(
   document.querySelectorAll(".viewtg .tg").forEach(x=>x.classList.toggle("active",x===t));
   renderDatexView();
 }));
+
+// ---- Download DATEX II XML ----
+document.getElementById("btn-download").onclick=()=>{
+  if(!lastXml||selectedId==null){alert("Select a segment first.");return;}
+  const blob=new Blob([lastXml],{type:"application/xml"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=`datex_segment_${selectedId}_${moment}.xml`;
+  a.click(); URL.revokeObjectURL(a.href);
+};
+
+// ---- Compare two source selections ----
+let cmpA=new Set(), cmpB=new Set();
+function cmpCheckboxes(containerId, set){
+  const el=document.getElementById(containerId);
+  el.innerHTML=SOURCES.map(s=>`<label class="cmp-chk"><input type="checkbox" data-s="${s}" ${set.has(s)?"checked":""}>${s}</label>`).join("");
+  el.querySelectorAll("input").forEach(inp=>inp.onchange=()=>{
+    if(inp.checked)set.add(inp.dataset.s); else set.delete(inp.dataset.s);
+    renderCompare();
+  });
+}
+async function fetchSide(set){
+  const r=await fetch(`/api/segments/fused/${selectedId}?sources=${[...set].join(",")}&moment=${moment}`);
+  return r.json();
+}
+function cmpSideHtml(me, other){
+  const condDiff = me.condition!==other.condition;
+  const fields=["road_surface_temp_c","air_temp_c","humidity_pct","precipitation_mm_h","pressure_hpa","visibility_m","cloud_cover_pct"];
+  const rows=fields.map(k=>{
+    const v=me.values[k]; if(v==null) return "";
+    const src=me.provenance[k], lbl=(FIELD_LABELS[k]||[k,""]);
+    const diff=(other.provenance[k]!==src)||(other.values[k]!==v);
+    const val=(typeof v==="number"?v.toFixed(1):v);
+    return `<tr class="${diff?"cmp-diff":""}"><td>${lbl[0]}</td><td><b>${val}${lbl[1]}</b> <span style="color:#94a3b8">[${src||"—"}]</span></td></tr>`;
+  }).filter(Boolean).join("");
+  const conf=me.confidence||{level:"single"};
+  const valid=me.validation.status==="valid";
+  return `<div style="margin-bottom:6px;font-size:12px">Sources: <b>${me.selected_sources.join(", ")||"none"}</b></div>`+
+    `<div style="margin-bottom:6px"><span class="pill" style="background:${me.color};${condDiff?"outline:2px solid #dc2626;outline-offset:1px":""}">${me.condition_de} (${me.condition})</span> → <code>${me.datex2}</code></div>`+
+    `<div style="margin-bottom:8px;font-size:12px">DATEX II: ${valid?'<span style="color:#16a34a;font-weight:700">✅ valid</span>':me.validation.status} · Confidence: <b style="color:${CONF_COLOR[conf.level]||"#94a3b8"}">${conf.level}</b></div>`+
+    `<table class="prov"><tbody>${rows||'<tr><td style="color:#94a3b8">no fused values</td></tr>'}</tbody></table>`;
+}
+async function renderCompare(){
+  if(selectedId==null) return;
+  const [a,b]=await Promise.all([fetchSide(cmpA),fetchSide(cmpB)]);
+  document.getElementById("cmp-a-res").innerHTML=cmpSideHtml(a,b);
+  document.getElementById("cmp-b-res").innerHTML=cmpSideHtml(b,a);
+}
+document.getElementById("btn-compare").onclick=()=>{
+  if(selectedId==null){alert("Select a road segment on the map first.");return;}
+  document.getElementById("cmp-seg").textContent="Segment #"+selectedId+" · "+moment;
+  cmpA=new Set(active.size?[...active]:SOURCES);
+  cmpB=new Set(SOURCES);
+  cmpCheckboxes("cmp-a-srcs",cmpA);
+  cmpCheckboxes("cmp-b-srcs",cmpB);
+  document.getElementById("cmp-modal").style.display="flex";
+  renderCompare();
+};
+document.getElementById("cmp-close").onclick=()=>document.getElementById("cmp-modal").style.display="none";
+document.getElementById("cmp-modal").addEventListener("click",e=>{
+  if(e.target.id==="cmp-modal") e.currentTarget.style.display="none";
+});
 document.getElementById("btn-all").onclick=()=>{active=new Set(SOURCES);refresh();};
 document.getElementById("btn-none").onclick=()=>{          // Reset → wipe the map clean
   active=new Set();

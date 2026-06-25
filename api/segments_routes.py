@@ -12,6 +12,7 @@ from adapter.segments import (
     ALL_SOURCES,
     FusedSegment,
     Segment,
+    fuse_one,
     fuse_segments,
     list_moments,
     load_segments,
@@ -105,6 +106,31 @@ def fused(sources: str | None = Query(None), limit: int = 200, moment: str = Que
             "sources_used": fs.fusion.sources_used,
         })
     return {"selected_sources": selected, "count": len(out), "segments": out}
+
+
+@router.get("/fused/{segment_id}")
+def fused_one(segment_id: int, sources: str | None = Query(None), moment: str = Query("latest")):
+    """One fused segment (values + provenance + agreement) for the compare view."""
+    selected = _parse_sources(sources)
+    fs = fuse_one(segment_id, selected, moment)
+    if fs is None:
+        raise HTTPException(404, f"segment {segment_id} not found")
+    _, result = segment_to_datex_validated(fs, selected) if selected else (None, None)
+    return {
+        "segment_id": fs.segment.segment_id,
+        "road_name": fs.segment.road_name,
+        "selected_sources": selected,
+        "condition": fs.condition_label,
+        "condition_de": fs.condition_label_de,
+        "datex2": fs.datex2_value,
+        "color": fs.color,
+        "values": {k: v.value for k, v in fs.fusion.fields.items() if v.value is not None},
+        "provenance": fs.fusion.provenance(),
+        "agreement": {k: v.agreement for k, v in fs.fusion.fields.items() if v.value is not None},
+        "confidence": fs.fusion.confidence(),
+        "sources_used": fs.fusion.sources_used,
+        "validation": {"status": (result.status if result else "n/a")},
+    }
 
 
 @router.get("/geojson")

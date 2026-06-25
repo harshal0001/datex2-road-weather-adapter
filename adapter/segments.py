@@ -164,6 +164,28 @@ def fuse_segments(
     return results
 
 
+def fuse_one(
+    segment_id: int, selected: list[str] | None = None, moment: str = "latest"
+) -> FusedSegment | None:
+    """Fuse a single segment (used by the compare view — avoids fusing all 1,021)."""
+    selected = ALL_SOURCES if selected is None else selected
+    seg = load_segments().get(segment_id)
+    if seg is None:
+        return None
+    fp = load_fusion_profile()
+    cond_profile = load_profile("segment_conditions")
+    per_source = _snapshots(moment).get(segment_id, {})
+    fr = fp.fuse(segment_id, per_source, selected=selected)
+    raw_code = fr.value("surface_condition")
+    code = int(raw_code) if raw_code is not None else 255
+    mapping = cond_profile.condition_codes.get(code) or cond_profile.condition_codes[255]
+    return FusedSegment(
+        segment=seg, fusion=fr, condition_code=code,
+        condition_label=mapping.label, condition_label_de=mapping.label_de or mapping.label,
+        datex2_value=mapping.datex2, color=mapping.color or "#95a5a6",
+    )
+
+
 @lru_cache(maxsize=1)
 def load_stations() -> list[dict]:
     """The physical ground-sensor stations with real coordinates (stations.json)."""
