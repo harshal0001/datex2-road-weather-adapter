@@ -40,7 +40,9 @@
   @media(max-width:1080px){.top,.bottom{grid-template-columns:1fr}}
 
   .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);
-    overflow:hidden;display:flex;flex-direction:column}
+    overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+  #map{cursor:crosshair}
+  .leaflet-interactive{cursor:pointer}
   .card h3{margin:0;padding:12px 15px;font-size:13.5px;border-bottom:1px solid var(--border);
     display:flex;justify-content:space-between;align-items:center;flex:0 0 auto}
   .card .body{padding:13px 15px;overflow:auto;flex:1 1 auto}
@@ -58,7 +60,10 @@
   .stat{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px dashed var(--border)}
   .stat:last-child{border:0}.stat b{font-variant-numeric:tabular-nums}
   .dist{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-  .pill{font-size:11px;padding:3px 9px;border-radius:999px;color:#fff;font-weight:600}
+  .pill{font-size:11px;padding:3px 9px;border-radius:999px;color:#fff;font-weight:600;transition:.12s}
+  .pill.clk{cursor:pointer}
+  .pill.clk:hover{filter:brightness(1.1);transform:translateY(-1px)}
+  .pill.sel{box-shadow:0 0 0 2px #13202d,0 0 0 4px #fff}
 
   table{width:100%;border-collapse:collapse;font-size:12.5px}
   th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--border)}
@@ -156,6 +161,7 @@
           <div class="stat"><span>Total segments</span><b id="s-total">—</b></div>
           <div class="stat"><span>Without condition</span><b id="s-unknown">—</b></div>
           <div class="dist" id="dist"></div>
+          <div id="filter-note" style="margin-top:6px;font-size:11px;color:var(--muted)"></div>
         </div>
       </div>
       <div class="card">
@@ -246,18 +252,21 @@ let geoLayer=null, selectedId=null, selectedProps=null, moment="latest";
 let sensorsOn=false, stations=[], selectMarker=null, lastXml="", lastStatus="", datexView="xml";
 const stationLayer=L.layerGroup(), linkLayer=L.layerGroup();
 
-const map=L.map("map",{preferCanvas:true}).setView([50.31,11.91],11);
+// generous hit-tolerance so thin road lines are easy to hover/click
+const map=L.map("map",{renderer:L.canvas({tolerance:10})}).setView([50.31,11.91],11);
 L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
   {attribution:"&copy; OpenStreetMap &copy; CARTO",subdomains:"abcd",maxZoom:19}).addTo(map);
 
 const qs=()=>[...active].join(",");
 const setLoading=on=>document.getElementById("loading").classList.toggle("on",on);
+let condFilter=null;   // when set, only segments with this condition are drawn
 
 function styleFor(props,selected){
-  if(selected) return {color:props.color||"#888",weight:9,opacity:1};
+  if(selected) return {color:props.color||"#888",weight:10,opacity:1};
   const faded = selectedId!==null;            // another segment is selected → fade the rest
-  return {color:props.color||"#888",weight:faded?3:5,opacity:faded?.18:.75};
+  return {color:props.color||"#888",weight:faded?3:6,opacity:faded?.2:.9};
 }
+const HOVER_STYLE={weight:10,opacity:1};
 
 async function loadGeo(){
   setLoading(true);
@@ -269,8 +278,10 @@ async function loadGeo(){
   }
   const r=await fetch("/api/segments/geojson?sources="+encodeURIComponent(qs())+"&moment="+moment);
   const gj=await r.json();
+  // condition filter (click a legend/pill): draw only matching segments
+  const feats = condFilter ? gj.features.filter(f=>f.properties.condition===condFilter) : gj.features;
   if(geoLayer) geoLayer.remove();
-  geoLayer=L.geoJSON(gj,{
+  geoLayer=L.geoJSON({type:"FeatureCollection",features:feats},{
     style:f=>styleFor(f.properties,f.properties.segment_id===selectedId),
     onEachFeature:(f,layer)=>{
       const p=f.properties;
@@ -279,7 +290,9 @@ async function loadGeo(){
         `${p.condition_de} (${p.condition}) → <code>${p.datex2}</code><br>`+
         `surface src: <b>${p.provenance.surface_condition||"—"}</b>`,
         {sticky:true});
-      layer.on("click",()=>selectSegment(p));
+      layer.on("mouseover",()=>{ if(p.segment_id!==selectedId){layer.setStyle(HOVER_STYLE);layer.bringToFront();} });
+      layer.on("mouseout", ()=>{ if(p.segment_id!==selectedId) layer.setStyle(styleFor(p,false)); });
+      layer.on("click",()=>selectSegment(p, true, layer));
     }
   }).addTo(map);
   if(sensorsOn) bringSensorsFront();
@@ -300,10 +313,12 @@ function markSelected(p){
     interactive:false, zIndexOffset:1000,
   }).addTo(map);
 }
-async function selectSegment(p, reveal=true){
+async function selectSegment(p, reveal=true, layer=null){
   selectedId=p.segment_id; selectedProps=p;
   if(geoLayer) geoLayer.setStyle(f=>styleFor(f.properties,f.properties.segment_id===selectedId));
   markSelected(p);
+  if(reveal && layer && layer.getBounds)            // click-to-zoom to the segment
+    map.fitBounds(layer.getBounds(), {maxZoom:15, padding:[60,60]});
   document.getElementById("seg-id").textContent="#"+p.segment_id;
   document.getElementById("datex-seg").textContent="#"+p.segment_id;
   const ag=p.agreement||{}, cand=p.candidates||{};
@@ -503,9 +518,16 @@ async function refreshCoverage(){
   document.getElementById("s-unknown").textContent=d.segments_without_condition;
   const dist=document.getElementById("dist");dist.innerHTML="";
   for(const [k,v] of Object.entries(d.condition_distribution)){
-    const el=document.createElement("span");el.className="pill";
-    el.style.background=COLORS[k]||"#888";el.textContent=`${k}: ${v}`;dist.appendChild(el);
+    const el=document.createElement("span");
+    el.className="pill clk"+(condFilter===k?" sel":"");
+    el.style.background=COLORS[k]||"#888";
+    el.textContent=`${k}: ${v}`;
+    el.title=condFilter===k?"Click to show all conditions":"Click to show only "+k;
+    el.onclick=()=>{ condFilter=(condFilter===k?null:k); refreshCoverage(); loadGeo(); };
+    dist.appendChild(el);
   }
+  const note=document.getElementById("filter-note");
+  if(note) note.textContent = condFilter ? `Filtered to ${condFilter} — click the pill again to clear` : "";
 }
 
 async function loadPriority(){
@@ -612,6 +634,7 @@ document.getElementById("cmp-modal").addEventListener("click",e=>{
 document.getElementById("btn-all").onclick=()=>{active=new Set(SOURCES);refresh();};
 document.getElementById("btn-none").onclick=()=>{          // Reset → wipe the map clean
   active=new Set();
+  condFilter=null;
   clearSelection();
   refresh();
 };
@@ -670,7 +693,7 @@ function toggleTlPlay(){
   tlTimer=setInterval(()=>setTimeStep(tlIdx+1>timeline.length-1?0:tlIdx+1),1400);
 }
 
-loadMoments();loadTimeline();loadPriority();refreshCoverage();loadGeo();
+loadMoments();/* loadTimeline(); */loadPriority();refreshCoverage();loadGeo();
 // keep Leaflet sized correctly after layout settles
 setTimeout(()=>map.invalidateSize(),300);
 window.addEventListener("resize",()=>map.invalidateSize());
