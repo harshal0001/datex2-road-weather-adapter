@@ -48,11 +48,11 @@
   .card .body{padding:13px 15px;overflow:auto;flex:1 1 auto}
 
   .map-wrap{position:relative;min-height:560px}
-  #map{position:absolute;inset:0}
-  .loading{position:absolute;top:12px;right:12px;z-index:600;background:rgba(15,23,42,.8);color:#fff;
+  #map{position:absolute;inset:0;background:#0b1220}
+  .loading{position:absolute;top:12px;left:12px;z-index:600;background:rgba(15,23,42,.8);color:#fff;
     padding:6px 12px;border-radius:8px;font-size:12px;display:none}
   .loading.on{display:block}
-  .sensor-legend{position:absolute;bottom:14px;right:14px;z-index:600;background:rgba(255,255,255,.94);
+  .sensor-legend{position:absolute;top:14px;right:14px;z-index:600;background:rgba(255,255,255,.94);
     border:1px solid var(--border);border-radius:10px;padding:8px 11px;font-size:11.5px;
     box-shadow:var(--shadow);line-height:1.3}
 
@@ -237,11 +237,13 @@ const AGREE_COLOR={agree:"#16a34a",spread:"#f59e0b",single:"#94a3b8",none:"#cbd5
 const CONF_COLOR={high:"#16a34a",medium:"#f59e0b",low:"#dc2626",single:"#94a3b8"};
 // real sensor network — distinct marker per source (SWS = ground truth, largest)
 const SRC_LABEL={sws:"SWS",lorawan:"LoRaWAN",dwd:"DWD",openweather:"OpenWeather"};
+// same diameter for every sensor — only the COLOUR differs by source
+const SENSOR_R=6;
 const SENSOR_STYLE={
-  sws:        {radius:6, fillColor:"#e74c3c", color:"#fff",     weight:1.5},
-  lorawan:    {radius:4, fillColor:"#f59e0b", color:"#7c2d12",  weight:1},
-  dwd:        {radius:8, fillColor:"#3498db", color:"#fff",     weight:1.5},
-  openweather:{radius:5, fillColor:"#94a3b8", color:"#475569",  weight:1},
+  sws:        {fillColor:"#e74c3c"},   // red
+  lorawan:    {fillColor:"#f59e0b"},   // amber
+  dwd:        {fillColor:"#3b82f6"},   // blue
+  openweather:{fillColor:"#9333ea"},   // purple (was grey — too close to road/Unknown)
 };
 const SOURCES=["sws","lorawan","dwd","openweather"];
 const FIELD_LABELS={
@@ -261,13 +263,20 @@ const FIELD_LABELS={
 };
 let active=new Set();   // start with nothing selected (use "All" or click chips)
 let geoLayer=null, selectedId=null, selectedProps=null, moment="latest";
-let sensorsOn=false, stations=[], selectMarker=null, lastXml="", lastStatus="", datexView="xml";
+let sensorsOn=false, stations=[], selectMarker=null, selectedLayer=null, lastXml="", lastStatus="", datexView="xml";
 const stationLayer=L.layerGroup(), linkLayer=L.layerGroup();
 
 // generous hit-tolerance so thin road lines are easy to hover/click
-const map=L.map("map",{renderer:L.canvas({tolerance:10})}).setView([50.31,11.91],11);
+const map=L.map("map",{renderer:L.canvas({tolerance:10}),minZoom:9,maxZoom:18}).setView([50.31,11.91],11);
 L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
   {attribution:"&copy; OpenStreetMap &copy; CARTO",subdomains:"abcd",maxZoom:19}).addTo(map);
+
+// the map cell stretches to match the side panel; whenever its size changes,
+// recompute so tiles always fill it (no dark band, no internal scrollbar)
+let _roPending=false;
+new ResizeObserver(()=>{ if(_roPending)return; _roPending=true;
+  requestAnimationFrame(()=>{_roPending=false; map.invalidateSize(false);}); })
+  .observe(document.getElementById("map"));
 
 const qs=()=>[...active].join(",");
 const setLoading=on=>document.getElementById("loading").classList.toggle("on",on);
@@ -327,10 +336,9 @@ function markSelected(p){
 }
 async function selectSegment(p, reveal=true, layer=null){
   selectedId=p.segment_id; selectedProps=p;
+  if(layer) selectedLayer=layer;
   if(geoLayer) geoLayer.setStyle(f=>styleFor(f.properties,f.properties.segment_id===selectedId));
   markSelected(p);
-  if(reveal && layer && layer.getBounds)            // click-to-zoom to the segment
-    map.fitBounds(layer.getBounds(), {maxZoom:15, padding:[60,60]});
   document.getElementById("seg-id").textContent="#"+p.segment_id;
   document.getElementById("datex-seg").textContent="#"+p.segment_id;
   const ag=p.agreement||{}, cand=p.candidates||{};
@@ -363,7 +371,7 @@ async function selectSegment(p, reveal=true, layer=null){
     `<div id="forecast"></div>`+
     `<div id="nearest"></div>`;
   if(reveal) await ensureSensors();   // a fresh click reveals the ground sensors
-  showNearest(p);
+  showNearest(p, reveal);             // reveal=true (a real click) also fits the view
   renderForecast(p.segment_id);
   fetchDatex(p.segment_id);
 }
@@ -423,8 +431,9 @@ async function ensureSensors(){
 }
 function sensorStyle(src,hi){
   const b=SENSOR_STYLE[src]||SENSOR_STYLE.lorawan;
-  return hi?{...b,radius:b.radius+5,fillColor:"#dc2626",color:"#fff",weight:3,fillOpacity:1}
-           :{...b,fillOpacity:.95};
+  // highlight keeps the source colour (so you can tell which source) + dark ring + bigger
+  return hi?{radius:9,fillColor:b.fillColor,color:"#0f172a",weight:3,fillOpacity:1}
+           :{radius:SENSOR_R,fillColor:b.fillColor,color:"#fff",weight:1.2,fillOpacity:.95};
 }
 function _readingBits(r){
   const out=[];
@@ -453,37 +462,42 @@ function clearNearest(){
   stations.forEach(st=>st._marker&&st._marker.setStyle(sensorStyle(st.source,false)));
   const n=document.getElementById("nearest"); if(n)n.innerHTML="";
 }
-function showNearest(p){
+function showNearest(p, doFit){
   clearNearest();
   if(!sensorsOn||!stations.length||p.lat==null) return;
-  // nearest SWS (ground-truth) station — the meaningful comparison; fall back to any
-  const sws=stations.filter(s=>s.source==="sws");
-  const pool=sws.length?sws:stations;
+  // nearest sensor OVERALL (any source) — not locked to SWS
   let best=null,bd=Infinity;
-  for(const st of pool){const d=haversine(p.lat,p.lon,st.lat,st.lon);if(d<bd){bd=d;best=st;}}
+  for(const st of stations){const d=haversine(p.lat,p.lon,st.lat,st.lon);if(d<bd){bd=d;best=st;}}
   if(!best) return;
   best._marker.setStyle(sensorStyle(best.source,true));
+  const col=(SENSOR_STYLE[best.source]||{}).fillColor||"#dc2626";
   L.polyline([[p.lat,p.lon],[best.lat,best.lon]],
-    {color:"#dc2626",weight:2,dashArray:"6 6",opacity:.9})
+    {color:col,weight:3,dashArray:"5 5",opacity:.95})
     .bindTooltip(`≈ ${bd.toFixed(1)} km to ${SRC_LABEL[best.source]} ${best.name}`,{sticky:true}).addTo(linkLayer);
   bringSensorsFront();
   const r=best.reading||{};
   const f=(v,u)=>v==null?"—":((typeof v==="number"?v.toFixed(1):v)+u);
-  const n=document.getElementById("nearest"); if(!n)return;
-  n.innerHTML=
-    `<div style="margin-top:10px;padding:10px 12px;border:1px solid #fecaca;background:#fef2f2;border-radius:10px">`+
-    `<div style="font-weight:700;color:#991b1b">📍 Nearest ${SRC_LABEL[best.source]} station</div>`+
-    `<div style="margin:4px 0"><b>${best.name}</b></div>`+
-    `<div style="font-size:12.5px;color:#7f1d1d">Distance from segment centroid: <b>${bd.toFixed(1)} km</b></div>`+
-    `<div style="margin-top:6px;font-size:12.5px">Surface ${f(r.surface_temp_c,"°C")} · `+
+  const n=document.getElementById("nearest");
+  if(n) n.innerHTML=
+    `<div style="margin-top:10px;padding:10px 12px;border:1px solid #e2e8f0;background:#f8fafc;border-radius:10px">`+
+    `<div style="font-weight:700;color:#0f172a">📍 Nearest sensor`+
+    ` <span style="font-weight:600;color:${col}">${SRC_LABEL[best.source]}</span></div>`+
+    `<div style="margin:4px 0"><b>${best.name}</b> · <b>${bd.toFixed(1)} km</b> from segment</div>`+
+    `<div style="margin-top:4px;font-size:12.5px;color:#475569">Surface ${f(r.surface_temp_c,"°C")} · `+
     `Air ${f(r.air_temp_c,"°C")} · Humidity ${f(r.humidity_pct,"%")}</div></div>`;
+  // fit the view to show the segment AND its nearest sensor together (no manual zoom-out)
+  if(doFit){
+    const b=L.latLngBounds([[p.lat,p.lon],[best.lat,best.lon]]);
+    if(selectedLayer&&selectedLayer.getBounds) b.extend(selectedLayer.getBounds());
+    map.fitBounds(b,{padding:[70,70],maxZoom:14});
+  }
 }
 function renderSensorLegend(counts){
   const el=document.getElementById("sensor-legend"); if(!el) return;
   const items=Object.keys(SRC_LABEL).filter(s=>counts[s]).map(s=>{
     const c=SENSOR_STYLE[s];
     return `<div style="display:flex;align-items:center;gap:6px;margin:2px 0">`+
-      `<span style="width:${c.radius*2}px;height:${c.radius*2}px;border-radius:50%;background:${c.fillColor};border:1px solid ${c.color};display:inline-block"></span>`+
+      `<span style="width:${SENSOR_R*2}px;height:${SENSOR_R*2}px;border-radius:50%;background:${c.fillColor};border:1px solid #fff;box-shadow:0 0 0 1px #cbd5e1;display:inline-block"></span>`+
       `${SRC_LABEL[s]} <span style="opacity:.6">(${counts[s]})</span></div>`;
   }).join("");
   el.innerHTML=`<div style="font-weight:700;margin-bottom:4px">Sensor network</div>${items}`;
