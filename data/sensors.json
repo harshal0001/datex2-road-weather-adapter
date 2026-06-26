@@ -1,0 +1,2147 @@
+{
+ "counts": {
+  "sws": 13,
+  "lorawan": 137,
+  "dwd": 1,
+  "openweather": 26
+ },
+ "sensors": [
+  {
+   "source": "sws",
+   "id": "P091",
+   "name": "P091",
+   "lat": 50.383889,
+   "lon": 11.963149,
+   "reading": {
+    "condition_code": null,
+    "surface_temp_c": null,
+    "air_temp_c": null,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "sws",
+   "id": "P047",
+   "name": "P047",
+   "lat": 50.148889,
+   "lon": 11.58485,
+   "reading": {
+    "condition_code": null,
+    "surface_temp_c": 10.3,
+    "air_temp_c": 6.0,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "sws",
+   "id": "P085",
+   "name": "P085",
+   "lat": 50.228787,
+   "lon": 11.936879,
+   "reading": {
+    "condition_code": null,
+    "surface_temp_c": 16.9,
+    "air_temp_c": 8.2,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "sws",
+   "id": "P063",
+   "name": "P063",
+   "lat": 50.273617,
+   "lon": 11.599173,
+   "reading": {
+    "condition_code": null,
+    "surface_temp_c": 6.4,
+    "air_temp_c": 6.2,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "sws",
+   "id": "O951",
+   "name": "O951",
+   "lat": 50.391084,
+   "lon": 11.984634,
+   "reading": {
+    "condition_code": null,
+    "surface_temp_c": 1.1,
+    "air_temp_c": -1.1,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "sws",
+   "id": "V082",
+   "name": "V082",
+   "lat": 50.38324,
+   "lon": 11.88541,
+   "reading": {
+    "condition_code": null,
+    "surface_temp_c": 10.1,
+    "air_temp_c": 5.3,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "sws",
+   "id": "P070",
+   "name": "P070",
+   "lat": 50.381579,
+   "lon": 11.504328,
+   "reading": {
+    "condition_code": null,
+    "surface_temp_c": 13.8,
+    "air_temp_c": 5.8,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "sws",
+   "id": "V071",
+   "name": "V071",
+   "lat": 50.28378,
+   "lon": 11.64628,
+   "reading": {
+    "condition_code": null,
+    "surface_temp_c": 9.0,
+    "air_temp_c": 3.4,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "sws",
+   "id": "P089",
+   "name": "P089",
+   "lat": 50.34278,
+   "lon": 12.00083,
+   "reading": {
+    "condition_code": 1.0,
+    "surface_temp_c": 2.5,
+    "air_temp_c": 2.5,
+    "humidity_pct": 97.0
+   }
+  },
+  {
+   "source": "sws",
+   "id": "P081",
+   "name": "P081",
+   "lat": 50.416681,
+   "lon": 11.783042,
+   "reading": {
+    "condition_code": 1.0,
+    "surface_temp_c": 3.4,
+    "air_temp_c": 4.0,
+    "humidity_pct": 100.0
+   }
+  },
+  {
+   "source": "sws",
+   "id": "P090",
+   "name": "P090",
+   "lat": 50.137299,
+   "lon": 12.0876,
+   "reading": {
+    "condition_code": 1.0,
+    "surface_temp_c": 1.7,
+    "air_temp_c": 1.7,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "sws",
+   "id": "P082",
+   "name": "P082",
+   "lat": 50.356137,
+   "lon": 11.86913,
+   "reading": {
+    "condition_code": 1.0,
+    "surface_temp_c": 3.3,
+    "air_temp_c": 14.9,
+    "humidity_pct": 100.0
+   }
+  },
+  {
+   "source": "sws",
+   "id": "P083",
+   "name": "P083",
+   "lat": 50.32493,
+   "lon": 11.795132,
+   "reading": {
+    "condition_code": 2.0,
+    "surface_temp_c": 2.3,
+    "air_temp_c": 3.4,
+    "humidity_pct": 100.0
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBS-TPK-0005-N50.22678-E11.97045",
+   "name": "SBS-TPK-0005",
+   "lat": 50.22678,
+   "lon": 11.97045,
+   "reading": {
+    "surface_temp_c": 16.02,
+    "air_temp_c": 10.6,
+    "humidity_pct": 56.03
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "GAT-TPK-0004-N50.34312-E11.97851",
+   "name": "GAT-TPK-0004",
+   "lat": 50.34312,
+   "lon": 11.97851,
+   "reading": {
+    "surface_temp_c": null,
+    "air_temp_c": null,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "RGL-TPK-0004-N50.28231-E12.00893",
+   "name": "RGL-TPK-0004",
+   "lat": 50.28231,
+   "lon": 12.00893,
+   "reading": {
+    "surface_temp_c": 13.02,
+    "air_temp_c": 9.91,
+    "humidity_pct": 58.63
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "TOE-TPK-0002-N50.37486-E11.86036",
+   "name": "TOE-TPK-0002",
+   "lat": 50.37486,
+   "lon": 11.86036,
+   "reading": {
+    "surface_temp_c": 13.48,
+    "air_temp_c": 11.12,
+    "humidity_pct": 54.28
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "FEI-TPK-0005-N50.35383-E11.90219",
+   "name": "FEI-TPK-0005",
+   "lat": 50.35383,
+   "lon": 11.90219,
+   "reading": {
+    "surface_temp_c": 16.29,
+    "air_temp_c": 10.09,
+    "humidity_pct": 57.9
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "RGL-TPK-0001-N50.28824-E12.06587",
+   "name": "RGL-TPK-0001",
+   "lat": 50.28824,
+   "lon": 12.06587,
+   "reading": {
+    "surface_temp_c": 10.91,
+    "air_temp_c": 8.84,
+    "humidity_pct": 58.93
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "RGL-TPK-0003-N50.31737-E12.04810",
+   "name": "RGL-TPK-0003",
+   "lat": 50.31737,
+   "lon": 12.0481,
+   "reading": {
+    "surface_temp_c": 11.69,
+    "air_temp_c": 9.48,
+    "humidity_pct": 55.77
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KOE-TPK-0004-N50.36412-E11.85723",
+   "name": "KOE-TPK-0004",
+   "lat": 50.36412,
+   "lon": 11.85723,
+   "reading": {
+    "surface_temp_c": 13.13,
+    "air_temp_c": 11.09,
+    "humidity_pct": 56.06
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBS-TPK-0001-N50.20905-E11.90687",
+   "name": "SBS-TPK-0001",
+   "lat": 50.20905,
+   "lon": 11.90687,
+   "reading": {
+    "surface_temp_c": 15.89,
+    "air_temp_c": 11.76,
+    "humidity_pct": 51.24
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "GAT-TPK-0001-N50.31282-E11.97764",
+   "name": "GAT-TPK-0001",
+   "lat": 50.31282,
+   "lon": 11.97764,
+   "reading": {
+    "surface_temp_c": 12.95,
+    "air_temp_c": 10.3,
+    "humidity_pct": 57.07
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "STA-TPK-0004-N50.14165-E11.70113",
+   "name": "STA-TPK-0004",
+   "lat": 50.14165,
+   "lon": 11.70113,
+   "reading": {
+    "surface_temp_c": 18.3,
+    "air_temp_c": 10.11,
+    "humidity_pct": 55.88
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SPA-TPK-0006-N50.15166-E11.82481",
+   "name": "SPA-TPK-0006",
+   "lat": 50.15166,
+   "lon": 11.82481,
+   "reading": {
+    "surface_temp_c": 12.73,
+    "air_temp_c": 10.47,
+    "humidity_pct": 55.23
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "ZEL-TPK-0004-N50.12940-E11.82787",
+   "name": "ZEL-TPK-0004",
+   "lat": 50.1294,
+   "lon": 11.82787,
+   "reading": {
+    "surface_temp_c": 16.1,
+    "air_temp_c": 10.7,
+    "humidity_pct": 50.65
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "MUB-TPK-0004-N50.16870-E11.74914",
+   "name": "MUB-TPK-0004",
+   "lat": 50.1687,
+   "lon": 11.74914,
+   "reading": {
+    "surface_temp_c": 15.86,
+    "air_temp_c": 9.64,
+    "humidity_pct": 58.87
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SST-TPK-0004-N50.28052-E11.74688",
+   "name": "SST-TPK-0004",
+   "lat": 50.28052,
+   "lon": 11.74688,
+   "reading": {
+    "surface_temp_c": 10.64,
+    "air_temp_c": 9.82,
+    "humidity_pct": 57.22
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SST-TPK-0003-N50.27902-E11.74044",
+   "name": "SST-TPK-0003",
+   "lat": 50.27902,
+   "lon": 11.74044,
+   "reading": {
+    "surface_temp_c": 11.13,
+    "air_temp_c": 10.5,
+    "humidity_pct": 54.3
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "LEU-TPK-0001-N50.28555-E11.79275",
+   "name": "LEU-TPK-0001",
+   "lat": 50.28555,
+   "lon": 11.79275,
+   "reading": {
+    "surface_temp_c": 14.86,
+    "air_temp_c": 9.82,
+    "humidity_pct": 56.78
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "LEU-TPK-0003-N50.29877-E11.79633",
+   "name": "LEU-TPK-0003",
+   "lat": 50.29877,
+   "lon": 11.79633,
+   "reading": {
+    "surface_temp_c": 13.2,
+    "air_temp_c": 8.67,
+    "humidity_pct": 59.32
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "LEU-TPK-0005-N50.28975-E11.79761",
+   "name": "LEU-TPK-0005",
+   "lat": 50.28975,
+   "lon": 11.79761,
+   "reading": {
+    "surface_temp_c": 12.95,
+    "air_temp_c": 9.76,
+    "humidity_pct": 57.34
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "LIB-TPK-0003-N50.37445-E11.67526",
+   "name": "LIB-TPK-0003",
+   "lat": 50.37445,
+   "lon": 11.67526,
+   "reading": {
+    "surface_temp_c": 15.29,
+    "air_temp_c": 10.2,
+    "humidity_pct": 57.49
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "BST-TPK-0001-N50.36823-E11.63840",
+   "name": "BST-TPK-0001",
+   "lat": 50.36823,
+   "lon": 11.6384,
+   "reading": {
+    "surface_temp_c": 14.45,
+    "air_temp_c": 10.1,
+    "humidity_pct": 54.59
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SEL-TPK-0002-N50.34121-E11.75982",
+   "name": "SEL-TPK-0002",
+   "lat": 50.34121,
+   "lon": 11.75982,
+   "reading": {
+    "surface_temp_c": 12.91,
+    "air_temp_c": 9.8,
+    "humidity_pct": 56.28
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "NAI-TPK-0002-N50.33722-E11.71388",
+   "name": "NAI-TPK-0002",
+   "lat": 50.33722,
+   "lon": 11.71388,
+   "reading": {
+    "surface_temp_c": 14.69,
+    "air_temp_c": 10.65,
+    "humidity_pct": 54.04
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "BRG-TPK-0001-N50.37777-E11.77472",
+   "name": "BRG-TPK-0001",
+   "lat": 50.37777,
+   "lon": 11.77472,
+   "reading": {
+    "surface_temp_c": 15.95,
+    "air_temp_c": 11.22,
+    "humidity_pct": 51.86
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "NAI-TPK-0003-N50.30611-E11.64749",
+   "name": "NAI-TPK-0003",
+   "lat": 50.30611,
+   "lon": 11.64749,
+   "reading": {
+    "surface_temp_c": 12.82,
+    "air_temp_c": 10.0,
+    "humidity_pct": 54.24
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "GEG-TPK-0005-N50.37688-E11.59391",
+   "name": "GEG-TPK-0005",
+   "lat": 50.37688,
+   "lon": 11.59391,
+   "reading": {
+    "surface_temp_c": 16.85,
+    "air_temp_c": 11.0,
+    "humidity_pct": 52.21
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "BRG-TPK-0004-N50.39722-E11.75305",
+   "name": "BRG-TPK-0004",
+   "lat": 50.39722,
+   "lon": 11.75305,
+   "reading": {
+    "surface_temp_c": 12.86,
+    "air_temp_c": 10.33,
+    "humidity_pct": 53.87
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "BST-TPK-0002-N50.36340-E11.61896",
+   "name": "BST-TPK-0002",
+   "lat": 50.3634,
+   "lon": 11.61896,
+   "reading": {
+    "surface_temp_c": 12.98,
+    "air_temp_c": 10.69,
+    "humidity_pct": 52.84
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "BST-TPK-0003-N50.37603-E11.61729",
+   "name": "BST-TPK-0003",
+   "lat": 50.37603,
+   "lon": 11.61729,
+   "reading": {
+    "surface_temp_c": 13.7,
+    "air_temp_c": 10.8,
+    "humidity_pct": 51.56
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "GEG-TPK-0004-N50.35408-E11.55488",
+   "name": "GEG-TPK-0004",
+   "lat": 50.35408,
+   "lon": 11.55488,
+   "reading": {
+    "surface_temp_c": 14.1,
+    "air_temp_c": 11.15,
+    "humidity_pct": 49.23
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KON-TPK-0002-N50.26771-E11.86683",
+   "name": "KON-TPK-0002",
+   "lat": 50.26771,
+   "lon": 11.86683,
+   "reading": {
+    "surface_temp_c": 11.89,
+    "air_temp_c": 10.31,
+    "humidity_pct": 55.26
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0008-N50.24659-E11.66739",
+   "name": "KBH-TPK-0008",
+   "lat": 50.24659,
+   "lon": 11.66739,
+   "reading": {
+    "surface_temp_c": 14.97,
+    "air_temp_c": 9.59,
+    "humidity_pct": 57.36
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KON-TPK-0001-N50.26838-E11.84895",
+   "name": "KON-TPK-0001",
+   "lat": 50.26838,
+   "lon": 11.84895,
+   "reading": {
+    "surface_temp_c": 12.8,
+    "air_temp_c": 9.37,
+    "humidity_pct": 55.56
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0004-N50.37652-E11.60378",
+   "name": "KBH-TPK-0004",
+   "lat": 50.37652,
+   "lon": 11.60378,
+   "reading": {
+    "surface_temp_c": 16.76,
+    "air_temp_c": 10.93,
+    "humidity_pct": 51.74
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0014-N50.32833-E12.02151",
+   "name": "KBH-TPK-0014",
+   "lat": 50.32833,
+   "lon": 12.02151,
+   "reading": {
+    "surface_temp_c": 14.97,
+    "air_temp_c": 9.32,
+    "humidity_pct": 57.36
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "MUB-TPK-0003-N50.21290-E11.81322",
+   "name": "MUB-TPK-0003",
+   "lat": 50.2129,
+   "lon": 11.81322,
+   "reading": {
+    "surface_temp_c": 14.86,
+    "air_temp_c": 10.61,
+    "humidity_pct": 55.49
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "WEI-TPK-0004-N50.18140-E11.84903",
+   "name": "WEI-TPK-0004",
+   "lat": 50.1814,
+   "lon": 11.84903,
+   "reading": {
+    "surface_temp_c": 12.91,
+    "air_temp_c": 9.9,
+    "humidity_pct": 55.4
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBS-TPK-0007-N50.20910-E11.96455",
+   "name": "SBS-TPK-0007",
+   "lat": 50.2091,
+   "lon": 11.96455,
+   "reading": {
+    "surface_temp_c": 14.95,
+    "air_temp_c": 11.04,
+    "humidity_pct": 51.27
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "WEI-TPK-0005-N50.18385-E11.84806",
+   "name": "WEI-TPK-0005",
+   "lat": 50.18385,
+   "lon": 11.84806,
+   "reading": {
+    "surface_temp_c": 12.92,
+    "air_temp_c": 10.37,
+    "humidity_pct": 53.91
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "TRO-TPK-0004-N50.36711-E11.95210",
+   "name": "TRO-TPK-0004",
+   "lat": 50.36711,
+   "lon": 11.9521,
+   "reading": {
+    "surface_temp_c": 13.1,
+    "air_temp_c": 9.41,
+    "humidity_pct": 59.1
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "GAT-TPK-0002-N50.31352-E12.00461",
+   "name": "GAT-TPK-0002",
+   "lat": 50.31352,
+   "lon": 12.00461,
+   "reading": {
+    "surface_temp_c": 11.58,
+    "air_temp_c": 9.8,
+    "humidity_pct": 57.47
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "TOE-TPK-0004-N50.39144-E11.89637",
+   "name": "TOE-TPK-0004",
+   "lat": 50.39144,
+   "lon": 11.89637,
+   "reading": {
+    "surface_temp_c": 12.69,
+    "air_temp_c": 9.81,
+    "humidity_pct": 59.39
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "TRO-TPK-0002-N50.35851-E11.97952",
+   "name": "TRO-TPK-0002",
+   "lat": 50.35851,
+   "lon": 11.97952,
+   "reading": {
+    "surface_temp_c": 12.7,
+    "air_temp_c": 9.13,
+    "humidity_pct": 57.2
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBS-TPK-0003-N50.18541-E11.92680",
+   "name": "SBS-TPK-0003",
+   "lat": 50.18541,
+   "lon": 11.9268,
+   "reading": {
+    "surface_temp_c": 15.86,
+    "air_temp_c": 9.76,
+    "humidity_pct": 58.03
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "TOE-TPK-0003-N50.39500-E11.87210",
+   "name": "TOE-TPK-0003",
+   "lat": 50.395,
+   "lon": 11.8721,
+   "reading": {
+    "surface_temp_c": 13.91,
+    "air_temp_c": 10.06,
+    "humidity_pct": 57.0
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "GAT-TPK-0005-N50.32249-E11.99952",
+   "name": "GAT-TPK-0005",
+   "lat": 50.32249,
+   "lon": 11.99952,
+   "reading": {
+    "surface_temp_c": 14.48,
+    "air_temp_c": 9.84,
+    "humidity_pct": 54.51
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "DOE-TPK-0001-N50.27820-E11.94490",
+   "name": "DOE-TPK-0001",
+   "lat": 50.2782,
+   "lon": 11.9449,
+   "reading": {
+    "surface_temp_c": 16.04,
+    "air_temp_c": 10.72,
+    "humidity_pct": 53.11
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "OBK-TPK-0004-N50.26471-E11.90658",
+   "name": "OBK-TPK-0004",
+   "lat": 50.26471,
+   "lon": 11.90658,
+   "reading": {
+    "surface_temp_c": 13.01,
+    "air_temp_c": 10.12,
+    "humidity_pct": 57.6
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "TRO-TPK-0001-N50.35502-E11.93755",
+   "name": "TRO-TPK-0001",
+   "lat": 50.35502,
+   "lon": 11.93755,
+   "reading": {
+    "surface_temp_c": null,
+    "air_temp_c": null,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "GAT-TPK-0003-N50.34019-E11.99607",
+   "name": "GAT-TPK-0003",
+   "lat": 50.34019,
+   "lon": 11.99607,
+   "reading": {
+    "surface_temp_c": 14.69,
+    "air_temp_c": 10.65,
+    "humidity_pct": 55.07
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "OBK-TPK-0002-N50.25659-E11.92636",
+   "name": "OBK-TPK-0002",
+   "lat": 50.25659,
+   "lon": 11.92636,
+   "reading": {
+    "surface_temp_c": 14.39,
+    "air_temp_c": 10.91,
+    "humidity_pct": 54.04
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "STA-TPK-0003-N50.13316-E11.73589",
+   "name": "STA-TPK-0003",
+   "lat": 50.13316,
+   "lon": 11.73589,
+   "reading": {
+    "surface_temp_c": 16.35,
+    "air_temp_c": 10.59,
+    "humidity_pct": 52.52
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "STA-TPK-0002-N50.15511-E11.71185",
+   "name": "STA-TPK-0002",
+   "lat": 50.15511,
+   "lon": 11.71185,
+   "reading": {
+    "surface_temp_c": 17.3,
+    "air_temp_c": 9.73,
+    "humidity_pct": 60.69
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SPA-TPK-0001-N50.14861-E11.84740",
+   "name": "SPA-TPK-0001",
+   "lat": 50.14861,
+   "lon": 11.8474,
+   "reading": {
+    "surface_temp_c": 13.82,
+    "air_temp_c": 10.8,
+    "humidity_pct": 55.77
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SPA-TPK-0002-N50.16142-E11.85786",
+   "name": "SPA-TPK-0002",
+   "lat": 50.16142,
+   "lon": 11.85786,
+   "reading": {
+    "surface_temp_c": 14.19,
+    "air_temp_c": 10.17,
+    "humidity_pct": 56.05
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "STA-TPK-0001-N50.16431-E11.67306",
+   "name": "STA-TPK-0001",
+   "lat": 50.16431,
+   "lon": 11.67306,
+   "reading": {
+    "surface_temp_c": 15.32,
+    "air_temp_c": 9.53,
+    "humidity_pct": 60.23
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "HEL-TPK-0005-N50.24829-E11.65545",
+   "name": "HEL-TPK-0005",
+   "lat": 50.24829,
+   "lon": 11.65545,
+   "reading": {
+    "surface_temp_c": 15.42,
+    "air_temp_c": 9.58,
+    "humidity_pct": 55.71
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SST-TPK-0005-N50.28480-E11.73652",
+   "name": "SST-TPK-0005",
+   "lat": 50.2848,
+   "lon": 11.73652,
+   "reading": {
+    "surface_temp_c": 11.36,
+    "air_temp_c": 9.68,
+    "humidity_pct": 57.67
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "HEL-TPK-0003-N50.22775-E11.66869",
+   "name": "HEL-TPK-0003",
+   "lat": 50.22775,
+   "lon": 11.66869,
+   "reading": {
+    "surface_temp_c": 14.58,
+    "air_temp_c": 9.57,
+    "humidity_pct": 58.17
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "ISI-TPK-0001-N50.37643-E11.72151",
+   "name": "ISI-TPK-0001",
+   "lat": 50.37643,
+   "lon": 11.72151,
+   "reading": {
+    "surface_temp_c": 14.97,
+    "air_temp_c": 11.78,
+    "humidity_pct": 49.55
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBW-TPK-0004-N50.27989-E11.67073",
+   "name": "SBW-TPK-0004",
+   "lat": 50.27989,
+   "lon": 11.67073,
+   "reading": {
+    "surface_temp_c": 15.76,
+    "air_temp_c": 9.37,
+    "humidity_pct": 59.69
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "BRG-TPK-0003-N50.39963-E11.80116",
+   "name": "BRG-TPK-0003",
+   "lat": 50.39963,
+   "lon": 11.80116,
+   "reading": {
+    "surface_temp_c": 16.35,
+    "air_temp_c": 11.57,
+    "humidity_pct": 53.82
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KOE-TPK-0002-N50.33113-E11.85450",
+   "name": "KOE-TPK-0002",
+   "lat": 50.33113,
+   "lon": 11.8545,
+   "reading": {
+    "surface_temp_c": null,
+    "air_temp_c": null,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "BRG-TPK-0002-N50.35333-E11.74027",
+   "name": "BRG-TPK-0002",
+   "lat": 50.35333,
+   "lon": 11.74027,
+   "reading": {
+    "surface_temp_c": 14.25,
+    "air_temp_c": 9.66,
+    "humidity_pct": 58.14
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0001-N50.37157-E11.84007",
+   "name": "KBH-TPK-0001",
+   "lat": 50.37157,
+   "lon": 11.84007,
+   "reading": {
+    "surface_temp_c": 13.48,
+    "air_temp_c": 11.04,
+    "humidity_pct": 54.34
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0010-N50.13665-E11.66444",
+   "name": "KBH-TPK-0010",
+   "lat": 50.13665,
+   "lon": 11.66444,
+   "reading": {
+    "surface_temp_c": 12.25,
+    "air_temp_c": 11.11,
+    "humidity_pct": 51.59
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "BRG-TPK-0005-N50.36844-E11.80416",
+   "name": "BRG-TPK-0005",
+   "lat": 50.36844,
+   "lon": 11.80416,
+   "reading": {
+    "surface_temp_c": 15.79,
+    "air_temp_c": 10.39,
+    "humidity_pct": 58.84
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "MUB-TPK-0005-N50.18805-E11.78975",
+   "name": "MUB-TPK-0005",
+   "lat": 50.18805,
+   "lon": 11.78975,
+   "reading": {
+    "surface_temp_c": 10.23,
+    "air_temp_c": 10.44,
+    "humidity_pct": 54.5
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0011-N50.16472-E11.81201",
+   "name": "KBH-TPK-0011",
+   "lat": 50.16472,
+   "lon": 11.81201,
+   "reading": {
+    "surface_temp_c": 16.1,
+    "air_temp_c": 9.99,
+    "humidity_pct": 59.49
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KON-TPK-0004-N50.24355-E11.80202",
+   "name": "KON-TPK-0004",
+   "lat": 50.24355,
+   "lon": 11.80202,
+   "reading": {
+    "surface_temp_c": 12.36,
+    "air_temp_c": 9.13,
+    "humidity_pct": 60.18
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0012-N50.24089-E11.77458",
+   "name": "KBH-TPK-0012",
+   "lat": 50.24089,
+   "lon": 11.77458,
+   "reading": {
+    "surface_temp_c": 9.36,
+    "air_temp_c": 9.02,
+    "humidity_pct": 61.87
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0005-N50.30542-E11.60354",
+   "name": "KBH-TPK-0005",
+   "lat": 50.30542,
+   "lon": 11.60354,
+   "reading": {
+    "surface_temp_c": 11.85,
+    "air_temp_c": 10.25,
+    "humidity_pct": 54.99
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0003-N50.39923-E11.71195",
+   "name": "KBH-TPK-0003",
+   "lat": 50.39923,
+   "lon": 11.71195,
+   "reading": {
+    "surface_temp_c": 12.67,
+    "air_temp_c": 11.54,
+    "humidity_pct": 50.88
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KON-TPK-0003-N50.28147-E11.81470",
+   "name": "KON-TPK-0003",
+   "lat": 50.28147,
+   "lon": 11.8147,
+   "reading": {
+    "surface_temp_c": 13.73,
+    "air_temp_c": 9.06,
+    "humidity_pct": 59.68
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "REH-TPK-0002-N50.26496-E11.97204",
+   "name": "REH-TPK-0002",
+   "lat": 50.26496,
+   "lon": 11.97204,
+   "reading": {
+    "surface_temp_c": null,
+    "air_temp_c": null,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "FEI-TPK-0001-N50.36186-E11.92758",
+   "name": "FEI-TPK-0001",
+   "lat": 50.36186,
+   "lon": 11.92758,
+   "reading": {
+    "surface_temp_c": 16.57,
+    "air_temp_c": 10.47,
+    "humidity_pct": 55.26
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "OBK-TPK-0003-N50.25837-E11.93986",
+   "name": "OBK-TPK-0003",
+   "lat": 50.25837,
+   "lon": 11.93986,
+   "reading": {
+    "surface_temp_c": null,
+    "air_temp_c": null,
+    "humidity_pct": null
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "TOE-TPK-0001-N50.38636-E11.87718",
+   "name": "TOE-TPK-0001",
+   "lat": 50.38636,
+   "lon": 11.87718,
+   "reading": {
+    "surface_temp_c": 13.1,
+    "air_temp_c": 10.86,
+    "humidity_pct": 54.01
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "DOE-TPK-0002-N50.30570-E11.95033",
+   "name": "DOE-TPK-0002",
+   "lat": 50.3057,
+   "lon": 11.95033,
+   "reading": {
+    "surface_temp_c": 14.91,
+    "air_temp_c": 9.45,
+    "humidity_pct": 58.64
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "ZEL-TPK-0003-N50.13771-E11.81736",
+   "name": "ZEL-TPK-0003",
+   "lat": 50.13771,
+   "lon": 11.81736,
+   "reading": {
+    "surface_temp_c": 11.08,
+    "air_temp_c": 11.4,
+    "humidity_pct": 51.06
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "HEL-TPK-0001-N50.25151-E11.75501",
+   "name": "HEL-TPK-0001",
+   "lat": 50.25151,
+   "lon": 11.75501,
+   "reading": {
+    "surface_temp_c": 13.35,
+    "air_temp_c": 10.21,
+    "humidity_pct": 55.53
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "LEU-TPK-0004-N50.29180-E11.79480",
+   "name": "LEU-TPK-0004",
+   "lat": 50.2918,
+   "lon": 11.7948,
+   "reading": {
+    "surface_temp_c": 17.41,
+    "air_temp_c": 9.9,
+    "humidity_pct": 56.29
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "NAI-TPK-0005-N50.35444-E11.69388",
+   "name": "NAI-TPK-0005",
+   "lat": 50.35444,
+   "lon": 11.69388,
+   "reading": {
+    "surface_temp_c": 13.54,
+    "air_temp_c": 10.39,
+    "humidity_pct": 54.78
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBW-TPK-0002-N50.26209-E11.58366",
+   "name": "SBW-TPK-0002",
+   "lat": 50.26209,
+   "lon": 11.58366,
+   "reading": {
+    "surface_temp_c": 16.98,
+    "air_temp_c": 10.75,
+    "humidity_pct": 56.22
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "LIB-TPK-0001-N50.37994-E11.67003",
+   "name": "LIB-TPK-0001",
+   "lat": 50.37994,
+   "lon": 11.67003,
+   "reading": {
+    "surface_temp_c": 15.39,
+    "air_temp_c": 11.05,
+    "humidity_pct": 53.73
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "GEG-TPK-0002-N50.32938-E11.58983",
+   "name": "GEG-TPK-0002",
+   "lat": 50.32938,
+   "lon": 11.58983,
+   "reading": {
+    "surface_temp_c": 15.69,
+    "air_temp_c": 8.67,
+    "humidity_pct": 57.99
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KOE-TPK-0001-N50.33960-E11.83998",
+   "name": "KOE-TPK-0001",
+   "lat": 50.3396,
+   "lon": 11.83998,
+   "reading": {
+    "surface_temp_c": 16.23,
+    "air_temp_c": 9.72,
+    "humidity_pct": 57.56
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "NAI-TPK-0004-N50.29805-E11.69000",
+   "name": "NAI-TPK-0004",
+   "lat": 50.29805,
+   "lon": 11.69,
+   "reading": {
+    "surface_temp_c": 14.75,
+    "air_temp_c": 9.01,
+    "humidity_pct": 58.97
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "GEG-TPK-0001-N50.34223-E11.61537",
+   "name": "GEG-TPK-0001",
+   "lat": 50.34223,
+   "lon": 11.61537,
+   "reading": {
+    "surface_temp_c": 15.14,
+    "air_temp_c": 9.26,
+    "humidity_pct": 60.96
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "OBK-TPK-0005-N50.24255-E11.94180",
+   "name": "OBK-TPK-0005",
+   "lat": 50.24255,
+   "lon": 11.9418,
+   "reading": {
+    "surface_temp_c": 12.54,
+    "air_temp_c": 10.58,
+    "humidity_pct": 57.04
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0002-N50.30167-E11.80680",
+   "name": "KBH-TPK-0002",
+   "lat": 50.30167,
+   "lon": 11.8068,
+   "reading": {
+    "surface_temp_c": 13.95,
+    "air_temp_c": 9.54,
+    "humidity_pct": 59.38
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KON-TPK-0005-N50.26409-E11.84018",
+   "name": "KON-TPK-0005",
+   "lat": 50.26409,
+   "lon": 11.84018,
+   "reading": {
+    "surface_temp_c": 15.25,
+    "air_temp_c": 9.29,
+    "humidity_pct": 56.94
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "WEI-TPK-0002-N50.19503-E11.86588",
+   "name": "WEI-TPK-0002",
+   "lat": 50.19503,
+   "lon": 11.86588,
+   "reading": {
+    "surface_temp_c": 14.25,
+    "air_temp_c": 10.69,
+    "humidity_pct": 53.44
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "REH-TPK-0003-N50.22600-E12.03844",
+   "name": "REH-TPK-0003",
+   "lat": 50.226,
+   "lon": 12.03844,
+   "reading": {
+    "surface_temp_c": 14.41,
+    "air_temp_c": 9.72,
+    "humidity_pct": 57.24
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "REH-TPK-0005-N50.24361-E12.01691",
+   "name": "REH-TPK-0005",
+   "lat": 50.24361,
+   "lon": 12.01691,
+   "reading": {
+    "surface_temp_c": 15.3,
+    "air_temp_c": 9.69,
+    "humidity_pct": 58.17
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBS-TPK-0004-N50.22190-E11.93341",
+   "name": "SBS-TPK-0004",
+   "lat": 50.2219,
+   "lon": 11.93341,
+   "reading": {
+    "surface_temp_c": 15.01,
+    "air_temp_c": 10.84,
+    "humidity_pct": 51.74
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "ZEL-TPK-0002-N50.13085-E11.85090",
+   "name": "ZEL-TPK-0002",
+   "lat": 50.13085,
+   "lon": 11.8509,
+   "reading": {
+    "surface_temp_c": 10.58,
+    "air_temp_c": 9.18,
+    "humidity_pct": 56.28
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "WEI-TPK-0003-N50.20416-E11.84633",
+   "name": "WEI-TPK-0003",
+   "lat": 50.20416,
+   "lon": 11.84633,
+   "reading": {
+    "surface_temp_c": 14.89,
+    "air_temp_c": 9.64,
+    "humidity_pct": 56.45
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBS-TPK-0006-N50.21457-E11.95039",
+   "name": "SBS-TPK-0006",
+   "lat": 50.21457,
+   "lon": 11.95039,
+   "reading": {
+    "surface_temp_c": 16.1,
+    "air_temp_c": 10.53,
+    "humidity_pct": 52.47
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBS-TPK-0002-N50.21055-E11.89023",
+   "name": "SBS-TPK-0002",
+   "lat": 50.21055,
+   "lon": 11.89023,
+   "reading": {
+    "surface_temp_c": 17.13,
+    "air_temp_c": 9.41,
+    "humidity_pct": 57.98
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "RGL-TPK-0002-N50.31075-E12.08997",
+   "name": "RGL-TPK-0002",
+   "lat": 50.31075,
+   "lon": 12.08997,
+   "reading": {
+    "surface_temp_c": 15.07,
+    "air_temp_c": 10.27,
+    "humidity_pct": 56.93
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KOE-TPK-0005-N50.37151-E11.83813",
+   "name": "KOE-TPK-0005",
+   "lat": 50.37151,
+   "lon": 11.83813,
+   "reading": {
+    "surface_temp_c": 9.97,
+    "air_temp_c": 11.62,
+    "humidity_pct": 50.81
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "OBK-TPK-0001-N50.26808-E11.94598",
+   "name": "OBK-TPK-0001",
+   "lat": 50.26808,
+   "lon": 11.94598,
+   "reading": {
+    "surface_temp_c": 15.2,
+    "air_temp_c": 10.58,
+    "humidity_pct": 54.14
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KOE-TPK-0006-N50.34663-E11.87007",
+   "name": "KOE-TPK-0006",
+   "lat": 50.34663,
+   "lon": 11.87007,
+   "reading": {
+    "surface_temp_c": 15.64,
+    "air_temp_c": 10.06,
+    "humidity_pct": 54.63
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "FEI-TPK-0003-N50.41686-E11.92547",
+   "name": "FEI-TPK-0003",
+   "lat": 50.41686,
+   "lon": 11.92547,
+   "reading": {
+    "surface_temp_c": 15.29,
+    "air_temp_c": 10.46,
+    "humidity_pct": 57.91
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "DOE-TPK-0003-N50.27963-E11.97607",
+   "name": "DOE-TPK-0003",
+   "lat": 50.27963,
+   "lon": 11.97607,
+   "reading": {
+    "surface_temp_c": 14.79,
+    "air_temp_c": 9.91,
+    "humidity_pct": 58.21
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "TRO-TPK-0003-N50.39215-E11.95547",
+   "name": "TRO-TPK-0003",
+   "lat": 50.39215,
+   "lon": 11.95547,
+   "reading": {
+    "surface_temp_c": 11.42,
+    "air_temp_c": 9.34,
+    "humidity_pct": 58.02
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "TRO-TPK-0005-N50.36186-E11.95920",
+   "name": "TRO-TPK-0005",
+   "lat": 50.36186,
+   "lon": 11.9592,
+   "reading": {
+    "surface_temp_c": 14.86,
+    "air_temp_c": 11.02,
+    "humidity_pct": 51.48
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SPA-TPK-0004-N50.16647-E11.83752",
+   "name": "SPA-TPK-0004",
+   "lat": 50.16647,
+   "lon": 11.83752,
+   "reading": {
+    "surface_temp_c": 11.32,
+    "air_temp_c": 9.86,
+    "humidity_pct": 58.05
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SPA-TPK-0003-N50.16370-E11.84655",
+   "name": "SPA-TPK-0003",
+   "lat": 50.1637,
+   "lon": 11.84655,
+   "reading": {
+    "surface_temp_c": 15.3,
+    "air_temp_c": 9.9,
+    "humidity_pct": 59.41
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "ZEL-TPK-0001-N50.15545-E11.79135",
+   "name": "ZEL-TPK-0001",
+   "lat": 50.15545,
+   "lon": 11.79135,
+   "reading": {
+    "surface_temp_c": 13.64,
+    "air_temp_c": 10.74,
+    "humidity_pct": 53.65
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "MUB-TPK-0001-N50.22764-E11.76708",
+   "name": "MUB-TPK-0001",
+   "lat": 50.22764,
+   "lon": 11.76708,
+   "reading": {
+    "surface_temp_c": 14.01,
+    "air_temp_c": 8.92,
+    "humidity_pct": 60.13
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "MUB-TPK-0002-N50.18964-E11.69702",
+   "name": "MUB-TPK-0002",
+   "lat": 50.18964,
+   "lon": 11.69702,
+   "reading": {
+    "surface_temp_c": 14.47,
+    "air_temp_c": 8.92,
+    "humidity_pct": 61.32
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SST-TPK-0002-N50.26280-E11.76711",
+   "name": "SST-TPK-0002",
+   "lat": 50.2628,
+   "lon": 11.76711,
+   "reading": {
+    "surface_temp_c": 14.08,
+    "air_temp_c": 8.93,
+    "humidity_pct": 61.09
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SST-TPK-0001-N50.28380-E11.68261",
+   "name": "SST-TPK-0001",
+   "lat": 50.2838,
+   "lon": 11.68261,
+   "reading": {
+    "surface_temp_c": 8.52,
+    "air_temp_c": 9.12,
+    "humidity_pct": 61.49
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "LEU-TPK-0002-N50.27869-E11.79666",
+   "name": "LEU-TPK-0002",
+   "lat": 50.27869,
+   "lon": 11.79666,
+   "reading": {
+    "surface_temp_c": 12.07,
+    "air_temp_c": 9.52,
+    "humidity_pct": 59.48
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "ISI-TPK-0003-N50.38418-E11.70460",
+   "name": "ISI-TPK-0003",
+   "lat": 50.38418,
+   "lon": 11.7046,
+   "reading": {
+    "surface_temp_c": 14.75,
+    "air_temp_c": 11.6,
+    "humidity_pct": 52.91
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "BST-TPK-0005-N50.32907-E11.64728",
+   "name": "BST-TPK-0005",
+   "lat": 50.32907,
+   "lon": 11.64728,
+   "reading": {
+    "surface_temp_c": 13.7,
+    "air_temp_c": 9.43,
+    "humidity_pct": 58.34
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SEL-TPK-0001-N50.31564-E11.74520",
+   "name": "SEL-TPK-0001",
+   "lat": 50.31564,
+   "lon": 11.7452,
+   "reading": {
+    "surface_temp_c": 16.26,
+    "air_temp_c": 10.87,
+    "humidity_pct": 51.75
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "ISI-TPK-0004-N50.39913-E11.72517",
+   "name": "ISI-TPK-0004",
+   "lat": 50.39913,
+   "lon": 11.72517,
+   "reading": {
+    "surface_temp_c": 11.08,
+    "air_temp_c": 10.94,
+    "humidity_pct": 52.14
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBW-TPK-0001-N50.27539-E11.57587",
+   "name": "SBW-TPK-0001",
+   "lat": 50.27539,
+   "lon": 11.57587,
+   "reading": {
+    "surface_temp_c": 18.73,
+    "air_temp_c": 10.76,
+    "humidity_pct": 51.95
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "FEI-TPK-0004-N50.41527-E11.90616",
+   "name": "FEI-TPK-0004",
+   "lat": 50.41527,
+   "lon": 11.90616,
+   "reading": {
+    "surface_temp_c": 13.35,
+    "air_temp_c": 10.13,
+    "humidity_pct": 60.38
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "ISI-TPK-0002-N50.36260-E11.72690",
+   "name": "ISI-TPK-0002",
+   "lat": 50.3626,
+   "lon": 11.7269,
+   "reading": {
+    "surface_temp_c": 13.36,
+    "air_temp_c": 10.75,
+    "humidity_pct": 56.25
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "NAI-TPK-0001-N50.32916-E11.71111",
+   "name": "NAI-TPK-0001",
+   "lat": 50.32916,
+   "lon": 11.71111,
+   "reading": {
+    "surface_temp_c": 13.69,
+    "air_temp_c": 11.2,
+    "humidity_pct": 53.21
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KOE-TPK-0003-N50.34550-E11.79823",
+   "name": "KOE-TPK-0003",
+   "lat": 50.3455,
+   "lon": 11.79823,
+   "reading": {
+    "surface_temp_c": 13.48,
+    "air_temp_c": 9.06,
+    "humidity_pct": 59.3
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBW-TPK-0005-N50.29335-E11.59253",
+   "name": "SBW-TPK-0005",
+   "lat": 50.29335,
+   "lon": 11.59253,
+   "reading": {
+    "surface_temp_c": 12.76,
+    "air_temp_c": 10.56,
+    "humidity_pct": 53.11
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "SBW-TPK-0003-N50.28320-E11.62249",
+   "name": "SBW-TPK-0003",
+   "lat": 50.2832,
+   "lon": 11.62249,
+   "reading": {
+    "surface_temp_c": 9.86,
+    "air_temp_c": 9.66,
+    "humidity_pct": 56.48
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "GEG-TPK-0003-N50.34507-E11.56738",
+   "name": "GEG-TPK-0003",
+   "lat": 50.34507,
+   "lon": 11.56738,
+   "reading": {
+    "surface_temp_c": 15.36,
+    "air_temp_c": 10.17,
+    "humidity_pct": 53.0
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "LIB-TPK-0002-N50.38494-E11.67876",
+   "name": "LIB-TPK-0002",
+   "lat": 50.38494,
+   "lon": 11.67876,
+   "reading": {
+    "surface_temp_c": 13.67,
+    "air_temp_c": 11.28,
+    "humidity_pct": 52.26
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0006-N50.31611-E11.61305",
+   "name": "KBH-TPK-0006",
+   "lat": 50.31611,
+   "lon": 11.61305,
+   "reading": {
+    "surface_temp_c": 10.67,
+    "air_temp_c": 8.76,
+    "humidity_pct": 60.93
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0007-N50.26237-E11.68664",
+   "name": "KBH-TPK-0007",
+   "lat": 50.26237,
+   "lon": 11.68664,
+   "reading": {
+    "surface_temp_c": 12.13,
+    "air_temp_c": 9.32,
+    "humidity_pct": 61.41
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0013-N50.28639-E12.10575",
+   "name": "KBH-TPK-0013",
+   "lat": 50.28639,
+   "lon": 12.10575,
+   "reading": {
+    "surface_temp_c": 13.76,
+    "air_temp_c": 8.32,
+    "humidity_pct": 61.18
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "KBH-TPK-0009-N50.18047-E11.70241",
+   "name": "KBH-TPK-0009",
+   "lat": 50.18047,
+   "lon": 11.70241,
+   "reading": {
+    "surface_temp_c": 13.23,
+    "air_temp_c": 9.35,
+    "humidity_pct": 59.49
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "REH-TPK-0001-N50.23973-E12.03742",
+   "name": "REH-TPK-0001",
+   "lat": 50.23973,
+   "lon": 12.03742,
+   "reading": {
+    "surface_temp_c": 15.52,
+    "air_temp_c": 10.32,
+    "humidity_pct": 52.88
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "REH-TPK-0004-N50.25949-E12.04163",
+   "name": "REH-TPK-0004",
+   "lat": 50.25949,
+   "lon": 12.04163,
+   "reading": {
+    "surface_temp_c": 16.67,
+    "air_temp_c": 9.6,
+    "humidity_pct": 56.88
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "ZEL-TPK-0005-N50.11427-E11.79900",
+   "name": "ZEL-TPK-0005",
+   "lat": 50.11427,
+   "lon": 11.799,
+   "reading": {
+    "surface_temp_c": 19.91,
+    "air_temp_c": 12.87,
+    "humidity_pct": 42.19
+   }
+  },
+  {
+   "source": "lorawan",
+   "id": "WEI-TPK-0001-N50.17813-E11.87196",
+   "name": "WEI-TPK-0001",
+   "lat": 50.17813,
+   "lon": 11.87196,
+   "reading": {
+    "surface_temp_c": 15.67,
+    "air_temp_c": 9.87,
+    "humidity_pct": 56.57
+   }
+  },
+  {
+   "source": "dwd",
+   "id": "02261",
+   "name": "DWD 02261",
+   "lat": 50.3123,
+   "lon": 11.876,
+   "reading": {
+    "air_temp_c": 5.9,
+    "humidity_pct": 90.0,
+    "cloud_oktas": 7.0
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Rehau",
+   "name": "Rehau",
+   "lat": 50.25,
+   "lon": 12.0333,
+   "reading": {
+    "air_temp_c": 9.7,
+    "humidity_pct": 60,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Schwarzenbach",
+   "name": "Schwarzenbach",
+   "lat": 49.7333,
+   "lon": 12.0,
+   "reading": {
+    "air_temp_c": 11.8,
+    "humidity_pct": 58,
+    "clouds_pct": 8
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Stammbach",
+   "name": "Stammbach",
+   "lat": 50.15,
+   "lon": 11.6833,
+   "reading": {
+    "air_temp_c": 9.7,
+    "humidity_pct": 63,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Gattendorf",
+   "name": "Gattendorf",
+   "lat": 50.3221,
+   "lon": 11.9978,
+   "reading": {
+    "air_temp_c": 9.2,
+    "humidity_pct": 60,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Konradsreuth",
+   "name": "Konradsreuth",
+   "lat": 50.2667,
+   "lon": 11.85,
+   "reading": {
+    "air_temp_c": 9.1,
+    "humidity_pct": 62,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Leupoldsgr\u00fcn",
+   "name": "Leupoldsgr\u00fcn",
+   "lat": 50.3,
+   "lon": 11.8,
+   "reading": {
+    "air_temp_c": 8.8,
+    "humidity_pct": 55,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "M\u00fcnchberg",
+   "name": "M\u00fcnchberg",
+   "lat": 50.2,
+   "lon": 11.7833,
+   "reading": {
+    "air_temp_c": 9.0,
+    "humidity_pct": 62,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Bad Steben",
+   "name": "Bad Steben",
+   "lat": 50.3667,
+   "lon": 11.65,
+   "reading": {
+    "air_temp_c": 21.9,
+    "humidity_pct": 43,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Zell im Fichtelgebirge",
+   "name": "Zell im Fichtelgebirge",
+   "lat": 50.1353,
+   "lon": 11.8227,
+   "reading": {
+    "air_temp_c": 22.0,
+    "humidity_pct": 54,
+    "clouds_pct": 40
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Sparneck",
+   "name": "Sparneck",
+   "lat": 50.1667,
+   "lon": 11.8333,
+   "reading": {
+    "air_temp_c": 9.7,
+    "humidity_pct": 60,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Berg",
+   "name": "Berg",
+   "lat": 47.9634,
+   "lon": 11.3734,
+   "reading": {
+    "air_temp_c": 11.3,
+    "humidity_pct": 40,
+    "clouds_pct": 0
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Feilitzsch",
+   "name": "Feilitzsch",
+   "lat": 50.3667,
+   "lon": 11.9333,
+   "reading": {
+    "air_temp_c": 9.6,
+    "humidity_pct": 60,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "D\u00f6hlau",
+   "name": "D\u00f6hlau",
+   "lat": 50.2833,
+   "lon": 11.95,
+   "reading": {
+    "air_temp_c": 9.4,
+    "humidity_pct": 60,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Geroldsgr\u00fcn",
+   "name": "Geroldsgr\u00fcn",
+   "lat": 50.3333,
+   "lon": 11.6,
+   "reading": {
+    "air_temp_c": 9.0,
+    "humidity_pct": 50,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "T\u00f6pen",
+   "name": "T\u00f6pen",
+   "lat": 50.3833,
+   "lon": 11.8667,
+   "reading": {
+    "air_temp_c": 9.9,
+    "humidity_pct": 59,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Naila",
+   "name": "Naila",
+   "lat": 50.3167,
+   "lon": 11.7,
+   "reading": {
+    "air_temp_c": 9.1,
+    "humidity_pct": 52,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Selbitz",
+   "name": "Selbitz",
+   "lat": 50.3167,
+   "lon": 11.75,
+   "reading": {
+    "air_temp_c": 9.4,
+    "humidity_pct": 53,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Regnitzlosau",
+   "name": "Regnitzlosau",
+   "lat": 50.3,
+   "lon": 12.05,
+   "reading": {
+    "air_temp_c": 9.4,
+    "humidity_pct": 60,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Wei\u00dfdorf",
+   "name": "Wei\u00dfdorf",
+   "lat": 50.1833,
+   "lon": 11.85,
+   "reading": {
+    "air_temp_c": 9.8,
+    "humidity_pct": 61,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Trogen",
+   "name": "Trogen",
+   "lat": 50.3667,
+   "lon": 11.95,
+   "reading": {
+    "air_temp_c": 9.6,
+    "humidity_pct": 60,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Helmbrechts",
+   "name": "Helmbrechts",
+   "lat": 50.2356,
+   "lon": 11.7159,
+   "reading": {
+    "air_temp_c": 9.0,
+    "humidity_pct": 55,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Lichtenberg",
+   "name": "Lichtenberg",
+   "lat": 50.8333,
+   "lon": 13.4167,
+   "reading": {
+    "air_temp_c": 7.7,
+    "humidity_pct": 73,
+    "clouds_pct": 83
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Schauenstein",
+   "name": "Schauenstein",
+   "lat": 50.2667,
+   "lon": 11.75,
+   "reading": {
+    "air_temp_c": 9.2,
+    "humidity_pct": 53,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "K\u00f6ditz",
+   "name": "K\u00f6ditz",
+   "lat": 50.3333,
+   "lon": 11.85,
+   "reading": {
+    "air_temp_c": 9.5,
+    "humidity_pct": 55,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Issigau",
+   "name": "Issigau",
+   "lat": 50.3758,
+   "lon": 11.7222,
+   "reading": {
+    "air_temp_c": 9.5,
+    "humidity_pct": 51,
+    "clouds_pct": 75
+   }
+  },
+  {
+   "source": "openweather",
+   "id": "Oberkotzau",
+   "name": "Oberkotzau",
+   "lat": 50.2667,
+   "lon": 11.9333,
+   "reading": {
+    "air_temp_c": 9.5,
+    "humidity_pct": 60,
+    "clouds_pct": 75
+   }
+  }
+ ]
+}

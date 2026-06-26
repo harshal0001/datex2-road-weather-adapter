@@ -86,6 +86,15 @@ def stations(moment: str = Query("latest")):
     return {"stations": station_readings(moment)}
 
 
+@router.get("/sensors")
+def sensors():
+    """Real physical sensor network across all sources (SWS/LoRaWAN/DWD/OWM),
+    with coordinates extracted from the raw full exports. Drawn as a map layer."""
+    from adapter.segments import load_sensors
+
+    return load_sensors()
+
+
 @router.get("/priority")
 def priority():
     """The per-field fusion priority config (the research artefact)."""

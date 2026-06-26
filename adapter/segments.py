@@ -212,6 +212,17 @@ def load_stations() -> list[dict]:
     return [s for s in data.get("stations", []) if s.get("lat") and s.get("lon")]
 
 
+SENSORS_FILE = Path(__file__).resolve().parents[1] / "data" / "sensors.json"
+
+
+@lru_cache(maxsize=1)
+def load_sensors() -> dict:
+    """Real physical sensor stations per source (extracted from the full exports)."""
+    if not SENSORS_FILE.exists():
+        return {"counts": {}, "sensors": []}
+    return json.loads(SENSORS_FILE.read_text(encoding="utf-8"))
+
+
 def station_readings(moment: str = "latest") -> list[dict]:
     """Ground stations + a representative reading for each.
 

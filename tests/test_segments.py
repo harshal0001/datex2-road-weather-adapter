@@ -152,6 +152,18 @@ def test_stations_endpoint_returns_located_sensors():
     assert isinstance(s["reading"], dict)
 
 
+def test_sensors_endpoint_all_sources():
+    """Real sensor network: per-source stations with coordinates from full exports."""
+    d = client.get("/api/segments/sensors").json()
+    if not d.get("sensors"):
+        import pytest
+        pytest.skip("sensors.json not built (run scripts/build_sensors.py)")
+    assert d["counts"].get("sws", 0) >= 1   # the in-road ground-truth stations
+    s = d["sensors"][0]
+    assert s["source"] in {"sws", "lorawan", "dwd", "openweather"}
+    assert -90 <= s["lat"] <= 90 and -180 <= s["lon"] <= 180
+
+
 @needs_db
 def test_geojson_carries_segment_centroid():
     """Client needs the segment centroid to find the nearest ground sensor."""
