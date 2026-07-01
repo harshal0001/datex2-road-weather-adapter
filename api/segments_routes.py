@@ -146,6 +146,7 @@ def fused_one(segment_id: int, sources: str | None = Query(None), moment: str = 
         "agreement": {k: v.agreement for k, v in fs.fusion.fields.items() if v.value is not None},
         "confidence": fs.fusion.confidence(),
         "sources_used": fs.fusion.sources_used,
+        "times": fs.source_times,
         "validation": {"status": (result.status if result else "n/a")},
     }
 
@@ -169,11 +170,26 @@ def forecast_segment(segment_id: int, moment: str = Query("latest")):
     features["elevation_m"] = feat_fs.segment.elevation_m
     pred = fc.predict(features)
 
+    # "on what basis" indicators for the demo: the salient inputs used (+ their
+    # source), a plain-English rationale, decisiveness, and any missing signal.
+    basis, missing, reasons, sig = [], [], [], None
+    if pred:
+        for key, label, unit in fc.SALIENT:
+            ff = feat_fs.fusion.fields.get(key)
+            if ff and ff.value is not None:
+                basis.append({"field": key, "label": label, "unit": unit,
+                              "value": ff.value, "source": ff.source})
+            else:
+                missing.append(label)
+        reasons = fc.explain(features, pred["label"])
+        sig = fc.signal(pred["probabilities"])
+
     obs_fs = fuse_one(segment_id, ["sws"], moment)
     observed = {
         "label": obs_fs.condition_label if obs_fs else "Unknown",
         "datex2": obs_fs.datex2_value if obs_fs else "other",
         "has_truth": bool(obs_fs and obs_fs.condition_code != 255),
+        "time": (obs_fs.source_times.get("sws") if obs_fs else None),
     }
 
     # publish the predicted condition as validated DATEX II (probabilityOfOccurrence)
@@ -194,7 +210,12 @@ def forecast_segment(segment_id: int, moment: str = Query("latest")):
         "segment_id": segment_id,
         "moment": moment,
         "feature_sources": [s for s in FORECAST_FEATURE_SOURCES if s in feat_fs.fusion.sources_used],
+        "feature_times": feat_fs.source_times,
         "predicted": pred,
+        "basis": basis,
+        "missing": missing,
+        "reasons": reasons,
+        "signal": sig,
         "observed": observed,
         "match": bool(pred and observed["has_truth"] and pred["label"] == observed["label"]),
         "datex": datex,
@@ -236,6 +257,7 @@ def geojson(sources: str | None = Query(None), moment: str = Query("latest")):
                 "agreement": {k: v.agreement for k, v in fs.fusion.fields.items() if v.value is not None},
                 "confidence": fs.fusion.confidence(),
                 "sources_used": fs.fusion.sources_used,
+                "times": fs.source_times,
             },
         })
     return {"type": "FeatureCollection", "selected_sources": selected, "features": features}

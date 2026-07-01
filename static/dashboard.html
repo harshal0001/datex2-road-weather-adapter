@@ -354,7 +354,8 @@ async function selectSegment(p, reveal=true, layer=null){
         .map(([s,cv])=>`${s} ${(typeof cv==="number"?cv.toFixed(1):cv)}`).join(", ");
       extra=`<div style="color:#94a3b8;font-size:11px">also ${others}</div>`;
     }
-    return `<tr><td>${dot}${lbl[0]}</td><td><b>${val}${lbl[1]}</b>${extra}</td><td>[${src||"—"}]</td></tr>`;
+    const stime=(src&&p.times&&p.times[src])?`as of ${fmtTs(p.times[src])}`:"";
+    return `<tr><td>${dot}${lbl[0]}</td><td><b>${val}${lbl[1]}</b>${extra}</td><td title="${stime}">[${src||"—"}]</td></tr>`;
   }).join("");
   const conf=p.confidence||{level:"single",agree:0,total:0};
   const confBadge=`<span class="pill" style="background:${CONF_COLOR[conf.level]||"#94a3b8"}">`+
@@ -364,6 +365,7 @@ async function selectSegment(p, reveal=true, layer=null){
     `<div style="margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">`+
     `<span>${p.road_name||"?"}${p.elevation_m?` · ${p.elevation_m.toFixed(0)} m`:""}</span> `+
     `<span class="pill" style="background:${p.color}">${p.condition_de}</span> ${confBadge}</div>`+
+    timesLine(p.times)+
     `<table class="prov"><thead><tr><th>Field</th><th>Value</th><th>Source</th></tr></thead><tbody>${rows}</tbody></table>`+
     `<div class="aglegend"><span class="adot" style="background:${AGREE_COLOR.agree}"></span>sources agree`+
     `<span class="adot" style="background:${AGREE_COLOR.spread};margin-left:10px"></span>disagree`+
@@ -397,14 +399,36 @@ async function renderForecast(id){
     ? (d.match?`<span style="color:#16a34a;font-weight:700">✓ matches SWS</span>`
               :`<span style="color:#dc2626;font-weight:700">✗ differs from SWS (${obs.label})</span>`)
     : `<span style="color:#94a3b8">no SWS ground truth here</span>`;
+  const SIG_COLOR={strong:"#16a34a",moderate:"#f59e0b",tentative:"#94a3b8"};
+  const sg=d.signal;
+  const sigBadge=sg?` · <span class="pill" style="background:${SIG_COLOR[sg.level]||"#94a3b8"}">${sg.level} call</span>`:"";
+  const reasons=(d.reasons||[]).map(t=>`<li style="margin:1px 0">${t}</li>`).join("");
+  const whyBlock=reasons
+    ? `<div style="margin-top:8px;font-size:11.5px"><b style="color:#3730a3">Why:</b>`+
+      `<ul style="margin:2px 0 0 16px;padding:0;color:#475569">${reasons}</ul></div>` : "";
+  const basisBlock=(d.basis&&d.basis.length)
+    ? `<div style="margin-top:6px;font-size:11px;color:#475569"><b style="color:#3730a3">Based on:</b> `+
+      d.basis.map(b=>`${b.label} <b>${(typeof b.value==="number"?b.value.toFixed(1):b.value)}${b.unit}</b>`+
+        ` <span style="color:#94a3b8">[${b.source||"?"}]</span>`).join(" · ")+`</div>` : "";
+  const missingBlock=(d.missing&&d.missing.length)
+    ? `<div style="margin-top:4px;font-size:10.5px;color:#b45309">⚠ no reading for: ${d.missing.join(", ")}`+
+      ` — prediction uses the remaining signals</div>` : "";
   el.innerHTML=
     `<div style="margin-top:10px;padding:10px 12px;border:1px solid #c7d2fe;background:#eef2ff;border-radius:10px">`+
     `<div style="font-weight:700;color:#3730a3">🔮 Predicted condition (no road sensor)</div>`+
     `<div style="margin:4px 0 8px"><span class="pill" style="background:${COLORS[pr.label]||"#64748b"}">${pr.label}</span> `+
-    `confidence ${Math.round(pr.probability*100)}% · ${verdict}</div>`+
+    `confidence ${Math.round(pr.probability*100)}%${sigBadge} · ${verdict}</div>`+
     bars+
+    whyBlock+
+    basisBlock+
+    missingBlock+
     (d.datex&&d.datex.status==="valid"
       ? `<div style="margin-top:8px;font-size:11px">DATEX II forecast: <span style="color:#16a34a;font-weight:700">✅ valid</span> · probabilityOfOccurrence: <b>${d.datex.probability_of_occurrence}</b></div>`
+      : "")+
+    ((d.feature_times&&Object.keys(d.feature_times).length)
+      ? `<div style="margin-top:6px;font-size:10.5px;color:#94a3b8">🕐 based on inputs — `+
+        Object.entries(d.feature_times).map(([s,t])=>`${SRC_LABEL[s]||s} ${fmtTs(t)}`).join(" · ")+
+        (obs.has_truth&&obs.time?` · SWS truth ${fmtTs(obs.time)}`:"")+`</div>`
       : "")+
     `<div style="margin-top:6px;font-size:10.5px;color:#6366f1">model trained on DWD/LoRaWAN/OpenWeather → SWS, `+
     `held-out accuracy ${Math.round((pr.accuracy||0)*100)}% · features: ${d.feature_sources.join(", ")||"none"}</div></div>`;
@@ -435,6 +459,20 @@ function sensorStyle(src,hi){
   return hi?{radius:9,fillColor:b.fillColor,color:"#0f172a",weight:3,fillOpacity:1}
            :{radius:SENSOR_R,fillColor:b.fillColor,color:"#fff",weight:1.2,fillOpacity:.95};
 }
+function fmtTs(ts){
+  if(!ts) return "";
+  const m=String(ts).match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})/);
+  return m?`${m[1]} ${m[2]}`:String(ts);
+}
+// "🕐 readings as of — SWS 2025-12-01 00:45 · DWD 2025-12-01 00:00 · …"
+function timesLine(times){
+  if(!times) return "";
+  const parts=Object.entries(times).filter(([,t])=>t)
+    .map(([s,t])=>`${SRC_LABEL[s]||s} <b style="color:#64748b">${fmtTs(t)}</b>`);
+  return parts.length
+    ? `<div style="font-size:11px;color:#94a3b8;margin:-2px 0 8px">🕐 readings as of — ${parts.join(" · ")}</div>`
+    : "";
+}
 function _readingBits(r){
   const out=[];
   if(r.air_temp_c!=null)out.push("air "+r.air_temp_c+"°C");
@@ -448,7 +486,8 @@ function renderStations(){
     const m=L.circleMarker([st.lat,st.lon],sensorStyle(st.source,false));
     const bits=_readingBits(st.reading||{});
     m.bindTooltip(`<b>${SRC_LABEL[st.source]||st.source}</b> · ${st.name}`+
-      (bits.length?"<br>"+bits.join(" · "):""),{direction:"top"});
+      (bits.length?"<br>"+bits.join(" · "):"")+
+      (st.ts?`<br><span style="opacity:.7">🕐 as of ${fmtTs(st.ts)}</span>`:""),{direction:"top"});
     m.on("click",e=>L.DomEvent.stop(e));
     st._marker=m; m.addTo(stationLayer);
   });
@@ -484,7 +523,9 @@ function showNearest(p, doFit){
     ` <span style="font-weight:600;color:${col}">${SRC_LABEL[best.source]}</span></div>`+
     `<div style="margin:4px 0"><b>${best.name}</b> · <b>${bd.toFixed(1)} km</b> from segment</div>`+
     `<div style="margin-top:4px;font-size:12.5px;color:#475569">Surface ${f(r.surface_temp_c,"°C")} · `+
-    `Air ${f(r.air_temp_c,"°C")} · Humidity ${f(r.humidity_pct,"%")}</div></div>`;
+    `Air ${f(r.air_temp_c,"°C")} · Humidity ${f(r.humidity_pct,"%")}</div>`+
+    (best.ts?`<div style="margin-top:5px;font-size:11.5px;color:#94a3b8">🕐 reading as of ${fmtTs(best.ts)}</div>`:"")+
+    `</div>`;
   // fit the view to show the segment AND its nearest sensor together (no manual zoom-out)
   if(doFit){
     const b=L.latLngBounds([[p.lat,p.lon],[best.lat,best.lon]]);

@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 import math
 import sqlite3
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
 
@@ -52,6 +52,7 @@ class FusedSegment:
     condition_label_de: str      # German label
     datex2_value: str            # WeatherRelatedRoadConditionTypeEnum literal
     color: str                   # hex for the map
+    source_times: dict = field(default_factory=dict)  # {source: reading timestamp}
 
 
 def _conn() -> sqlite3.Connection:
@@ -89,16 +90,26 @@ def _snapshots(moment: str = "latest") -> dict[int, dict[str, dict]]:
     con = _conn()
     out: dict[int, dict[str, dict]] = {}
     if moment == "latest":
-        rows = con.execute("SELECT segment_id, source, raw_json FROM segment_snapshot")
+        rows = con.execute(
+            "SELECT segment_id, source, event_timestamp, raw_json FROM segment_snapshot")
     else:
         rows = con.execute(
-            "SELECT segment_id, source, raw_json FROM segment_moment WHERE moment=?",
+            "SELECT segment_id, source, event_timestamp, raw_json "
+            "FROM segment_moment WHERE moment=?",
             (moment,),
         )
     for r in rows:
-        out.setdefault(r["segment_id"], {})[r["source"]] = json.loads(r["raw_json"])
+        row = json.loads(r["raw_json"])
+        row["_ts"] = r["event_timestamp"]   # per-source reading time (ignored by fusion)
+        out.setdefault(r["segment_id"], {})[r["source"]] = row
     con.close()
     return out
+
+
+def _source_times(per_source: dict[str, dict], sources_used: list[str]) -> dict:
+    """{source: reading timestamp} for the sources that contributed to this segment."""
+    return {s: per_source[s]["_ts"] for s in sources_used
+            if s in per_source and per_source[s].get("_ts")}
 
 
 def list_moments() -> list[dict]:
@@ -177,6 +188,7 @@ def fuse_segments(
             condition_label_de=mapping.label_de or mapping.label,
             datex2_value=mapping.datex2,
             color=mapping.color or "#95a5a6",
+            source_times=_source_times(per_source, fr.sources_used),
         ))
     return results
 
@@ -200,6 +212,7 @@ def fuse_one(
         segment=seg, fusion=fr, condition_code=code,
         condition_label=mapping.label, condition_label_de=mapping.label_de or mapping.label,
         datex2_value=mapping.datex2, color=mapping.color or "#95a5a6",
+        source_times=_source_times(per_source, fr.sources_used),
     )
 
 

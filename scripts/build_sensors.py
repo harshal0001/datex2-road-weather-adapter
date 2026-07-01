@@ -36,6 +36,11 @@ def _clean(v):
     return None if (v is None or v != v) else v   # NaN/None → None
 
 
+def _ts(v):
+    """event_timestamp → ISO-ish string the dashboard can show ('as of …')."""
+    return None if (v is None or v != v) else str(v)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--downloads", type=Path, default=Path("/mnt/e/Ice Prediction"))
@@ -62,16 +67,16 @@ def main() -> int:
     # ---- SWS: 13 in-road road-weather stations ----
     p = base / FILES["sws"]
     if p.exists():
-        for sid, lat, lon, code, st, at, hum in latest_per(
+        for sid, lat, lon, code, st, at, hum, ts in latest_per(
             p, "station_id",
             ["station_id", "latitude", "longitude", "road_condition_code",
              "road_surface_temperature_celsius", "air_temperature_celsius",
-             "relative_humidity_percent"],
+             "relative_humidity_percent", "event_timestamp"],
         ):
             if lat is None or lon is None:
                 continue
             sensors.append({"source": "sws", "id": sid, "name": sid,
-                            "lat": float(lat), "lon": float(lon),
+                            "lat": float(lat), "lon": float(lon), "ts": _ts(ts),
                             "reading": {"condition_code": _clean(code),
                                         "surface_temp_c": _clean(st),
                                         "air_temp_c": _clean(at),
@@ -82,10 +87,10 @@ def main() -> int:
     p = base / FILES["lorawan"]
     if p.exists():
         n0 = len(sensors)
-        for name, lat, lon, st, at, hum in latest_per(
+        for name, lat, lon, st, at, hum, ts in latest_per(
             p, "deviceName",
             ["deviceName", "lat", "lon", "surface_temperature",
-             "air_temperature", "air_humidity"],
+             "air_temperature", "air_humidity", "event_timestamp"],
         ):
             if not name:
                 continue
@@ -94,7 +99,7 @@ def main() -> int:
             if la is None or lo is None:
                 continue
             sensors.append({"source": "lorawan", "id": name, "name": str(name).split("-N")[0],
-                            "lat": float(la), "lon": float(lo),
+                            "lat": float(la), "lon": float(lo), "ts": _ts(ts),
                             "reading": {"surface_temp_c": _clean(st),
                                         "air_temp_c": _clean(at),
                                         "humidity_pct": _clean(hum)}})
@@ -104,15 +109,15 @@ def main() -> int:
     p = base / FILES["dwd"]
     if p.exists():
         n0 = len(sensors)
-        for sid, lat, lon, at, hum, ok in latest_per(
+        for sid, lat, lon, at, hum, ok, ts in latest_per(
             p, "station_id",
             ["station_id", "latitude", "longitude", "air_temperature_celsius",
-             "relative_humidity_percent", "cloud_cover_oktas"],
+             "relative_humidity_percent", "cloud_cover_oktas", "event_timestamp"],
         ):
             if lat is None or lon is None:
                 continue
             sensors.append({"source": "dwd", "id": str(sid), "name": f"DWD {sid}",
-                            "lat": float(lat), "lon": float(lon),
+                            "lat": float(lat), "lon": float(lon), "ts": _ts(ts),
                             "reading": {"air_temp_c": _clean(at),
                                         "humidity_pct": _clean(hum),
                                         "cloud_oktas": _clean(ok)}})
@@ -122,15 +127,15 @@ def main() -> int:
     p = base / FILES["openweather"]
     if p.exists():
         n0 = len(sensors)
-        for city, lat, lon, temp, hum, cl in latest_per(
+        for city, lat, lon, temp, hum, cl, ts in latest_per(
             p, "city",
-            ["city", "lat", "lon", "temp", "humidity", "clouds"],
+            ["city", "lat", "lon", "temp", "humidity", "clouds", "event_timestamp"],
         ):
             if lat is None or lon is None:
                 continue
             t = _clean(temp)
             sensors.append({"source": "openweather", "id": str(city), "name": str(city),
-                            "lat": float(lat), "lon": float(lon),
+                            "lat": float(lat), "lon": float(lon), "ts": _ts(ts),
                             "reading": {"air_temp_c": (round(t - 273.15, 1) if t is not None else None),
                                         "humidity_pct": _clean(hum),
                                         "clouds_pct": _clean(cl)}})
