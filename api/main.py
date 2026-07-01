@@ -72,36 +72,46 @@ def sources() -> dict[str, Any]:
     return {"sources": health_report()}
 
 
+# serve the single-file UIs fresh — they change often during development, so never
+# let the browser cache a stale copy
+_NO_CACHE = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"}
+
+
 @app.get("/dashboard")
 def dashboard() -> FileResponse:
     """Multi-source fusion + road-segment map dashboard."""
-    return FileResponse(STATIC_DIR / "dashboard.html")
+    return FileResponse(STATIC_DIR / "dashboard.html", headers=_NO_CACHE)
 
 
 @app.get("/demo")
 def demo() -> FileResponse:
     """Non-technical demo: raw data → validated DATEX II → plain English."""
-    return FileResponse(STATIC_DIR / "demo.html")
+    return FileResponse(STATIC_DIR / "demo.html", headers=_NO_CACHE)
+
+
+# demo.db row-counts are invariant at runtime (built once by build_demo_db.py), so we
+# COUNT them once and cache the result. Without this, every /health re-scans ~4.3M rows
+# (~13 s) — the worst offender found by the jMeter benchmark.
+_DEMO_COUNTS: dict[str, int] | None = None
 
 
 def _demo_db_status() -> dict[str, Any]:
+    global _DEMO_COUNTS
     if not DEMO_DB.exists():
         return {
             "status": "missing",
             "hint": "Run scripts/build_demo_db.py to seed the demo data.",
         }
     try:
-        conn = sqlite3.connect(f"file:{DEMO_DB}?mode=ro", uri=True)
-        stations = conn.execute("SELECT COUNT(*) FROM stations").fetchone()[0]
-        lorawan = conn.execute("SELECT COUNT(*) FROM lorawan_obs").fetchone()[0]
-        owm = conn.execute("SELECT COUNT(*) FROM owm_obs").fetchone()[0]
-        conn.close()
-        return {
-            "status": "ready",
-            "stations": stations,
-            "lorawan_observations": lorawan,
-            "owm_observations": owm,
-        }
+        if _DEMO_COUNTS is None:  # one-time populate; served from cache thereafter
+            conn = sqlite3.connect(f"file:{DEMO_DB}?mode=ro", uri=True)
+            _DEMO_COUNTS = {
+                "stations": conn.execute("SELECT COUNT(*) FROM stations").fetchone()[0],
+                "lorawan_observations": conn.execute("SELECT COUNT(*) FROM lorawan_obs").fetchone()[0],
+                "owm_observations": conn.execute("SELECT COUNT(*) FROM owm_obs").fetchone()[0],
+            }
+            conn.close()
+        return {"status": "ready", **_DEMO_COUNTS}
     except sqlite3.Error as e:
         return {"status": "error", "detail": str(e)}
 

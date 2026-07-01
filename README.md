@@ -64,6 +64,10 @@ Then open:
 | GET | `/api/segments/datex?segment_id=…` | XSD-validated DATEX II for one segment |
 | GET | `/api/segments/datex/city` | Validated multi-segment publication |
 | GET | `/api/segments/coverage` · `/priority` · `/fused` | Fusion stats / config / data |
+| GET | `/api/segments/fused/{id}` | One fused segment (values + provenance + agreement); powers Compare |
+| GET | `/api/segments/sensors` | Real physical sensor network (SWS 13 · LoRaWAN 137 · DWD 1 · OWM 26), each with its latest reading + timestamp |
+| GET | `/api/segments/forecast/{id}` | Predicted condition (no road sensor) vs observed SWS + forecast DATEX II — with signal strength, plain-English reasons, and the inputs it used |
+| GET | `/api/segments/moments` · `/timeline` | Named moments / hourly time-series steps |
 | GET | `/api/scenarios` · `/api/scenarios/{id}` | Demo scenarios |
 
 Responses carry `X-Validation-Status`, `X-Transform-Time-Ms`; `/transform` adds `X-Source-Used`, `X-Profile`.
