@@ -320,6 +320,22 @@ class TransformRequest(BaseModel):
     road_name: str | None = None
     elevation_m: float | None = None
 
+    # realistic icy-night rows so Swagger's "Try it out" works out of the box
+    model_config = {"json_schema_extra": {"example": {
+        "lat": 50.3135, "lon": 11.9128,
+        "road_name": "K HO 7",
+        "elevation_m": 612,
+        "sources": {
+            "sws": {"road_condition_code": 3.0,
+                    "road_surface_temperature_celsius": -0.5,
+                    "air_temperature_celsius": -2.1,
+                    "relative_humidity_percent": 96.0},
+            "dwd": {"air_temperature_celsius": -2.4,
+                    "cloud_cover_oktas": 7.0},
+            "openweather": {"temp": 270.9, "humidity": 95}
+        }
+    }}}
+
 
 @transform_router.get("/scenarios")
 def scenarios():
