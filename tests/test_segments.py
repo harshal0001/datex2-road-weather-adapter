@@ -164,6 +164,22 @@ def test_sensors_endpoint_all_sources():
     assert -90 <= s["lat"] <= 90 and -180 <= s["lon"] <= 180
 
 
+def test_sensors_endpoint_is_moment_aligned():
+    """Markers for a named moment carry that moment's readings (same instant as the
+    fused segment layer), not each station's absolute latest."""
+    d = client.get("/api/segments/sensors?moment=ice-event-night").json()
+    sensors = d.get("sensors") or []
+    if not sensors:
+        import pytest
+        pytest.skip("sensors.json not built moment-aware (run scripts/build_sensors.py)")
+    dated = [s["ts"] for s in sensors if s.get("ts")]
+    assert dated, "moment sensors should carry timestamps"
+    # the ice event is 24 Nov 2025 — every marker's reading sits around it (day-of or
+    # the day before), never each station's absolute latest stuck in 2024/2026
+    assert all(t[:7] == "2025-11" for t in dated)
+    assert all(t[:10] in {"2025-11-23", "2025-11-24"} for t in dated)
+
+
 @needs_db
 def test_geojson_carries_segment_centroid():
     """Client needs the segment centroid to find the nearest ground sensor."""

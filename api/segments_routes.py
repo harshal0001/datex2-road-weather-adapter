@@ -87,12 +87,14 @@ def stations(moment: str = Query("latest")):
 
 
 @router.get("/sensors")
-def sensors():
+def sensors(moment: str = Query("latest")):
     """Real physical sensor network across all sources (SWS/LoRaWAN/DWD/OWM),
-    with coordinates extracted from the raw full exports. Drawn as a map layer."""
+    with coordinates extracted from the raw full exports. Each station's reading is
+    aligned to the selected `moment`, so the markers share one instant with the
+    fused segment layer. Drawn as a map layer."""
     from adapter.segments import load_sensors
 
-    return load_sensors()
+    return load_sensors(moment)
 
 
 @router.get("/priority")

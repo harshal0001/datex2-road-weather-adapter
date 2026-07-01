@@ -51,7 +51,7 @@ datex2-adapter/
 │   ├── build_timeseries.py       # 31 hourly steps for the time slider (ts:* moments)
 │   ├── build_training.py         # ASOF-joined feature/label set → data/_training.parquet
 │   ├── train_forecast.py         # train HGB model → data/forecast_model.joblib
-│   ├── build_sensors.py          # full-export CSVs → data/sensors.json (real sensor network + reading ts)
+│   ├── build_sensors.py          # full-export CSVs → data/sensors.json (per-moment sensor readings, ASOF-aligned)
 │   └── evaluate.py               # latency / XSD-conformance / provenance metrics
 │
 ├── static/                  # Frontend (vanilla JS + Leaflet, no build step)
@@ -61,7 +61,7 @@ datex2-adapter/
 ├── data/                    # Runtime data + build artefacts
 │   ├── segments.db          #   COMMITTED — what the live app reads (segments, snapshots, moments)
 │   ├── forecast_model.joblib#   COMMITTED — trained ice-prediction model
-│   ├── sensors.json         #   COMMITTED — real sensor network, all sources (177 stations + reading ts)
+│   ├── sensors.json         #   COMMITTED — real sensor network, per-moment readings (177 stations × 35 moments)
 │   ├── stations.json        #   COMMITTED — legacy 8-station LoRaWAN subset (old /stations)
 │   ├── demo.db              #   git-ignored (~951 MB) raw observation history
 │   ├── _training.parquet    #   git-ignored build artefact (data/_* ignored)

@@ -114,16 +114,24 @@ def _source_times(per_source: dict[str, dict], sources_used: list[str]) -> dict:
 
 def list_moments() -> list[dict]:
     """Named historical moments for the dropdown (+ 'latest'). Excludes the
-    hourly time-series steps (ts:*), which the time slider serves separately."""
-    moments = [{"id": "latest", "label": "Latest reading"}]
+    hourly time-series steps (ts:*), which the time slider serves separately.
+
+    Each entry carries `ts` — the moment's reference instant (newest reading in
+    that snapshot) — so the UI can show "data as of …" next to the picker."""
+    moments = [{"id": "latest", "label": "Latest reading", "ts": None}]
     if not DB.exists():
         return moments
     con = _conn()
     try:
+        moments[0]["ts"] = con.execute(
+            "SELECT max(event_timestamp) FROM segment_snapshot"
+        ).fetchone()[0]
         rows = con.execute(
-            "SELECT moment, label FROM moment_meta WHERE moment NOT LIKE 'ts:%' ORDER BY rowid"
+            "SELECT m.moment, m.label,"
+            " (SELECT max(s.event_timestamp) FROM segment_moment s WHERE s.moment=m.moment) AS ts"
+            " FROM moment_meta m WHERE m.moment NOT LIKE 'ts:%' ORDER BY m.rowid"
         ).fetchall()
-        moments += [{"id": r["moment"], "label": r["label"]} for r in rows]
+        moments += [{"id": r["moment"], "label": r["label"], "ts": r["ts"]} for r in rows]
     except sqlite3.Error:
         pass  # moment_meta not built yet
     finally:
@@ -229,11 +237,25 @@ SENSORS_FILE = Path(__file__).resolve().parents[1] / "data" / "sensors.json"
 
 
 @lru_cache(maxsize=1)
-def load_sensors() -> dict:
-    """Real physical sensor stations per source (extracted from the full exports)."""
+def _sensors_raw() -> dict:
     if not SENSORS_FILE.exists():
-        return {"counts": {}, "sensors": []}
+        return {}
     return json.loads(SENSORS_FILE.read_text(encoding="utf-8"))
+
+
+def load_sensors(moment: str = "latest") -> dict:
+    """Real physical sensor stations for a given moment (built from the full exports,
+    aligned to the same reference instants as the segment snapshots).
+
+    Returns {"counts": {source: n}, "sensors": [...]} — falls back to 'latest' for an
+    unknown moment, and stays backward-compatible with the old flat file shape.
+    """
+    data = _sensors_raw()
+    moments = data.get("moments")
+    if moments is None:                       # legacy flat file: {"counts", "sensors"}
+        return {"counts": data.get("counts", {}), "sensors": data.get("sensors", [])}
+    block = moments.get(moment) or moments.get("latest") or {}
+    return {"counts": block.get("counts", {}), "sensors": block.get("sensors", [])}
 
 
 def station_readings(moment: str = "latest") -> list[dict]:

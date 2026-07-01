@@ -73,6 +73,12 @@
   th{font-size:10.5px;color:var(--muted);text-transform:uppercase}
   .badge{display:inline-block;padding:2px 7px;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-size:10.5px;font-weight:700;margin:1px}
   .badge.off{background:#f1f5f9;color:#aab4c0}
+  .badge.win{background:var(--teal);color:#fff}
+  .parrow{color:#c4ced8;margin:0 4px;font-size:11px}
+  .map-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:500;
+    background:rgba(15,23,42,.78);color:#e2e8f0;padding:12px 22px;border-radius:12px;
+    font-size:13.5px;font-weight:600;display:none;pointer-events:none}
+  .map-hint.on{display:block}
   pre{margin:0;background:#0f172a;color:#d1fae5;border-radius:9px;padding:12px;font-size:11px;
     line-height:1.5;overflow:auto;height:100%;white-space:pre-wrap}
   .seg-empty{color:var(--muted);font-size:12.5px}
@@ -122,7 +128,7 @@
   <div class="topbar">
     <div>
       <h1>DATEX II · Multi-Source Fusion Dashboard</h1>
-      <div class="sub">Hof road network · select sources → fused per field → standardized DATEX II → live map</div>
+      <div class="sub">Hof region · multi-source road-weather data, standardized to DATEX II v3</div>
     </div>
     <div class="chips" id="chips">
       <span class="lbl">Sources:</span>
@@ -138,6 +144,8 @@
     <div class="chips">
       <span class="lbl">Moment:</span>
       <select id="moment" style="border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600;color:var(--teal);background:var(--teal-soft);cursor:pointer"></select>
+      <span id="asof" style="font-size:11.5px;color:var(--muted);font-weight:600"
+            title="All panels — map, sensors, segment values, DATEX II — show this instant. Historical demo dataset (Hof region, 2025)."></span>
     </div>
   </div>
 
@@ -155,6 +163,7 @@
       <div id="map"></div>
       <div class="loading" id="loading">updating…</div>
       <div id="sensor-legend" class="sensor-legend" style="display:none"></div>
+      <div id="map-hint" class="map-hint">👆 Select data sources above to light up the map</div>
     </div>
 
     <div class="side">
@@ -180,7 +189,7 @@
   <!-- BOTTOM: priority + DATEX, full width -->
   <div class="bottom">
     <div class="card">
-      <h3>Per-field source priority <span style="color:var(--muted);font-weight:500">active source wins ←</span></h3>
+      <h3>Per-field source priority <span style="color:var(--muted);font-weight:500">highest first · ★ = supplying the value now</span></h3>
       <div class="body" style="padding-top:4px">
         <table><thead><tr><th>Field</th><th>Priority order</th></tr></thead>
         <tbody id="prio"></tbody></table>
@@ -291,6 +300,7 @@ const HOVER_STYLE={weight:10,opacity:1};
 
 async function loadGeo(){
   setLoading(true);
+  document.getElementById("map-hint").classList.toggle("on",!active.size);
   // no sources selected (incl. Reset) → blank map, nothing drawn
   if(!active.size){
     if(geoLayer){geoLayer.remove();geoLayer=null;}
@@ -358,8 +368,11 @@ async function selectSegment(p, reveal=true, layer=null){
     return `<tr><td>${dot}${lbl[0]}</td><td><b>${val}${lbl[1]}</b>${extra}</td><td title="${stime}">[${src||"—"}]</td></tr>`;
   }).join("");
   const conf=p.confidence||{level:"single",agree:0,total:0};
-  const confBadge=`<span class="pill" style="background:${CONF_COLOR[conf.level]||"#94a3b8"}">`+
-    `Confidence: ${conf.level}${conf.total?` (${conf.agree}/${conf.total} agree)`:""}</span>`;
+  const confBadge=conf.total
+    ? `<span class="pill" style="background:${CONF_COLOR[conf.level]||"#94a3b8"}" `+
+      `title="Of the fields reported by 2+ selected sources, how many agree within tolerance">`+
+      `Sources agree: ${conf.agree}/${conf.total} fields</span>`
+    : `<span class="pill" style="background:#94a3b8">single-source data</span>`;
   document.getElementById("seg-body").className="";
   document.getElementById("seg-body").innerHTML=
     `<div style="margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">`+
@@ -374,7 +387,7 @@ async function selectSegment(p, reveal=true, layer=null){
     `<div id="nearest"></div>`;
   if(reveal) await ensureSensors();   // a fresh click reveals the ground sensors
   showNearest(p, reveal);             // reveal=true (a real click) also fits the view
-  renderForecast(p.segment_id);
+  // renderForecast(p.segment_id);    // Predicted-condition card hidden for now
   fetchDatex(p.segment_id);
 }
 
@@ -442,7 +455,8 @@ function haversine(la1,lo1,la2,lo2){
   return 2*R*Math.asin(Math.sqrt(a));
 }
 async function loadStations(){
-  const d=await(await fetch("/api/segments/sensors")).json();   // real network, all sources
+  // moment-aware: markers reflect each station's reading at the selected moment
+  const d=await(await fetch("/api/segments/sensors?moment="+encodeURIComponent(moment))).json();
   stations=d.sensors||[];
   renderSensorLegend(d.counts||{});
 }
@@ -583,9 +597,8 @@ function renderPlain(el){
   const disagree=Object.entries(p.agreement||{}).filter(([,a])=>a==="spread")
     .map(([k])=>(FIELD_LABELS[k]||[k])[0]);
   const confSentence = conf.total
-    ? `Cross-source confidence is <b style="color:${CONF_COLOR[conf.level]}">${conf.level}</b> — `+
-      `${conf.agree} of ${conf.total} cross-checkable fields agree across sources`+
-      (disagree.length?`; sources disagree on ${disagree.join(", ")}.`:".")
+    ? `<b>${conf.agree} of ${conf.total}</b> cross-checkable values agree across the selected sources`+
+      (disagree.length?`; they disagree on ${disagree.join(", ")}.`:".")
     : `Only one source per field here, so values cannot be cross-checked.`;
   el.innerHTML=
     `<h4>Road segment #${p.segment_id}${p.road_name?` · ${p.road_name}`:""}</h4>`+
@@ -625,8 +638,15 @@ async function loadPriority(){
   const r=await fetch("/api/segments/priority");const d=await r.json();
   const tb=document.getElementById("prio");tb.innerHTML="";
   for(const [field,list] of Object.entries(d.field_priority)){
-    const chips=list.map(s=>`<span class="badge ${active.has(s)?"":"off"}">${s}</span>`).join(" ");
-    const tr=document.createElement("tr");tr.innerHTML=`<td>${field}</td><td>${chips}</td>`;tb.appendChild(tr);
+    const lbl=FIELD_LABELS[field]||[field,""];
+    const winner=list.find(s=>active.has(s));   // first ACTIVE source = supplies the value
+    const chips=list.map(s=>{
+      const cls=s===winner?"badge win":(active.has(s)?"badge":"badge off");
+      return `<span class="${cls}">${s===winner?"★ ":""}${SRC_LABEL[s]||s}</span>`;
+    }).join(`<span class="parrow">›</span>`);
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${lbl[0]}${lbl[1]?` <span style="color:var(--muted)">${lbl[1]}</span>`:""}</td><td>${chips}</td>`;
+    tb.appendChild(tr);
   }
 }
 
@@ -696,11 +716,12 @@ function cmpSideHtml(me, other){
     const val=(typeof v==="number"?v.toFixed(1):v);
     return `<tr class="${diff?"cmp-diff":""}"><td>${lbl[0]}</td><td><b>${val}${lbl[1]}</b> <span style="color:#94a3b8">[${src||"—"}]</span></td></tr>`;
   }).filter(Boolean).join("");
-  const conf=me.confidence||{level:"single"};
+  const conf=me.confidence||{level:"single",agree:0,total:0};
   const valid=me.validation.status==="valid";
+  const agreeTxt=conf.total?` · Sources agree: <b>${conf.agree}/${conf.total}</b> fields`:"";
   return `<div style="margin-bottom:6px;font-size:12px">Sources: <b>${me.selected_sources.join(", ")||"none"}</b></div>`+
     `<div style="margin-bottom:6px"><span class="pill" style="background:${me.color};${condDiff?"outline:2px solid #dc2626;outline-offset:1px":""}">${me.condition_de} (${me.condition})</span> → <code>${me.datex2}</code></div>`+
-    `<div style="margin-bottom:8px;font-size:12px">DATEX II: ${valid?'<span style="color:#16a34a;font-weight:700">✅ valid</span>':me.validation.status} · Confidence: <b style="color:${CONF_COLOR[conf.level]||"#94a3b8"}">${conf.level}</b></div>`+
+    `<div style="margin-bottom:8px;font-size:12px">DATEX II: ${valid?'<span style="color:#16a34a;font-weight:700">✅ valid</span>':me.validation.status}${agreeTxt}</div>`+
     `<table class="prov"><tbody>${rows||'<tr><td style="color:#94a3b8">no fused values</td></tr>'}</tbody></table>`;
 }
 async function renderCompare(){
@@ -745,8 +766,14 @@ async function loadMoments(){
   const d=await (await fetch("/api/segments/moments")).json();
   const sel=document.getElementById("moment");
   sel.innerHTML=d.moments.map(m=>`<option value="${m.id}">${m.label}</option>`).join("");
+  // "data as of" badge — the exact instant every panel is showing
+  const tsMap=Object.fromEntries(d.moments.map(m=>[m.id,m.ts]));
+  const setAsof=()=>{const t=tsMap[moment];
+    document.getElementById("asof").textContent=t?`🕐 data as of ${fmtTs(t)}`:"";};
+  setAsof();
   sel.onchange=async()=>{
     moment=sel.value;
+    setAsof();
     if(sensorsOn){await loadStations();renderStations();}  // fresh readings for this moment
     refreshCoverage();loadGeo();                           // loadGeo re-selects + re-renders
   };

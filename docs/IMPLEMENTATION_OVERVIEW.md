@@ -105,9 +105,12 @@ database rebuild**.
 - **`segments.db`** (committed) — `segments`, `segment_snapshot`, `segment_moment`,
   `moment_meta`. This is what the live app reads.
 - **`sensors.json`** (committed) — the **real physical sensor network** (177 stations
-  with coordinates + each station's latest reading and its `ts` timestamp) extracted from
-  the raw full-export CSVs by `scripts/build_sensors.py`: SWS 13 · LoRaWAN 137 · DWD 1 ·
-  OpenWeather 26. Drives the dashboard sensor layer (markers show `🕐 as of …`).
+  with coordinates: SWS 13 · LoRaWAN 137 · DWD 1 · OpenWeather 26), extracted from the
+  raw full-export CSVs by `scripts/build_sensors.py`. **Moment-aware**: for every
+  dashboard moment it stores each station's reading at-or-before that moment's reference
+  instant (ASOF-aligned to the same timestamps as the segment snapshots, with a 48 h
+  staleness cutoff) — so the map markers and the segment layer always show the same
+  point in time. Drives the dashboard sensor layer (markers show `🕐 as of …`).
 - **`stations.json`** — a legacy hand-picked subset of 8 LoRaWAN stations (kept for the
   older `/api/segments/stations` endpoint; the dashboard now uses `sensors.json`).
 - **`forecast_model.joblib`** (committed) — the trained classifier.
